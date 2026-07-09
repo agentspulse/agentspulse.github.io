@@ -14,7 +14,6 @@ replica_variant: replica-sky
 
 <footer class="sky-footer">
 <span>© {{ site.time | date: '%Y' }} Latest AI Research</span>
-<span>Styled after Berkeley Sky ADRS</span>
 </footer>
 
 {% include sky-script.liquid %}

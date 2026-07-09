@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: article-sky
 title: "LLM Mid-Training: Data, Methods & Trends"
 description: "Learn how LLM mid-training works across data curation, synthesis, decontamination, and training strategy, with a practical survey of methods and trends."
 tags: [llms, mid-training, reasoning]

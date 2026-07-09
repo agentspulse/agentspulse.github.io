@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: article-sky
 title: "LLM Security & Privacy: Risks & Defenses"
 description: "Explore LLM security and privacy research across attacks, defenses, code security, and data protection, with a survey of risks, safeguards, and open issues."
 tags: [llms, security, surveys]

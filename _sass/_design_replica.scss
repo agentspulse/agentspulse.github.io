@@ -369,7 +369,7 @@
   --sky-gold: #fdb515;
   --sky-gray: #9ca3af;
   --sky-border: #e5e7eb;
-  --sky-bg: #f8fafc;
+  --sky-bg: #ffffff;
 
   background: var(--sky-bg);
   color: var(--sky-primary);
@@ -480,11 +480,12 @@
       border-radius: 8px;
       color: #9ca3af;
       display: inline-flex;
-      font-size: 18px;
       height: 36px;
       justify-content: center;
       transition: color 0.15s ease, background 0.15s ease;
       width: 36px;
+
+      svg { height: 18px; width: 18px; fill: currentColor; }
 
       &:hover { background: #f9fafb; color: var(--sky-blue); }
     }
@@ -708,13 +709,12 @@
     margin-bottom: 10px;
 
     span {
-      background: #00326212;
+      border: 1px solid transparent;
       border-radius: 999px;
-      color: var(--sky-blue);
       font-size: 11px;
       font-weight: 600;
       padding: 3px 9px;
-      text-transform: lowercase;
+      text-transform: capitalize;
     }
   }
 
@@ -770,6 +770,7 @@
     border-radius: 16px;
     box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
     display: flex;
+    height: 9.5rem;
     overflow: hidden;
     transition: box-shadow 0.25s ease, transform 0.25s ease,
       border-color 0.25s ease;
@@ -789,8 +790,7 @@
     flex-shrink: 0;
     justify-content: center;
     overflow: hidden;
-    padding: 12px;
-    width: 18rem;
+    width: 15rem;
 
     img {
       height: 100%;
@@ -802,9 +802,11 @@
   .sky-row:hover .sky-row-thumb img { transform: scale(1.05); }
 
   .sky-row-body {
+    display: flex;
     flex: 1;
+    flex-direction: column;
     min-width: 0;
-    padding: 20px 24px;
+    padding: 18px 24px;
 
     h3 {
       color: var(--sky-primary);
@@ -822,7 +824,7 @@
       color: #64748b;
       font-size: 14px;
       line-height: 1.6;
-      margin: 10px 0 0;
+      margin: 8px 0 0;
       display: -webkit-box;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 2;
@@ -838,16 +840,62 @@
     flex-wrap: wrap;
     font-size: 12.5px;
     gap: 8px;
-    margin-top: 8px;
-    text-transform: capitalize;
+    margin-top: auto;
+    padding-top: 12px;
 
     .sky-row-tags {
       align-items: center;
-      color: #64748b;
       display: inline-flex;
-      font-weight: 500;
-      gap: 4px;
+      flex-wrap: wrap;
+      gap: 6px;
+
+      span {
+        border: 1px solid transparent;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 3px 9px;
+        text-transform: capitalize;
+      }
     }
+  }
+
+  /* Shared category tag colors (Berkeley ADRS palette) */
+  .sky-card-tags span,
+  .sky-row-tags span {
+    background: #eef2ff;
+    border-color: #e0e7ff;
+    color: #4338ca;
+  }
+  .sky-card-tags span[data-tag="llms"],
+  .sky-row-tags span[data-tag="llms"] {
+    background: #eff6ff;
+    border-color: #dbeafe;
+    color: #1d4ed8;
+  }
+  .sky-card-tags span[data-tag="surveys"],
+  .sky-row-tags span[data-tag="surveys"] {
+    background: #ecfdf5;
+    border-color: #d1fae5;
+    color: #047857;
+  }
+  .sky-card-tags span[data-tag="security"],
+  .sky-row-tags span[data-tag="security"] {
+    background: #fff1f2;
+    border-color: #ffe4e6;
+    color: #be123c;
+  }
+  .sky-card-tags span[data-tag="mid-training"],
+  .sky-row-tags span[data-tag="mid-training"] {
+    background: #fff7ed;
+    border-color: #ffedd5;
+    color: #c2410c;
+  }
+  .sky-card-tags span[data-tag="reasoning"],
+  .sky-row-tags span[data-tag="reasoning"] {
+    background: #faf5ff;
+    border-color: #f3e8ff;
+    color: #7e22ce;
   }
 
   .sky-row-dot {
@@ -901,6 +949,181 @@
     }
   }
 
+  /* ---- Article (paper detail) reading experience ---- */
+  .sky-article-wrap {
+    max-width: 46rem;
+    margin: auto;
+    padding: 32px 24px 8px;
+  }
+
+  .sky-article-back {
+    align-items: center;
+    color: #64748b;
+    display: inline-flex;
+    font-size: 14px;
+    font-weight: 600;
+    gap: 6px;
+    margin-bottom: 22px;
+    transition: color 0.15s ease;
+
+    i { font-size: 16px; }
+    &:hover { color: var(--sky-blue); }
+  }
+
+  .sky-article {
+    color: #334155;
+    font-size: 17px;
+    line-height: 1.78;
+
+    h1 {
+      color: var(--sky-blue);
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin: 0 0 20px;
+    }
+
+    h2 {
+      color: var(--sky-primary);
+      font-size: 25px;
+      font-weight: 750;
+      letter-spacing: -0.015em;
+      line-height: 1.25;
+      margin: 52px 0 14px;
+      padding-top: 22px;
+      border-top: 1px solid var(--sky-border);
+    }
+
+    h3 {
+      color: var(--sky-primary);
+      font-size: 19px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin: 34px 0 10px;
+    }
+
+    p { margin: 0 0 20px; }
+
+    a {
+      color: var(--sky-blue);
+      text-decoration: underline;
+      text-decoration-color: rgba(0, 50, 98, 0.3);
+      text-underline-offset: 2px;
+      transition: text-decoration-color 0.15s ease;
+
+      &:hover { text-decoration-color: var(--sky-gold); }
+    }
+
+    strong { color: var(--sky-primary); font-weight: 700; }
+
+    ul, ol { margin: 0 0 20px; padding-left: 1.4em; }
+    li { margin: 0 0 8px; }
+    li > p { margin: 0 0 8px; }
+
+    hr {
+      border: 0;
+      border-top: 1px solid var(--sky-border);
+      margin: 24px 0 28px;
+    }
+
+    hr + h2 { border-top: 0; padding-top: 0; margin-top: 34px; }
+
+    /* Paper metadata block (ArXiv / Authors / Institutions) */
+    > ul:first-of-type {
+      background: #f8fafc;
+      border: 1px solid var(--sky-border);
+      border-radius: 14px;
+      list-style: none;
+      margin: 0 0 8px;
+      padding: 18px 22px;
+
+      li { margin: 0; }
+      li + li { margin-top: 10px; }
+      li > p { margin: 0; font-size: 15px; color: #475569; }
+      strong { color: var(--sky-blue); }
+    }
+
+    /* Figures: img + caption share one paragraph */
+    img {
+      border-radius: 12px;
+      display: block;
+      height: auto;
+      margin: 8px auto;
+      max-width: 100%;
+    }
+
+    p:has(> img) {
+      color: #64748b;
+      font-size: 13.5px;
+      line-height: 1.6;
+      margin: 28px auto 30px;
+      text-align: center;
+    }
+
+    /* Tables */
+    table {
+      border-collapse: collapse;
+      display: block;
+      font-size: 14px;
+      margin: 4px 0 8px;
+      overflow-x: auto;
+      width: 100%;
+    }
+
+    thead th {
+      background: #00326208;
+      border-bottom: 2px solid var(--sky-border);
+      color: var(--sky-primary);
+      font-weight: 700;
+      padding: 10px 14px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    tbody td {
+      border-bottom: 1px solid var(--sky-border);
+      padding: 12px 14px;
+      vertical-align: top;
+    }
+
+    tbody tr:hover { background: #f8fafc; }
+
+    /* Table caption rendered via <center> */
+    center {
+      color: #64748b;
+      display: block;
+      font-size: 13.5px;
+      margin: 0 0 30px;
+    }
+
+    /* Core Viewpoint callouts */
+    blockquote {
+      background: #00326208;
+      border-left: 3px solid var(--sky-gold);
+      border-radius: 0 12px 12px 0;
+      margin: 26px 0;
+      padding: 18px 22px 4px;
+
+      p { font-size: 15.5px; margin: 0 0 14px; }
+      p:first-child {
+        color: var(--sky-blue);
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+      p:first-child strong { color: var(--sky-blue); }
+    }
+
+    code {
+      background: #f1f5f9;
+      border-radius: 6px;
+      font-size: 0.88em;
+      padding: 2px 6px;
+    }
+  }
+
   .sky-footer {
     max-width: 72rem;
     margin: auto;
@@ -917,7 +1140,8 @@
 /* Responsive */
 @media (max-width: 860px) {
   .replica-sky .sky-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .replica-sky .sky-row-thumb { width: 13rem; }
+  .replica-sky .sky-row { height: 8.5rem; }
+  .replica-sky .sky-row-thumb { width: 12rem; }
 }
 
 @media (max-width: 640px) {
@@ -929,8 +1153,11 @@
   .replica-sky .sky-tabs { position: static; transform: none; }
   .replica-sky .sky-social { display: none; }
   .replica-sky .sky-nav-inner { gap: 12px; }
-  .replica-sky .sky-row { flex-direction: column; }
+  .replica-sky .sky-row { flex-direction: column; height: auto; }
   .replica-sky .sky-row-thumb { width: 100%; height: 11rem; }
+  .replica-sky .sky-article { font-size: 16px; }
+  .replica-sky .sky-article h1 { font-size: 28px; }
+  .replica-sky .sky-article h2 { font-size: 22px; }
 }
 
 /* Respect reduced-motion preference (taste-skill §6.B, mandatory) */

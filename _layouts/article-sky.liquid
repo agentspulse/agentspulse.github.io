@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="{{ site.lang }}">
+  <head>
+    {% include head.liquid %}
+  </head>
+  <body class="design-replica-body">
+    <div class="design-replica-shell replica-sky">
+{% include sky-nav.liquid active='paper' %}
+<main class="sky-article-wrap">
+<a class="sky-article-back" href="{{ '/' | relative_url }}"><i class="ti ti-arrow-left"></i> All papers</a>
+<article class="sky-article">
+{% assign rendered_content = content %}
+{% if page.collection == 'tutorials' %}
+{% assign rendered_content = content | ensure_single_h1: page.title %}
+{% endif %}
+{{ rendered_content }}
+</article>
+</main>
+<footer class="sky-footer">
+<span>© {{ site.time | date: '%Y' }} Latest AI Research</span>
+</footer>
+    </div>
+  </body>
+</html>
