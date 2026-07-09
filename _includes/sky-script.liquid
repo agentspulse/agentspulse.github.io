@@ -1,0 +1,76 @@
+<script>
+(function () {
+  var root = document.querySelector('.replica-sky');
+  if (!root) return;
+  var posts = root.querySelector('.sky-posts');
+  var viewBtns = root.querySelectorAll('.sky-view-btn');
+  var searchInput = root.querySelector('.sky-search-input');
+  var clearBtn = root.querySelector('.sky-search-clear');
+  var chips = root.querySelectorAll('.sky-chip');
+  var count = root.querySelector('.sky-count');
+  var empty = root.querySelector('.sky-empty');
+  var total = count ? count.getAttribute('data-total') : '0';
+  var items = root.querySelectorAll('.sky-card, .sky-row');
+  var VKEY = 'sky-view';
+  var activeTag = '';
+
+  function applyView(view) {
+    posts.setAttribute('data-view', view);
+    viewBtns.forEach(function (b) {
+      b.classList.toggle('sky-view-active', b.getAttribute('data-view') === view);
+    });
+  }
+  try { var sv = localStorage.getItem(VKEY); if (sv) applyView(sv); } catch (e) {}
+  viewBtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      var v = b.getAttribute('data-view');
+      applyView(v);
+      try { localStorage.setItem(VKEY, v); } catch (e) {}
+    });
+  });
+
+  function filter() {
+    var q = (searchInput.value || '').trim().toLowerCase();
+    var gridShown = 0;
+    items.forEach(function (el) {
+      var hay = el.getAttribute('data-search') || '';
+      var tags = el.getAttribute('data-tags') || '';
+      var matchQ = !q || hay.indexOf(q) !== -1;
+      var matchTag = !activeTag || (' ' + tags + ' ').indexOf(' ' + activeTag + ' ') !== -1;
+      var show = matchQ && matchTag;
+      el.style.display = show ? '' : 'none';
+      if (show && el.classList.contains('sky-card')) gridShown++;
+    });
+    if (clearBtn) clearBtn.hidden = q.length === 0;
+    if (count) {
+      if (!q && !activeTag) {
+        count.textContent = total + ' total posts.';
+      } else {
+        count.textContent = gridShown + (gridShown === 1 ? ' result.' : ' results.');
+      }
+    }
+    if (empty) empty.hidden = gridShown !== 0;
+  }
+
+  if (searchInput) searchInput.addEventListener('input', filter);
+  if (clearBtn) clearBtn.addEventListener('click', function () {
+    searchInput.value = '';
+    searchInput.focus();
+    filter();
+  });
+  chips.forEach(function (chip) {
+    chip.addEventListener('click', function () {
+      var tag = chip.getAttribute('data-tag');
+      if (activeTag === tag) {
+        activeTag = '';
+        chip.classList.remove('sky-chip-active');
+      } else {
+        activeTag = tag;
+        chips.forEach(function (c) { c.classList.remove('sky-chip-active'); });
+        chip.classList.add('sky-chip-active');
+      }
+      filter();
+    });
+  });
+})();
+</script>

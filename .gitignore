@@ -4,3 +4,4 @@ backup0829/*
 vendor/bundle/*
 .bundle/
 .env
+tmp/
