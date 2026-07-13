@@ -1,7 +1,7 @@
 ---
 layout: design-replica
 permalink: /
-title: "Latest AI Research"
+title: "AgentsPulse"
 description: "Insights and survey breakdowns on frontier AI research across LLMs, security, reasoning, and training methods."
 replica_variant: replica-sky
 ---
@@ -13,7 +13,7 @@ replica_variant: replica-sky
 </main>
 
 <footer class="sky-footer">
-<span>© {{ site.time | date: '%Y' }} Latest AI Research</span>
+<span>© {{ site.time | date: '%Y' }} AgentsPulse</span>
 </footer>
 
 {% include sky-script.liquid %}

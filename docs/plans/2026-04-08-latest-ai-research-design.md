@@ -1,4 +1,4 @@
-# Latest AI Research Site Design
+# AgentsPulse Site Design
 
 ## Goal
 
@@ -21,7 +21,7 @@ Bootstrap `agentspulse.github.io` using the visual and content structure of the 
 
 1. Copy only the directories and files required to build the template and render a tutorials listing.
 2. Keep custom plugins that the listing page depends on, but avoid copying large generated output folders and caches.
-3. Rebrand the site configuration to `Latest AI Research` and neutralize identity-specific data.
+3. Rebrand the site configuration to `AgentsPulse` and neutralize identity-specific data.
 4. Seed a few example tutorials from the reference site, including only the images those pages require.
 5. Add a smoke test that proves the generated homepage contains the new site title.
 

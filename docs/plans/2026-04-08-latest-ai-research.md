@@ -1,4 +1,4 @@
-# Latest AI Research Implementation Plan
+# AgentsPulse Implementation Plan
 
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
@@ -17,7 +17,7 @@
 
 **Step 1: Write the failing test**
 
-Create a shell script that fails when `_site/index.html` is missing or does not include `Latest AI Research`.
+Create a shell script that fails when `_site/index.html` is missing or does not include `AgentsPulse`.
 
 **Step 2: Run test to verify it fails**
 

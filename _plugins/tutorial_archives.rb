@@ -19,8 +19,8 @@ module Jekyll
         'documents' => documents.sort_by { |doc| doc.date || Time.at(0) }.reverse,
         'seo_title' => archive_type == 'tags' ? "#{archive_value} AI Tag" : "#{archive_value} AI Category",
         'description' => archive_type == 'tags' ?
-          "Browse tutorial articles tagged #{archive_value} on Latest AI Research, including frontier AI papers, surveys, and practical explainers." :
-          "Browse tutorial articles in the #{archive_value} category on Latest AI Research, including frontier AI papers, surveys, and practical explainers."
+          "Browse tutorial articles tagged #{archive_value} on AgentsPulse, including frontier AI papers, surveys, and practical explainers." :
+          "Browse tutorial articles in the #{archive_value} category on AgentsPulse, including frontier AI papers, surveys, and practical explainers."
       }
     end
   end

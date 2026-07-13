@@ -2,15 +2,15 @@
 # Site settings
 # -----------------------------------------------------------------------------
 
-title: Latest AI Research # the website title (if blank, full name will be used instead)
-first_name: Latest
+title: AgentsPulse # the website title (if blank, full name will be used instead)
+first_name: AgentsPulse
 middle_name:
-last_name: AI Research
+last_name:
 contact_note: >
   Research-led explainers, surveys, and frontier AI briefings.
 description: > # the ">" symbol means to ignore newlines until "footer_text:"
   Research-led explainers and survey-style breakdowns of frontier AI papers, models, and techniques across LLMs, agents, reasoning, multimodal systems, and evaluation.
-home_title: AI Research, Frontier Papers & Surveys | Latest AI Research
+home_title: AI Research, Frontier Papers & Surveys | AgentsPulse
 home_description: >
   Learn frontier AI research through clear paper breakdowns, survey-driven explainers, and practical insights across LLMs, agents, reasoning, and benchmarks.
 footer_text: >
@@ -86,7 +86,7 @@ bing_site_verification: FC670854123D4478EC382A01882CE6C9
 # Blog
 # -----------------------------------------------------------------------------
 
-blog_name: Latest AI Research
+blog_name: AgentsPulse
 blog_description: Research-led explainers, surveys, and frontier AI paper breakdowns.
 permalink: /blog/:year/:title/
 lsi: false # produce an index for related posts

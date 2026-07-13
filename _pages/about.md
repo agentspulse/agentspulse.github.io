@@ -1,8 +1,8 @@
 ---
 layout: design-replica
 permalink: /about/
-title: "About · Latest AI Research"
-description: "About the Latest AI Research digest."
+title: "About · AgentsPulse"
+description: "About the AgentsPulse digest."
 replica_variant: replica-sky
 ---
 
@@ -14,7 +14,7 @@ replica_variant: replica-sky
 <div class="sky-header-row">
 <div class="sky-header-copy">
 <h1>About</h1>
-<p class="sky-sub">What Latest AI Research is and how the digest is built.</p>
+<p class="sky-sub">What AgentsPulse is and how the digest is built.</p>
 </div>
 </div>
 </header>
@@ -22,7 +22,7 @@ replica_variant: replica-sky
 <div class="sky-about">
 <section class="sky-about-block">
 <h2>Mission</h2>
-<p>Latest AI Research turns dense frontier-AI papers into readable, structured digests. We track surveys and primary work across large language models, security, reasoning, and training methods, then distill each into an accessible breakdown so practitioners can keep up without reading every preprint end to end.</p>
+<p>AgentsPulse turns dense frontier-AI papers into readable, structured digests. We track surveys and primary work across large language models, security, reasoning, and training methods, then distill each into an accessible breakdown so practitioners can keep up without reading every preprint end to end.</p>
 </section>
 
 <section class="sky-about-block">
@@ -50,5 +50,5 @@ replica_variant: replica-sky
 </main>
 
 <footer class="sky-footer">
-<span>© {{ site.time | date: '%Y' }} Latest AI Research</span>
+<span>© {{ site.time | date: '%Y' }} AgentsPulse</span>
 </footer>
