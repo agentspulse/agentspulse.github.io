@@ -11,16 +11,16 @@ check_file() {
   fi
 }
 
-check_file "_site/tutorials/tag/llms/index.html"
+check_file "_site/tutorials/tag/agents/index.html"
 check_file "_site/tutorials/category/frontier-research/index.html"
 
-if ! grep -Fq 'href="/tutorials/tag/llms/"' "_site/index.html"; then
-  echo "FAIL: tutorial tag links should include trailing slashes"
+if ! grep -Fq 'href="https://agentspulse.github.io/tutorials/tag/agents/"' "_site/tutorials/tag/agents/index.html"; then
+  echo "FAIL: tutorial tag canonical URL should include a trailing slash"
   exit 1
 fi
 
-if ! grep -Fq 'href="/tutorials/category/frontier-research/"' "_site/index.html"; then
-  echo "FAIL: tutorial category links should include trailing slashes"
+if ! grep -Fq 'href="https://agentspulse.github.io/tutorials/category/frontier-research/"' "_site/tutorials/category/frontier-research/index.html"; then
+  echo "FAIL: tutorial category canonical URL should include a trailing slash"
   exit 1
 fi
 
