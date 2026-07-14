@@ -15,12 +15,12 @@
 <button type="button" class="sky-view-btn" data-view="list" aria-label="List view"><i class="ti ti-list"></i></button>
 </div>
 </div>
-<p class="sky-count" data-total="{{ ordered | size }}">{{ ordered | size }} total posts.</p>
+<p class="sky-count" data-total="{{ ordered | size }}">{{ ordered | size }} agent research {% if ordered.size == 1 %}digest{% else %}digests{% endif %}.</p>
 </header>
 
 <div class="sky-search">
 <span class="sky-search-icon"><i class="ti ti-search"></i></span>
-<input type="text" class="sky-search-input" placeholder="Search posts..." aria-label="Search posts" autocomplete="off">
+<input type="text" class="sky-search-input" placeholder="Search agent research..." aria-label="Search agent research" autocomplete="off">
 <button type="button" class="sky-search-clear" aria-label="Clear search" hidden><i class="ti ti-x"></i></button>
 </div>
 
@@ -28,7 +28,7 @@
 {% for tag in all_tags %}<button type="button" class="sky-chip" data-tag="{{ tag | downcase }}">{{ tag }}</button>{% endfor %}
 </div>
 
-<p class="sky-empty" hidden>No posts match your search.</p>
+<p class="sky-empty" hidden>No agent research matches your search.</p>
 
 <div class="sky-posts" data-view="grid">
 

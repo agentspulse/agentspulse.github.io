@@ -2,14 +2,15 @@
 layout: design-replica
 permalink: /
 title: "AgentsPulse"
-description: "Insights and survey breakdowns on frontier AI research across LLMs, security, reasoning, and training methods."
+description: "AI agent research reviews, paper breakdowns, and surveys covering agent evolution, architectures, tool use, evaluation, and safety."
+lang: en
 replica_variant: replica-sky
 ---
 
 {% include sky-nav.liquid active='paper' %}
 
 <main class="sky-main">
-{% include sky-paper-body.liquid title='Paper' subtitle='Insights and survey breakdowns on frontier AI research.' %}
+{% include sky-paper-body.liquid title='AI Agent Research Papers and Surveys' subtitle='Clear reviews of the research shaping AI agents—from reasoning and tool use to self-evolution, evaluation, and safety.' %}
 </main>
 
 <footer class="sky-footer">

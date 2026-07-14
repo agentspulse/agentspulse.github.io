@@ -17,8 +17,12 @@ check_contains() {
   fi
 }
 
-check_contains "_site/index.html" "<title>AI Research, Frontier Papers &amp; Surveys | AgentsPulse</title>"
-check_contains "_site/index.html" "<meta name=\"description\" content=\"Learn frontier AI research through clear paper breakdowns, survey-driven explainers, and practical insights across LLMs, agents, reasoning, and benchmarks.\""
+check_contains "_site/index.html" "<title>AI Agent Research, Papers &amp; Surveys | AgentsPulse</title>"
+check_contains "_site/index.html" "<meta name=\"description\" content=\"Explore AI agent research through clear paper reviews, surveys, and practical explainers on agent evolution, architectures, tool use, evaluation, and safety.\""
+check_contains "_site/index.html" "<html lang=\"en\">"
+check_contains "_site/index.html" "<h1>AI Agent Research Papers and Surveys</h1>"
+check_contains "_site/index.html" "AI Agent Research Digest"
+check_contains "_site/index.html" "Search agent research..."
 check_contains "_site/404.html" "<title>Page Not Found | AgentsPulse</title>"
 check_contains "_site/404.html" "<meta name=\"description\" content=\"Return to AgentsPulse to explore frontier AI papers, surveys, and practical explainers across LLMs, agents, reasoning, and benchmarks.\""
 

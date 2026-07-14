@@ -44,9 +44,9 @@
     if (clearBtn) clearBtn.hidden = q.length === 0;
     if (count) {
       if (!q && !activeTag) {
-        count.textContent = total + ' total posts.';
+        count.textContent = total + (total === 1 ? ' agent research digest.' : ' agent research digests.');
       } else {
-        count.textContent = gridShown + (gridShown === 1 ? ' result.' : ' results.');
+        count.textContent = gridShown + (gridShown === 1 ? ' agent research result.' : ' agent research results.');
       }
     }
     if (empty) empty.hidden = gridShown !== 0;

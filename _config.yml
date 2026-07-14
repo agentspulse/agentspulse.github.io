@@ -10,13 +10,13 @@ contact_note: >
   Research-led explainers, surveys, and frontier AI briefings.
 description: > # the ">" symbol means to ignore newlines until "footer_text:"
   Research-led explainers and survey-style breakdowns of frontier AI papers, models, and techniques across LLMs, agents, reasoning, multimodal systems, and evaluation.
-home_title: AI Research, Frontier Papers & Surveys | AgentsPulse
+home_title: AI Agent Research, Papers & Surveys | AgentsPulse
 home_description: >
-  Learn frontier AI research through clear paper breakdowns, survey-driven explainers, and practical insights across LLMs, agents, reasoning, and benchmarks.
+  Explore AI agent research through clear paper reviews, surveys, and practical explainers on agent evolution, architectures, tool use, evaluation, and safety.
 footer_text: >
   Powered by <a href="https://jekyllrb.com/" target="_blank">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio">al-folio</a> theme.
   Hosted by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>.
-keywords: ai research, frontier ai, llm research, ai papers, ai surveys, ai trends
+keywords: ai agents, ai agent research, agentic ai, ai agent papers, ai agent surveys, self-evolving agents
 lang: zh-CN # the language of your site (for example: en, fr, cn, ru, etc.)
 icon: ⚛️ # the emoji used as the favicon (alternatively, provide image name in /assets/img/)
 
