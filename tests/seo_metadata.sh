@@ -22,8 +22,20 @@ check_contains "_site/index.html" "<meta name=\"description\" content=\"Learn fr
 check_contains "_site/404.html" "<title>Page Not Found | AgentsPulse</title>"
 check_contains "_site/404.html" "<meta name=\"description\" content=\"Return to AgentsPulse to explore frontier AI papers, surveys, and practical explainers across LLMs, agents, reasoning, and benchmarks.\""
 
-check_contains "_site/tutorials/self-evolving-agents-review-en/index.html" "<title>Self-evolving Agents Review: 8 Papers | AgentsPulse</title>"
-check_contains "_site/tutorials/self-evolving-agents-review-en/index.html" "<meta name=\"description\" content=\"A review of eight self-evolving agent papers, covering artifact-layer refinement, harness-layer adaptation, and model-layer learning without ground-truth ...\""
+check_contains "_site/tutorials/self-evolving-agents-review-en/index.html" "<title>Self-Evolving Agents: A Review of 8 Key Papers | AgentsPulse</title>"
+check_contains "_site/tutorials/self-evolving-agents-review-en/index.html" "<meta name=\"description\" content=\"A self-evolving agents survey of eight key papers, explaining how AI agents improve models, harnesses, and artifacts through feedback and self-play.\""
+check_contains "_site/tutorials/self-evolving-agents-review-en/index.html" "<h1>Self-Evolving Agents: Model, Harness, and Artifact Evolution</h1>"
+check_contains "_site/tutorials/self-evolving-agents-review-en/index.html" "aria-label=\"Table of contents\""
+check_contains "_site/tutorials/self-evolving-agents-review-en/index.html" "href=\"https://arxiv.org/abs/2506.13131\""
+check_contains "_site/tutorials/self-evolving-agents-review-en/index.html" "<html lang=\"en\">"
+check_contains "_site/tutorials/self-evolving-agents-review-en/index.html" "<meta property=\"og:type\" content=\"article\">"
+check_contains "_site/tutorials/self-evolving-agents-review-en/index.html" '"@type": "Article"'
+check_contains "_site/tutorials/self-evolving-agents-review-en/index.html" '"inLanguage": "en"'
+
+if grep -Fq "61.149.12.104" "_site/tutorials/self-evolving-agents-review-en/index.html"; then
+  echo "FAIL: internal preview URL leaked into the published article"
+  exit 1
+fi
 
 if [[ -e "_site/tutorials/self-evolving-agents-review-zh/index.html" ]]; then
   echo "FAIL: Chinese paper should not be published"

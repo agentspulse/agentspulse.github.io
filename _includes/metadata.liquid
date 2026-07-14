@@ -203,18 +203,23 @@
     {% assign is_blog_post = true %}
   {% endunless %}
 {% endif %}
+{% assign is_article = is_blog_post %}
+{% if page.collection == 'tutorials' %}
+  {% assign is_article = true %}
+{% endif %}
+{% assign page_language = page.lang | default: site.lang %}
 
 {% if site.serve_og_meta %}
   <!-- OpenGraph -->
   <meta property="og:site_name" content="{{ site_title }}">
-  <meta property="og:type" content="{% if is_blog_post %}article{% else %}website{% endif %}">
+  <meta property="og:type" content="{% if is_article %}article{% else %}website{% endif %}">
   <meta property="og:title" content="{{ meta_title }}">
   <meta property="og:url" content="{{ page.url | prepend: site.baseurl | prepend: site.url | remove_first: 'index.html' }}">
   <meta property="og:description" content="{{ meta_description }}">
   {% if page.og_image or site.og_image %}
     <meta property="og:image" content="{% if page.og_image %}{{ page.og_image }}{% else %}{{ site.og_image }}{% endif %}">
   {% endif %}
-  <meta property="og:locale" content="{{ site.lang }}">
+  <meta property="og:locale" content="{{ page_language | replace: '-', '_' }}">
 
   <!-- Twitter card -->
   <meta name="twitter:card" content="summary">
@@ -227,6 +232,33 @@
     <meta name="twitter:site" content="@{{ site.x_username }}">
     <meta name="twitter:creator" content="@{{ site.x_username }}">
   {% endif %}
+{% endif %}
+
+{% if is_article %}
+  <!-- Article structured data -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": {{ page_title | jsonify }},
+      "description": {{ meta_description | jsonify }},
+      "url": {{ page.url | prepend: site.baseurl | prepend: site.url | remove_first: 'index.html' | jsonify }},
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": {{ page.url | prepend: site.baseurl | prepend: site.url | remove_first: 'index.html' | jsonify }}
+      },
+      "inLanguage": {{ page_language | jsonify }},
+      "author": {
+        "@type": "Organization",
+        "name": {{ site_title | jsonify }}
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": {{ site_title | jsonify }}
+      }{% if page.og_image or site.og_image %},
+      "image": {{ page.og_image | default: site.og_image | absolute_url | jsonify }}{% endif %}
+    }
+  </script>
 {% endif %}
 
 {% if site.serve_schema_org %}
