@@ -262,20 +262,29 @@
 {% endif %}
 
 {% if page_url == '/about/' or page_url == '/about/index.html' %}
-  <!-- Organization identity for the About page -->
+  <!-- About page identity and editorial context -->
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Organization",
-      "@id": {{ site.url | append: '/#organization' | jsonify }},
-      "name": {{ site_title | jsonify }},
-      "url": {{ site.url | append: '/' | jsonify }},
-      "description": {{ site.description | strip | normalize_whitespace | jsonify }},
-      "sameAs": [
-        "https://x.com/ai4research_ucb",
-        "https://www.linkedin.com/company/ucb-adrs",
-        "https://github.com/UCB-ADRS/ADRS"
-      ]
+      "@type": "AboutPage",
+      "@id": {{ site.url | append: '/about/#aboutpage' | jsonify }},
+      "url": {{ site.url | append: '/about/' | jsonify }},
+      "name": {{ meta_title | jsonify }},
+      "description": {{ meta_description | jsonify }},
+      "inLanguage": {{ page_language | jsonify }},
+      "isPartOf": {
+        "@type": "WebSite",
+        "@id": {{ site.url | append: '/#website' | jsonify }},
+        "name": {{ site_title | jsonify }},
+        "url": {{ site.url | append: '/' | jsonify }}
+      },
+      "about": {
+        "@type": "Organization",
+        "@id": {{ site.url | append: '/#organization' | jsonify }},
+        "name": {{ site_title | jsonify }},
+        "url": {{ site.url | append: '/' | jsonify }},
+        "description": {{ site.description | strip | normalize_whitespace | jsonify }}
+      }
     }
   </script>
 {% endif %}

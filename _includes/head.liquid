@@ -1,6 +1,7 @@
 <!-- Metadata, OpenGraph and Schema.org -->
 {% include metadata.liquid %}
 
+{% unless page.minimal_head %}
 <!-- Bootstrap & MDB -->
 <link rel="stylesheet" href="{{ '/assets/css/bootstrap.min.css' | relative_url | bust_file_cache }}">
 <link
@@ -44,6 +45,7 @@
   <!-- Sidebar Table of Contents -->
   <link defer href="{{ '/assets/css/bootstrap-toc.min.css' | relative_url | bust_file_cache }}" rel="stylesheet">
 {% endif %}
+{% endunless %}
 
 <!-- Styles -->
 
@@ -66,10 +68,14 @@
 {% elsif site.icon != blank %}
   <link rel="shortcut icon" href="{{ site.icon | prepend: '/assets/img/' | relative_url | bust_file_cache}}">
 {% endif %}
-<link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url | bust_css_cache }}">
+{% if page.minimal_head %}
+  <link rel="stylesheet" href="{{ '/assets/css/sky.css' | relative_url }}">
+{% else %}
+  <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url | bust_css_cache }}">
+{% endif %}
 <link rel="canonical" href="{{ page.url | replace:'index.html','' | absolute_url }}">
 
-{% if site.enable_darkmode %}
+{% if site.enable_darkmode and page.minimal_head != true %}
   <!-- Dark Mode -->
   <script src="{{ '/assets/js/theme.js' | relative_url | bust_file_cache }}"></script>
   <link

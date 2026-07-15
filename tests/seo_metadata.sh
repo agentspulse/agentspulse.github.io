@@ -33,13 +33,13 @@ if [[ -e "_site/blog/index.html" ]]; then
   exit 1
 fi
 
-check_contains "_site/about/index.html" "<title>About AgentsPulse | AgentsPulse</title>"
+check_contains "_site/about/index.html" "<title>AI Agent Research Editorial Process | AgentsPulse</title>"
 check_contains "_site/about/index.html" "<html lang=\"en\">"
-check_contains "_site/about/index.html" "<h1>About AgentsPulse</h1>"
-check_contains "_site/about/index.html" "How we work"
-check_contains "_site/about/index.html" "Editorial responsibility"
+check_contains "_site/about/index.html" "<h1 id=\"about-title\">AI agent research, read clearly.</h1>"
+check_contains "_site/about/index.html" "How a review is built"
+check_contains "_site/about/index.html" "Editorial standards"
 check_contains "_site/about/index.html" "Corrections and contact"
-check_contains "_site/about/index.html" '"@type": "Organization"'
+check_contains "_site/about/index.html" '"@type": "AboutPage"'
 check_contains "_site/404.html" "<title>Page Not Found | AgentsPulse</title>"
 check_contains "_site/404.html" "<meta name=\"description\" content=\"Return to AgentsPulse to explore frontier AI papers, surveys, and practical explainers across LLMs, agents, reasoning, and benchmarks.\""
 
@@ -71,7 +71,6 @@ namespace = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
 urls = [node.text for node in root.findall("sm:url/sm:loc", namespace)]
 expected = {
     "https://agentspulse.github.io/",
-    "https://agentspulse.github.io/about/",
     "https://agentspulse.github.io/tutorials/self-evolving-agents-review-en/",
 }
 if set(urls) != expected or len(urls) != len(expected):

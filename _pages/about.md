@@ -2,68 +2,105 @@
 layout: design-replica
 permalink: /about/
 title: "About AgentsPulse"
-seo_title: "About AgentsPulse"
-description: "Learn how AgentsPulse selects, reviews, and explains AI agent research, including its editorial process, coverage, sources, and correction standards."
+seo_title: "AI Agent Research Editorial Process"
+description: "Learn how AgentsPulse selects, evaluates, and explains AI agent research, including topic coverage, source standards, corrections, and editorial review."
 lang: en
+sitemap: false
+minimal_head: true
 replica_variant: replica-sky
 ---
 
 {% include sky-nav.liquid active='about' %}
 
-<main class="sky-main">
+<main class="sky-main sky-about-main">
 
-<header class="sky-header">
-<div class="sky-header-row">
-<div class="sky-header-copy">
-<h1>About AgentsPulse</h1>
-<p class="sky-sub">How we select, review, and explain AI agent research.</p>
+<section class="sky-about-hero" aria-labelledby="about-title">
+<div class="sky-about-hero-copy">
+<p class="sky-about-kicker">About AgentsPulse</p>
+<h1 id="about-title">AI agent research, read clearly.</h1>
+<p class="sky-about-lede">A focused research digest that traces claims back to papers, experiments, figures, and stated limitations.</p>
+<a class="sky-about-primary-link" href="{{ '/tutorials/self-evolving-agents-review-en/' | relative_url }}">Read the latest review <span aria-hidden="true">→</span></a>
 </div>
+<figure class="sky-about-hero-figure">
+<img src="{{ '/images/359239/overview.jpg' | relative_url }}" width="1200" height="697" alt="Diagram showing model, harness, and artifact routes to AI agent self-evolution" loading="eager" fetchpriority="high">
+<figcaption>A framework from our review of self-evolving agents.</figcaption>
+</figure>
+</section>
+
+<div class="sky-about-content">
+<section class="sky-about-intro" aria-labelledby="about-purpose">
+<h2 id="about-purpose">What AgentsPulse is</h2>
+<p>AgentsPulse turns dense primary papers and surveys into structured reviews for researchers, engineers, and practitioners. The goal is not to replace the paper. It is to make the research question, mechanism, evidence, and limits easier to see before you decide where to read deeper.</p>
+</section>
+
+<section class="sky-about-scope" aria-labelledby="about-coverage">
+<div class="sky-about-section-heading">
+<h2 id="about-coverage">Research we follow</h2>
+<p>Coverage follows the layers and questions that shape capable, useful, and dependable agents.</p>
 </div>
-</header>
-
-<div class="sky-about">
-<section class="sky-about-block">
-<h2>What AgentsPulse is</h2>
-<p>AgentsPulse is a research digest focused on AI agents. We turn dense primary papers and surveys into clear, structured reviews for researchers, engineers, and practitioners who want to understand how agent systems are changing without relying on headlines or reading every preprint end to end.</p>
-</section>
-
-<section class="sky-about-block">
-<h2>What we cover</h2>
-<p>Our coverage follows the research questions that shape capable and dependable agents: reasoning and planning, tool use, memory, multi-agent systems, self-improvement, evaluation, safety, and the model and harness architectures behind agent behavior.</p>
-<div class="sky-about-tags" aria-label="AgentsPulse coverage areas">
-<span>Agent architectures</span>
-<span>Reasoning &amp; planning</span>
-<span>Tool use</span>
-<span>Memory</span>
-<span>Self-evolution</span>
-<span>Evaluation</span>
-<span>Safety</span>
+<div class="sky-about-scope-grid">
+<article class="sky-about-scope-item sky-about-scope-system">
+<h3>System design</h3>
+<p>Agent architectures, harnesses, memory, and multi-agent coordination.</p>
+</article>
+<article class="sky-about-scope-item sky-about-scope-capability">
+<h3>Capabilities</h3>
+<p>Reasoning, planning, tool use, adaptation, and self-evolution.</p>
+</article>
+<article class="sky-about-scope-item sky-about-scope-reliability">
+<h3>Reliability</h3>
+<p>Evaluation, safety, failure modes, and the boundaries of reported evidence.</p>
+</article>
 </div>
 </section>
 
-<section class="sky-about-block">
-<h2>How we work</h2>
-<ul>
-<li><strong>Select:</strong> We prioritize work that introduces a meaningful method, clarifies an emerging research direction, or provides evidence with practical implications for agent builders.</li>
-<li><strong>Read:</strong> We examine the original paper, its stated assumptions, experiments, limitations, and supporting figures rather than summarizing secondary coverage.</li>
-<li><strong>Explain:</strong> We organize each review around the research question, mechanism, evidence, and boundaries so readers can distinguish demonstrated results from interpretation.</li>
-<li><strong>Source:</strong> Reviews link directly to the papers discussed. Figures retain descriptive captions and source context so readers can verify the underlying work.</li>
-</ul>
+<section class="sky-about-process" aria-labelledby="about-process">
+<div class="sky-about-section-heading">
+<h2 id="about-process">How a review is built</h2>
+<p>Every article uses the same source-first editorial sequence.</p>
+</div>
+<ol class="sky-about-process-list">
+<li>
+<span class="sky-about-process-label">Select</span>
+<p>Prioritize work with a meaningful method, an emerging research direction, or practical evidence for agent builders.</p>
+</li>
+<li>
+<span class="sky-about-process-label">Read</span>
+<p>Examine the original paper, assumptions, experiments, limitations, and figures instead of relying on secondary coverage.</p>
+</li>
+<li>
+<span class="sky-about-process-label">Explain</span>
+<p>Separate the research question, mechanism, evidence, and interpretation so the strength of each claim stays visible.</p>
+</li>
+<li>
+<span class="sky-about-process-label">Source</span>
+<p>Link directly to every paper discussed and retain enough figure context for readers to verify the underlying work.</p>
+</li>
+</ol>
 </section>
 
-<section class="sky-about-block">
-<h2>Editorial responsibility</h2>
-<p>Reviews are published by the AgentsPulse editorial team. We aim to preserve the authors' claims accurately, identify important limitations, and avoid presenting inference as experimental fact. When a source changes or a material error is found, we update the review rather than leaving a known mistake in place.</p>
+<section class="sky-about-standards" aria-labelledby="about-standards">
+<div>
+<h2 id="about-standards">Editorial standards</h2>
+<p>Reviews are published by the AgentsPulse editorial team. We aim to represent authors' claims accurately, identify important limitations, and label interpretation as interpretation. When a source changes or a material error is found, the review is updated.</p>
+</div>
+<aside class="sky-about-principle" aria-label="AgentsPulse source standard">
+<strong>Primary sources first</strong>
+<p>Each review should let a reader move from our explanation to the original evidence without losing the thread.</p>
+</aside>
 </section>
 
-<section class="sky-about-block">
-<h2>Corrections and contact</h2>
-<p>Questions, source corrections, and reproducible evidence are welcome. Open an issue in the <a href="https://github.com/UCB-ADRS/ADRS/issues" target="_blank" rel="noopener noreferrer">ADRS GitHub repository</a>, or reach the community through <a href="https://x.com/ai4research_ucb" target="_blank" rel="noopener noreferrer">X</a>, <a href="https://www.linkedin.com/company/ucb-adrs" target="_blank" rel="noopener noreferrer">LinkedIn</a>, or <a href="https://join.slack.com/t/adrs-global/shared_invite/zt-3fgme22n5-PKYyAc9aIeTyX5iSQTKIoA" target="_blank" rel="noopener noreferrer">Slack</a>.</p>
-</section>
-
-<section class="sky-about-block">
-<h2>Start with our latest review</h2>
-<p>Read <a href="{{ '/tutorials/self-evolving-agents-review-en/' | relative_url }}">Self-Evolving Agents: Model, Harness, and Artifact Evolution</a>, a structured review of eight papers on how agents improve their outputs, harnesses, and model weights.</p>
+<section class="sky-about-contact" aria-labelledby="about-contact">
+<div>
+<h2 id="about-contact">Corrections and contact</h2>
+<p>Questions, source corrections, and reproducible evidence are welcome. AgentsPulse currently uses ADRS community channels for discussion and issue tracking.</p>
+</div>
+<div class="sky-about-contact-links" aria-label="Contact AgentsPulse">
+<a href="https://github.com/UCB-ADRS/ADRS/issues" target="_blank" rel="noopener noreferrer">GitHub issues <span aria-hidden="true">↗</span></a>
+<a href="https://x.com/ai4research_ucb" target="_blank" rel="noopener noreferrer">X <span aria-hidden="true">↗</span></a>
+<a href="https://www.linkedin.com/company/ucb-adrs" target="_blank" rel="noopener noreferrer">LinkedIn <span aria-hidden="true">↗</span></a>
+<a href="https://join.slack.com/t/adrs-global/shared_invite/zt-3fgme22n5-PKYyAc9aIeTyX5iSQTKIoA" target="_blank" rel="noopener noreferrer">Slack <span aria-hidden="true">↗</span></a>
+</div>
 </section>
 </div>
 
