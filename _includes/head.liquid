@@ -1,6 +1,12 @@
 <!-- Metadata, OpenGraph and Schema.org -->
 {% include metadata.liquid %}
 
+{% if site.enable_google_analytics %}
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id={{ site.google_analytics }}"></script>
+  <script defer src="{{ '/assets/js/google-analytics-setup.js' | relative_url }}"></script>
+{% endif %}
+
 {% unless page.minimal_head %}
 <!-- Bootstrap & MDB -->
 <link rel="stylesheet" href="{{ '/assets/css/bootstrap.min.css' | relative_url | bust_file_cache }}">
