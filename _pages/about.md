@@ -97,7 +97,7 @@ replica_variant: replica-sky
 </div>
 <div class="sky-about-contact-links" aria-label="Contact AgentsPulse">
 <a href="https://github.com/agentspulse/agentspulse.github.io/issues" target="_blank" rel="noopener noreferrer">GitHub issues <span aria-hidden="true">↗</span></a>
-<a href="https://x.com/ai_cat_news" target="_blank" rel="noopener noreferrer">X <span aria-hidden="true">↗</span></a>
+<a href="https://x.com/AgentsPulse" target="_blank" rel="noopener noreferrer">X <span aria-hidden="true">↗</span></a>
 <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer">LinkedIn <span aria-hidden="true">↗</span></a>
 <a href="https://slack.com/" target="_blank" rel="noopener noreferrer">Slack <span aria-hidden="true">↗</span></a>
 </div>

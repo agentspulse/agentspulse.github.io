@@ -23,6 +23,12 @@ check_contains "_site/index.html" "<html lang=\"en\">"
 check_contains "_site/index.html" "<h1>AI Agent Research Papers and Surveys</h1>"
 check_contains "_site/index.html" "AI Agent Research Digest"
 check_contains "_site/index.html" "Search agent research..."
+check_contains "_site/index.html" 'href="https://x.com/AgentsPulse"'
+check_contains "_site/about/index.html" 'href="https://x.com/AgentsPulse"'
+if grep -R -Fq "https://x.com/ai_cat_news" _site --include='*.html'; then
+  echo "FAIL: retired X profile remains in generated pages"
+  exit 1
+fi
 if grep -Fq 'href="/blog/"' "_site/index.html"; then
   echo "FAIL: retired Blog page remains in homepage navigation"
   exit 1
