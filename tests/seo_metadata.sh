@@ -53,8 +53,34 @@ check_contains "_site/tutorials/self-evolving-agents-review-en/index.html" "<met
 check_contains "_site/tutorials/self-evolving-agents-review-en/index.html" '"@type": "Article"'
 check_contains "_site/tutorials/self-evolving-agents-review-en/index.html" '"inLanguage": "en"'
 
+check_contains "_site/tutorials/stateful-long-horizon-agents-review/index.html" "<title>Stateful Long-Horizon Agents: 10 Key Papers | AgentsPulse</title>"
+check_contains "_site/tutorials/stateful-long-horizon-agents-review/index.html" ">Stateful Long-Horizon Agents: 10 Key Papers</h1>"
+check_contains "_site/tutorials/stateful-long-horizon-agents-review/index.html" 'aria-label="Table of contents"'
+check_contains "_site/tutorials/stateful-long-horizon-agents-review/index.html" 'fetchpriority="high"'
+check_contains "_site/tutorials/stateful-long-horizon-agents-review/index.html" 'loading="lazy" width="1200" height="671"'
+check_contains "_site/tutorials/stateful-long-horizon-agents-review/index.html" 'href="/tutorials/self-evolving-agents-review-en/"'
+check_contains "_site/tutorials/stateful-long-horizon-agents-review/index.html" '<meta name="twitter:card" content="summary_large_image">'
+check_contains "_site/tutorials/stateful-long-horizon-agents-review/index.html" '"datePublished": "2026-07-20T00:00:00+08:00"'
+check_contains "_site/tutorials/stateful-long-horizon-agents-review/index.html" '"@type": "BreadcrumbList"'
+check_contains "_site/tutorials/self-evolving-agents-review-en/index.html" "By AgentsPulse Editorial Team"
+check_contains "_site/tutorials/self-evolving-agents-review-en/index.html" 'href="/tutorials/stateful-long-horizon-agents-review/"'
+
+check_contains "_site/tutorials/measuring-reward-seeking-contrastive-beliefs/index.html" "<title>Measuring Reward-Seeking in RL Models | AgentsPulse</title>"
+check_contains "_site/tutorials/measuring-reward-seeking-contrastive-beliefs/index.html" ">Measuring Reward-Seeking in RL-Trained Models</h1>"
+check_contains "_site/tutorials/measuring-reward-seeking-contrastive-beliefs/index.html" 'Research review <span aria-hidden="true">/</span> 1 paper'
+check_contains "_site/tutorials/measuring-reward-seeking-contrastive-beliefs/index.html" 'aria-label="Table of contents"'
+check_contains "_site/tutorials/measuring-reward-seeking-contrastive-beliefs/index.html" 'loading="lazy" width="1200" height="617"'
+check_contains "_site/tutorials/measuring-reward-seeking-contrastive-beliefs/index.html" 'href="https://alignment.openai.com/measuring-reward-seeking/"'
+check_contains "_site/tutorials/measuring-reward-seeking-contrastive-beliefs/index.html" 'href="/tutorials/stateful-long-horizon-agents-review/"'
+check_contains "_site/tutorials/stateful-long-horizon-agents-review/index.html" 'href="/tutorials/measuring-reward-seeking-contrastive-beliefs/"'
+
 if grep -Fq "61.149.12.104" "_site/tutorials/self-evolving-agents-review-en/index.html"; then
   echo "FAIL: internal preview URL leaked into the published article"
+  exit 1
+fi
+
+if [[ -e "_site/tutorials/topic-review-stateful-long-horizon-agent-20260720-en/index.html" ]]; then
+  echo "FAIL: old long Stateful URL should not be generated"
   exit 1
 fi
 
@@ -72,6 +98,8 @@ urls = [node.text for node in root.findall("sm:url/sm:loc", namespace)]
 expected = {
     "https://agentspulse.github.io/",
     "https://agentspulse.github.io/tutorials/self-evolving-agents-review-en/",
+    "https://agentspulse.github.io/tutorials/stateful-long-horizon-agents-review/",
+    "https://agentspulse.github.io/tutorials/measuring-reward-seeking-contrastive-beliefs/",
 }
 if set(urls) != expected or len(urls) != len(expected):
     raise SystemExit(f"FAIL: sitemap URLs differ from expected canonical set: {urls}")

@@ -1,5 +1,6 @@
 ---
 layout: article-sky
+article_variant: research-review
 lang: en
 title: "Self-Evolving Agents: Model, Harness, and Artifact Evolution"
 seo_title: "Self-Evolving Agents: A Review of 8 Key Papers"
@@ -7,24 +8,47 @@ description: "A self-evolving agents survey of eight key papers, explaining how 
 keywords: "self-evolving agents, self-evolving agents survey, self evolving AI agents, self-improving AI agents"
 tags: [agents, self-evolution, surveys]
 categories: [frontier-research]
+thumbnail: "/images/359239/overview.jpg"
+og_image: "/images/359239/overview.jpg"
+cover_alt: "Three routes to agent self-evolution across models, harnesses, and artifacts"
+cover_width: 1200
+cover_height: 697
+date: 2026-07-14
+last_modified_at: 2026-07-21
+author_name: "AgentsPulse Editorial Team"
+paper_count: 8
+research_scope: "Models · Harnesses · Artifacts"
+dek: "A foundation-first taxonomy for understanding what changes when an AI agent persistently improves through feedback, reflection, and self-play."
+key_takeaways:
+  - "Agent behavior comes from the model and its harness; self-evolution can change either layer."
+  - "Artifacts connect the feedback loops that improve algorithms, prompts, tools, and model weights."
+  - "Evaluation must distinguish durable improvement from automation, adaptation, and benchmark overfitting."
+article_toc:
+  - id: "introduction"
+    label: "Introduction"
+  - id: "conceptual-foundations"
+    label: "Conceptual Foundations"
+  - id: "artifact-layer-evolution"
+    label: "Artifact-Layer Evolution"
+  - id: "harness-layer-evolution"
+    label: "Harness-Layer Evolution"
+  - id: "model-layer-evolution"
+    label: "Model-Layer Evolution"
+  - id: "open-problems"
+    label: "Open Problems"
+  - id: "conclusion"
+    label: "Conclusion"
+  - id: "references"
+    label: "Original Papers"
+related_research:
+  - url: "/tutorials/stateful-long-horizon-agents-review/"
+    title: "Stateful Long-Horizon Agents: 10 Key Papers"
+    description: "See how memory, causal state, failover, and recovery support reliable long-running agents."
+  - url: "/tutorials/measuring-reward-seeking-contrastive-beliefs/"
+    title: "Measuring Reward-Seeking in RL-Trained Models"
+    description: "See how causal interventions can reveal whether a model follows intent or inferred grader preferences."
 ---
-
-<hr />
-<nav class="sky-article-toc" aria-label="Table of contents">
-<strong>On this page</strong>
-<ol>
-<li><a href="#introduction">Introduction</a></li>
-<li><a href="#conceptual-foundations">Conceptual foundations</a></li>
-<li><a href="#artifact-layer-evolution">Artifact-layer evolution</a>: <a href="#alphaevolve">AlphaEvolve</a>, <a href="#fars">FARS</a></li>
-<li><a href="#harness-layer-evolution">Harness-layer evolution</a>: <a href="#gepa">GEPA</a>, <a href="#eevee">EEVEE</a>, <a href="#ui-mem">UI-Mem</a>, <a href="#alita">Alita</a>, <a href="#boundaryrouter">BoundaryRouter</a></li>
-<li><a href="#model-layer-evolution">Model-layer evolution</a>: <a href="#absolute-zero-reasoner">Absolute Zero Reasoner</a></li>
-<li><a href="#open-problems">Open problems and deployment constraints</a></li>
-<li><a href="#conclusion">Conclusion</a> · <a href="#references">Original papers</a></li>
-</ol>
-</nav>
 <h2 id="introduction">Introduction</h2>
-<p><img alt="Three routes to Agent self-evolution" src="/images/359239/overview.jpg" />
-<em>Three routes to agent self-evolution</em></p>
 <p>Terms like "self-evolving," "self-improving," "autonomous adaptation," and "meta-learning" appear interchangeably across papers doing fundamentally different things to fundamentally different parts of the system. One paper updates weights through self-generated training signal. Another rewrites system prompts based on trajectory reflection. A third iteratively mutates a population of algorithms scored by an external evaluator. All three call themselves self-improving—but the label obscures more than it reveals.</p>
 <p>This review focuses on eight representative papers from the past year or so, selected to cover three routes to self-evolution: changing the artifact, changing the harness, and changing the model itself. They range from a zero-data reinforcement learning paradigm (Absolute Zero) to a fully automated research system deployed across 166 papers and 67 topics (FARS), from prompt evolution that outperforms gradient-based optimization (GEPA) to an evolutionary coding agent that discovered improvements to Strassen's algorithm after 56 years (AlphaEvolve).</p>
 <p>This survey introduces three anchoring constructs—<strong>Model</strong>, <strong>Harness</strong>, and <strong>Artifact</strong>—and uses them to partition self-evolution strategies into three mutually exclusive categories, each defined by one question: <em>which layer of the agent is changing?</em></p>
@@ -32,7 +56,7 @@ categories: [frontier-research]
 <h2 id="conceptual-foundations">Conceptual Foundations: Model, Harness, Artifact, and the Agent Identity</h2>
 <p><strong>Model</strong> denotes the parametric language model whose weights encode compressed knowledge. Those weights may be frozen or trainable; when the Model changes, gradient updates flow into it and weights shift.</p>
 <p><strong>Harness</strong> denotes everything surrounding the Model at inference time without requiring weight updates: prompts, system instructions, routing logic, memory stores, tool dispatchers, workflow scaffolds, MCP libraries. The Harness is software, not learned parameters; it can be rewritten between calls with no gradient involved.</p>
-<p><img alt="Alita: Generalist Agent Enabling Scalable Agentic Reasoning with Minimal Predefinition and Maximal Self-Evolution" src="/images/359239/figure-1.jpg" />
+<p><img alt="Alita: Generalist Agent Enabling Scalable Agentic Reasoning with Minimal Predefinition and Maximal Self-Evolution" src="/images/359239/figure-1.jpg" loading="lazy" width="1200" height="409" />
 <em>Alita workflow</em></p>
 <p><strong>Artifact</strong> denotes any persistent output the Agent produces as the residue of task execution: code files, algorithm implementations, research manuscripts, experience templates, MCP definitions. Artifacts live outside the agent loop and can be stored, versioned, evaluated, and fed back in.</p>
 <p>The key architectural claim is: <strong>Agent = Model + Harness</strong>. Observable behavior is a joint function of what the Model knows and how the Harness directs it. Neither layer alone constitutes the agent, and conflating the two is a primary source of terminology confusion in this literature.</p>
@@ -67,19 +91,19 @@ categories: [frontier-research]
 </tr>
 </tbody>
 </table>
-<p><img alt="GEPA: Reflective Prompt Evolution Can Outperform Reinforcement Learning" src="/images/359239/figure-2.jpg" />
+<p><img alt="GEPA: Reflective Prompt Evolution Can Outperform Reinforcement Learning" src="/images/359239/figure-2.jpg" loading="lazy" width="1200" height="929" />
 <em>GEPA results</em></p>
 <p>Three papers concisely illustrate the distinctions. Alita generates MCP tools on demand and accumulates them in the Harness inventory—Harness-layer evolution. GEPA reflects on trajectories and rewrites system prompts—Harness-layer evolution by a different mechanism. AZR proposes code-reasoning tasks, solves them, and updates weights via verifiable execution rewards—Model-layer evolution. All three call their systems "self-evolving"; the taxonomy makes clear they operate on three different layers.</p>
 <hr />
 <h2 id="artifact-layer-evolution">Artifact-Layer Evolution: Iterative Refinement of What the Agent Produces</h2>
 <p>In Artifact-layer evolution, neither Model weights nor Harness configuration are permanently altered. What evolves is the population of Artifacts—code files, algorithms, research manuscripts—through iterative generation, evaluation, and selection. The Model and Harness serve as fixed generators; an automated evaluator provides scores; highest-scoring Artifacts seed the next generation. The loop closes at the Artifact store.</p>
 <h3 id="alphaevolve">AlphaEvolve <a class="sky-paper-source" href="https://arxiv.org/abs/2506.13131" aria-label="Read the AlphaEvolve paper on arXiv">Original paper ↗</a></h3>
-<p><img alt="AlphaEvolve: A coding agent for scientific and algorithmic discovery" src="/images/359239/figure-3.jpg" />
+<p><img alt="AlphaEvolve: A coding agent for scientific and algorithmic discovery" src="/images/359239/figure-3.jpg" loading="lazy" width="1200" height="498" />
 <em>AlphaEvolve results</em></p>
 <p>AlphaEvolve was developed by Alexander Novikov, Matej Balog and colleagues, with participating institutions including Google DeepMind, Google. AlphaEvolve, from Google DeepMind, is the cleanest instantiation of this category. The system orchestrates a pipeline of LLMs—Gemini Flash for rapid generation, Gemini Pro for higher-quality proposals—to evolve entire code files. Each candidate is scored by automated evaluators (correctness verifiers, benchmark metrics, resource monitors), and a program database maintains a diverse evolutionary population, sampling from past candidates weighted by recency and quality to prevent premature convergence.</p>
 <p>AlphaEvolve discovered the first improvement over Strassen's algorithm for multiplying two 4×4 complex-valued matrices in 56 years, reducing required scalar multiplications from 49 to 48. It also optimized data-center scheduling heuristics at Google and accelerated training of the LLM that powers AlphaEvolve itself. Automated executable evaluation is a structural prerequisite: without reliable selection pressure, the evolutionary population degenerates. The program database's diversity management—retaining candidates across performance levels rather than only the global best—enables discovery of structurally novel algorithms.</p>
 <h3 id="fars">FARS <a class="sky-paper-source" href="https://arxiv.org/abs/2606.31651" aria-label="Read the FARS paper on arXiv">Original paper ↗</a></h3>
-<p><img alt="FARS: A Fully Automated Research System Deployed at Scale" src="/images/359239/figure-4.jpg" />
+<p><img alt="FARS: A Fully Automated Research System Deployed at Scale" src="/images/359239/figure-4.jpg" loading="lazy" width="1200" height="669" />
 <em>FARS architecture</em></p>
 <p>FARS (Fully Automated Research System) extends Artifact-layer evolution to the full scientific research pipeline. Stage-specific agents handle Ideation, Planning, Experimentation, and Writing, coordinated through a shared workspace that functions as both project memory and auditable artifact store. In its first public deployment, FARS produced 166 complete papers spanning 67 AI/ML topics. Volunteer reviewers provided 282 structured reviews covering 140 of the 166 papers, including overall ratings, sub-scores for soundness and contribution, integrity checks, and disclosure of LLM-assisted review. Recurring weaknesses include narrow experimental scope, overclaiming, and insufficient experimental validation.</p>
 <p>The human review process is an external audit of the Artifact population, not a self-evolution feedback loop—the system does not automatically update from reviewer feedback. FARS demonstrates that Artifact-layer evolution at scale surfaces failure modes that curated demonstrations systematically suppress. AlphaEvolve achieves high-fidelity evolution by restricting scope to problems with executable automated evaluators; FARS achieves broad scope by expanding to full research pipelines, compensating with structured human review. The tension between scope and evaluability is a structural constraint.</p>
@@ -90,12 +114,12 @@ categories: [frontier-research]
 <p>GEPA was developed by Lakshya A Agrawal, Omar Khattab and colleagues, with participating institutions including Stanford University, MIT. GEPA (Genetic-Pareto) argues directly against gradient-based RL as the right tool for adapting LLM agents. A trajectory contains nothing but language—instructions, reasoning chains, tool calls, compiler messages, reward signals—which is precisely what LLMs are best at understanding. Rather than compress that richness into a scalar reward and run policy gradient ascent, GEPA reflects on trajectories in natural language to diagnose problems and propose prompt mutations, then maintains a Pareto frontier of top-performing prompts to avoid greedy convergence.</p>
 <p>On HotpotQA, HoVer, IFBench, and PUPA, GEPA outperforms GRPO (with 24,000 rollouts and LoRA fine-tuning) by an average of 10% and up to 20%, while requiring up to 35× fewer rollouts. It also outperforms MIPROv2 by over 10% across two LLMs. GEPA never updates Model weights. The information-efficiency asymmetry is the key insight: prompt optimization operates in language space, where each rollout carries a full natural-language explanation of what went wrong, whereas RL operates in weight space via scalar rewards.</p>
 <h3 id="eevee">EEVEE <a class="sky-paper-source" href="https://arxiv.org/abs/2606.11182" aria-label="Read the EEVEE paper on arXiv">Original paper ↗</a></h3>
-<p><img alt="EEVEE: Towards Test-time Prompt Learning in the Real World for Self-Improving Agents" src="/images/359239/figure-5.jpg" />
+<p><img alt="EEVEE: Towards Test-time Prompt Learning in the Real World for Self-Improving Agents" src="/images/359239/figure-5.jpg" loading="lazy" width="1200" height="453" />
 <em>EEVEE architecture</em></p>
 <p>GEPA assumes a single-benchmark setting. Real-world deployment breaks this: queries arrive from heterogeneous domains, and optimizing a prompt for one domain degrades performance on another. EEVEE extends test-time prompt learning to heterogeneous multi-dataset streams by adding a router that partitions incoming inputs into task clusters and assigns each cluster a suitable prompt configuration. The router and prompt learner are mutually dependent; EEVEE resolves this coupling through interleaved router and prompt learning phases.</p>
 <p>EEVEE improves average multi-benchmark scores by 10.38 points over Qwen3-4B-Instruct and 24.32 points over DeepSeek-V3.2, surpassing GEPA and ACE by up to 37.2% and 48.2% respectively. In the incremental setting—benchmarks introduced one at a time—EEVEE ends at a cumulative +41.53 retention gain while GEPA and ACE end at −15.36 and −18.58. The negative numbers reveal the cross-dataset interference problem: optimizing for a new task destroys the Harness configuration that worked for prior tasks.</p>
 <h3 id="ui-mem">UI-Mem <a class="sky-paper-source" href="https://arxiv.org/abs/2602.05832" aria-label="Read the UI-Mem paper on arXiv">Original paper ↗</a></h3>
-<p><img alt="UI-Mem: Self-Evolving Experience Memory for Online Reinforcement Learning in Mobile GUI Agents" src="/images/359239/figure-6.jpg" />
+<p><img alt="UI-Mem: Self-Evolving Experience Memory for Online Reinforcement Learning in Mobile GUI Agents" src="/images/359239/figure-6.jpg" loading="lazy" width="1200" height="596" />
 <em>UI-Mem workflow</em></p>
 <p>UI-Mem addresses how a mobile GUI agent should accumulate experience across multiple tasks and applications where online RL must contend with sparse rewards and long-horizon credit assignment. The solution is a hierarchical experience memory with three levels: high-level workflows for planning, subtask skills for execution, and failure patterns to prevent repetitive errors. Experiences are stored as parameterized templates that abstract away task-specific details, enabling reuse across applications sharing structural similarities.</p>
 <p>UI-Mem's Stratified Group Sampling injects varying levels of memory guidance across trajectories within each rollout group. Without unguided trajectories the agent would follow memory rather than internalize it; the mix drives the unguided policy toward reproducing guided behaviors—imitation-through-contrast that makes the RL signal more informative. Model weights are updated via online RL (GRPO), but the memory component evolves independently of and in addition to the weight updates; the memory itself is a Harness-layer artifact.</p>
@@ -107,7 +131,7 @@ categories: [frontier-research]
 <p>BoundaryRouter reduces average inference time by 60.6% compared to always using the agent, while improving performance by 28.6% over always using direct LLM inference. The rubric-guided reasoning encodes structural knowledge about task difficulty rather than surface-level similarity matching, enabling generalization to out-of-domain scenarios in the RouteBench evaluation.</p>
 <hr />
 <h2 id="model-layer-evolution">Model-Layer Evolution: Learning Without Ground-Truth Answer Labels</h2>
-<p><img alt="Absolute Zero: Reinforced Self-play Reasoning with Zero Data" src="/images/359239/figure-7.jpg" />
+<p><img alt="Absolute Zero: Reinforced Self-play Reasoning with Zero Data" src="/images/359239/figure-7.jpg" loading="lazy" width="1200" height="929" />
 <em>Absolute Zero results</em></p>
 <p>Model-layer evolution is the most fundamental form: weights change through signal generated by the agent itself, with no external dataset of (question, answer) pairs. The defining constraint is <strong>verifiability</strong>—there must be a reliable automated mechanism to determine whether a proposed solution is correct, because the loop must close thousands of times during training with no human in the critical path. This restricts the category to domains where correctness has an executable definition: code that runs or doesn't, proofs that check out or don't.</p>
 <h3 id="absolute-zero-reasoner">Absolute Zero Reasoner (AZR) <a class="sky-paper-source" href="https://arxiv.org/abs/2505.03335" aria-label="Read the Absolute Zero Reasoner paper on arXiv">Original paper ↗</a></h3>
@@ -118,7 +142,7 @@ categories: [frontier-research]
 <hr />
 <h2 id="open-problems">Boundaries, Open Problems, and Real-World Deployment Constraints</h2>
 <p><strong>Verifiability is the master constraint.</strong> Both Artifact-layer and Model-layer evolution require automated correctness signals: AlphaEvolve's code executor, AZR's verification environment. When such signals are unavailable, neither category can function without human evaluation in the loop. FARS demonstrates what happens at the boundary: automated metrics for research quality are insufficient, so evaluation relies on 282 volunteer reviews—an honest acknowledgment that automated verifiability for open-ended scientific writing does not yet exist at acceptable quality. Harness-layer evolution remains the most broadly applicable category for domains where verification is soft or subjective.</p>
-<p><img alt="Learning Agent Routing From Early Experience" src="/images/359239/figure-8.jpg" />
+<p><img alt="Learning Agent Routing From Early Experience" src="/images/359239/figure-8.jpg" loading="lazy" width="1200" height="581" />
 <em>Learning Agent Routing workflow</em></p>
 <p><strong>Cold-start scarcity affects all categories differently.</strong> BoundaryRouter confronts routing cold-start—no prior routing labels exist for new deployments—and builds a behavioral reference from a seed set. EEVEE confronts prompt cold-start under domain shift—as new benchmark domains enter the stream, existing configurations have no experience with them. FARS confronts quality cold-start at scale—in early deployment, there is no evidence about which experimental configurations produce strong papers. Each paper develops a specific mitigation, but none eliminates the cold-start problem; they manage it.</p>
 <p><strong>Proxy optimization and faithfulness failures are structurally analogous.</strong> AZR faces reward hacking risk: a sufficiently powerful proposer could generate tasks that are technically executable-verifiable but solved by surface pattern matching rather than actual reasoning. FARS faces faithfulness failures: the writing agent occasionally overclaims or inadequately represents experimental evidence, optimizing for plausible-sounding language rather than accurate scientific description. Both represent the same structural issue—optimizing a measurable proxy at the expense of the intended objective.</p>
