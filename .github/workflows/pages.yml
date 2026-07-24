@@ -48,6 +48,16 @@ jobs:
     needs: build
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Notify Bing with IndexNow
+        run: >-
+          python3 scripts/submit_indexnow.py
+          --sitemap https://agentspulse.github.io/sitemap.xml
+          --key-file indexnow-key.txt
+          --key-location https://agentspulse.github.io/indexnow-key.txt

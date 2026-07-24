@@ -29,4 +29,14 @@ grep -Fq 'actions/deploy-pages' "$workflow" || {
   exit 1
 }
 
+grep -Fq 'scripts/submit_indexnow.py' "$workflow" || {
+  echo "FAIL: missing IndexNow notification step"
+  exit 1
+}
+
+grep -Fq 'https://agentspulse.github.io/indexnow-key.txt' "$workflow" || {
+  echo "FAIL: missing public IndexNow key location"
+  exit 1
+}
+
 echo "PASS: pages workflow exists and contains required steps"
