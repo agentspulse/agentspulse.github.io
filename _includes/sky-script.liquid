@@ -7,6 +7,7 @@
   var searchInput = root.querySelector('.sky-search-input');
   var clearBtn = root.querySelector('.sky-search-clear');
   var chips = root.querySelectorAll('.sky-chip');
+  var sortBtns = root.querySelectorAll('.sky-sort-btn');
   var count = root.querySelector('.sky-count');
   var empty = root.querySelector('.sky-empty');
   var total = count ? count.getAttribute('data-total') : '0';
@@ -28,6 +29,45 @@
       try { localStorage.setItem(VKEY, v); } catch (e) {}
     });
   });
+
+  function itemValue(el, name) {
+    return Number(el.getAttribute('data-' + name)) || 0;
+  }
+
+  function compareItems(a, b, mode) {
+    if (mode === 'latest') {
+      var dateDelta = itemValue(b, 'latest') - itemValue(a, 'latest');
+      if (dateDelta) return dateDelta;
+    } else {
+      var pinnedDelta = itemValue(b, 'popular-pinned') - itemValue(a, 'popular-pinned');
+      if (pinnedDelta) return pinnedDelta;
+      var viewDelta = itemValue(b, 'popular') - itemValue(a, 'popular');
+      if (viewDelta) return viewDelta;
+      var tieDateDelta = itemValue(b, 'latest') - itemValue(a, 'latest');
+      if (tieDateDelta) return tieDateDelta;
+    }
+    return (a.getAttribute('data-title') || '').localeCompare(b.getAttribute('data-title') || '');
+  }
+
+  function applySort(mode) {
+    root.querySelectorAll('.sky-grid, .sky-list').forEach(function (container) {
+      Array.prototype.slice.call(container.children).sort(function (a, b) {
+        return compareItems(a, b, mode);
+      }).forEach(function (item) { container.appendChild(item); });
+    });
+    sortBtns.forEach(function (button) {
+      var active = button.getAttribute('data-sort') === mode;
+      button.classList.toggle('sky-sort-active', active);
+      button.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+  }
+
+  sortBtns.forEach(function (button) {
+    button.addEventListener('click', function () {
+      applySort(button.getAttribute('data-sort'));
+    });
+  });
+  applySort('popular');
 
   function filter() {
     var q = (searchInput.value || '').trim().toLowerCase();

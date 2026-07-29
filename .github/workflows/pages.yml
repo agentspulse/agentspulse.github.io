@@ -5,6 +5,9 @@ on:
     branches:
       - main
   workflow_dispatch:
+  schedule:
+    # Refresh the rolling popularity window every day at 03:20 UTC.
+    - cron: '20 3 * * *'
 
 permissions:
   contents: read
@@ -22,12 +25,34 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.1
           bundler-cache: true
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Python dependencies
+        run: pip install --disable-pip-version-check 'Pillow>=10,<12' 'google-auth>=2.29,<3' 'requests>=2.31,<3'
+
+      - name: Refresh popular article data
+        env:
+          GA4_PROPERTY_ID: ${{ secrets.GA4_PROPERTY_ID }}
+          GA4_SERVICE_ACCOUNT_JSON: ${{ secrets.GA4_SERVICE_ACCOUNT_JSON }}
+        run: python3 scripts/fetch_ga4_popularity.py --days 30
+
+      - name: Build figure collages
+        run: python3 scripts/build_collages.py
+
+      - name: Build Git article order
+        run: python3 scripts/build_git_order.py
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -36,6 +61,9 @@ jobs:
         env:
           JEKYLL_ENV: production
         run: bundle exec jekyll build
+
+      - name: Verify SEO metadata
+        run: bash tests/seo_metadata.sh
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

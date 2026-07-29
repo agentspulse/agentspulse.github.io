@@ -117,6 +117,21 @@ giscus:
   lang: en
 
 # -----------------------------------------------------------------------------
+# Featured survey card (homepage hero)
+# -----------------------------------------------------------------------------
+# Set `url` to any published tutorial permalink. Title, description, and image
+# fall back to that document's own front matter when the fields below are blank.
+
+featured_post:
+  enabled: true
+  url: /tutorials/self-evolving-agents-review-en/
+  eyebrow: Featured survey
+  title: A survey of 8 self-evolving agent systems
+  description: How self-improving AI agents change models, harnesses, and artifacts — with a side-by-side comparison table, CSV, and BibTeX.
+  cta: Read the survey
+  image:
+
+# -----------------------------------------------------------------------------
 # Collections
 # -----------------------------------------------------------------------------
 

@@ -158,7 +158,7 @@ The problem may also resist ordinary corrective training. When the grader is wat
 
 As frontier laboratories scale reinforcement learning and models gain more situational awareness, audits need to ask not only **whether** a checkpoint succeeds, but **why its behavior changes**. Contrastive SDF offers one concrete causal test: alter the model's belief about the evaluator while holding the task fixed, then measure which authority gains control of the output.
 
-The immediate practical lesson is to test intermediate training checkpoints, not only deployed models. Evaluation suites should combine outcome scores with causal interventions, hidden-monitoring changes, and tests where grader preferences conflict with user or developer intent. A model that behaves well for the wrong reason is not yet reliable evidence of alignment.
+The same evaluator-design risk applies to [self-improving AI agents](/tutorials/self-evolving-agents-review-en/) that update themselves from automated feedback: when the reward signal becomes the optimization target, durable improvement and proxy exploitation look alike. The immediate practical lesson is to test intermediate training checkpoints, not only deployed models. Evaluation suites should combine outcome scores with causal interventions, hidden-monitoring changes, and tests where grader preferences conflict with user or developer intent. A model that behaves well for the wrong reason is not yet reliable evidence of alignment.
 
 ## References
 

@@ -1,0 +1,9 @@
+paper,year,primary_layer,what_evolves,feedback_signal,weight_update,headline_result,arxiv_url
+AlphaEvolve,2025,Artifact,Population of code files and algorithms,Automated executable evaluators,No,First improvement to Strassen-style 4x4 complex matrix multiplication in 56 years (49 to 48 multiplications),https://arxiv.org/abs/2506.13131
+FARS,2026,Artifact,Research manuscripts and experiment plans,Shared workspace plus structured human review,No,166 complete papers across 67 topics audited by 282 volunteer reviews,https://arxiv.org/abs/2606.31651
+GEPA,2025,Harness,System prompts on a Pareto frontier,Natural-language reflection on trajectories,No,Beats GRPO by about 10 percent on average with up to 35x fewer rollouts,https://arxiv.org/abs/2507.19457
+EEVEE,2026,Harness,Router assignments and per-cluster prompts,Test-time outcomes on heterogeneous streams,No,Plus 41.53 cumulative retention in the incremental setting where GEPA and ACE go negative,https://arxiv.org/abs/2606.11182
+UI-Mem,2026,Harness + Model (hybrid),Hierarchical experience memory alongside online RL,Online GUI task rewards,Yes (online GRPO),Reusable workflow skill and failure-pattern templates transfer across mobile apps,https://arxiv.org/abs/2602.05832
+Alita,2025,Harness,On-demand MCP tool inventory,Tool testing and task success,No,75.15 percent pass@1 on GAIA validation above OpenAI Deep Research at 67.36 percent,https://arxiv.org/abs/2505.20286
+BoundaryRouter,2026,Harness,Early-experience memory and routing policy,Paired LLM-versus-agent behavioral reference,No,60.6 percent less average inference time than always-agent and 28.6 percent better than always-LLM,https://arxiv.org/abs/2605.07180
+Absolute Zero (AZR),2025,Model,Parametric weights via proposer-solver self-play,Code execution verification (RLVR),Yes,State-of-the-art coding and math reasoning with zero external training data,https://arxiv.org/abs/2505.03335

@@ -137,7 +137,7 @@ This gives the illusion of an infinite context window while using a standard, fi
 
 The *KnowAct-GUIClaw* framework demonstrates how agents can learn and generalize from past trajectories. Its "Know-Route-Act-Reflect" loop is designed for complex GUI tasks. After executing a task, the "Reflect" stage distills the successful (or unsuccessful) trajectory into an evolving library of skills and memories.
 
-This allows the agent to improve over time, finding more efficient paths and reusing successful sub-routines in future tasks.
+This allows the agent to improve over time, finding more efficient paths and reusing successful sub-routines in future tasks. This skill library is one instance of a broader pattern; our [self-evolving agents survey](/tutorials/self-evolving-agents-review-en/) sets out the full taxonomy of model, harness, and artifact evolution.
 
 Even a tightly focused system like the stateful proxy proposed in *ContinuityBench* offers an architectural blueprint. It uses a "History-Forwarding" strategy to intercept requests, persist conversational state, and reconstruct that state for a fallback provider during a failover, ensuring continuity is preserved across different LLM services.
 

@@ -23,6 +23,16 @@ check_contains "_site/index.html" "<html lang=\"en\">"
 check_contains "_site/index.html" "<h1>AI Agent Research Papers and Surveys</h1>"
 check_contains "_site/index.html" "AI Agent Research Digest"
 check_contains "_site/index.html" "Search agent research..."
+check_contains "_site/index.html" 'aria-label="Sort research articles"'
+check_contains "_site/index.html" 'class="sky-sort-btn sky-sort-active" data-sort="popular" aria-pressed="true"'
+check_contains "_site/index.html" 'class="sky-sort-btn" data-sort="latest" aria-pressed="false"'
+check_contains "_site/index.html" 'data-popular="'
+check_contains "_site/index.html" 'data-popular-pinned="1"'
+check_contains "_site/index.html" 'data-latest="'
+if grep -Fq "Popularity · last 30 days" "_site/index.html"; then
+  echo "FAIL: popularity window label should not be visible"
+  exit 1
+fi
 check_contains "_site/index.html" 'href="https://x.com/AgentsPulse"'
 check_contains "_site/about/index.html" 'href="https://x.com/AgentsPulse"'
 if grep -R -Fq "https://x.com/ai_cat_news" _site --include='*.html'; then
@@ -95,18 +105,109 @@ if [[ -e "_site/tutorials/self-evolving-agents-review-zh/index.html" ]]; then
   exit 1
 fi
 
+# --- P0 enhancement checks for the self-evolving agents survey ---
+SEA="_site/tutorials/self-evolving-agents-review-en/index.html"
+
+check_contains "$SEA" '<h2 id="what-are-self-evolving-agents">What Are Self-Evolving Agents?</h2>'
+check_contains "$SEA" '<h2 id="papers-at-a-glance">8 Papers at a Glance</h2>'
+check_contains "$SEA" '<h2 id="data-and-citation">Data and Citation</h2>'
+
+# target keyword phrases must appear in body copy
+check_contains "$SEA" "self-evolving agents survey"
+check_contains "$SEA" "self-improving AI agents"
+check_contains "$SEA" "self evolution in AI agents"
+
+# comparison table must cover exactly the eight reviewed systems
+for paper in AlphaEvolve FARS GEPA EEVEE UI-Mem Alita BoundaryRouter "Absolute Zero"; do
+  check_contains "$SEA" "$paper"
+done
+
+# downloadable data and citation assets
+check_contains "$SEA" 'href="/assets/data/self-evolving-agents-survey.csv"'
+check_contains "$SEA" 'href="/assets/bibliography/self-evolving-agents-survey.bib"'
+check_contains "$SEA" "Suggested citation"
+check_contains "$SEA" "agentspulse2026selfevolving"
+
+for asset in "_site/assets/data/self-evolving-agents-survey.csv" "_site/assets/bibliography/self-evolving-agents-survey.bib"; do
+  if [[ ! -s "$asset" ]]; then
+    echo "FAIL: missing or empty downloadable asset $asset"
+    exit 1
+  fi
+done
+
+csv_rows=$(($(wc -l < "_site/assets/data/self-evolving-agents-survey.csv") - 1))
+if [[ "$csv_rows" -ne 8 ]]; then
+  echo "FAIL: comparison CSV should hold 8 paper rows, found $csv_rows"
+  exit 1
+fi
+
+bib_authors=$(grep -c "^  author " "_site/assets/bibliography/self-evolving-agents-survey.bib")
+if [[ "$bib_authors" -ne 8 ]]; then
+  echo "FAIL: every BibTeX entry needs an author list, found $bib_authors"
+  exit 1
+fi
+
+bib_entries=$(grep -c "^@misc{" "_site/assets/bibliography/self-evolving-agents-survey.bib")
+if [[ "$bib_entries" -ne 8 ]]; then
+  echo "FAIL: BibTeX file should hold 8 entries, found $bib_entries"
+  exit 1
+fi
+
+# every tutorial card must use a generated multi-figure collage, not a single figure
+shopt -s nullglob
+built_collages=(_site/images/collages/*-card.jpg)
+shopt -u nullglob
+
+tutorial_count=$(ls _tutorials/*.md | wc -l | tr -d ' ')
+if [[ "${#built_collages[@]}" -ne "$tutorial_count" ]]; then
+  echo "FAIL: expected $tutorial_count card collages, found ${#built_collages[@]}."
+  echo "      Collages are generated artifacts. Run: python3 scripts/build_collages.py"
+  exit 1
+fi
+
+for collage in "${built_collages[@]}"; do
+  if [[ ! -s "$collage" ]]; then
+    echo "FAIL: empty collage $collage"
+    exit 1
+  fi
+done
+
+collage_cards=$(grep -o 'src="/images/collages/[^"]*-card.jpg"' _site/index.html | sort -u | wc -l | tr -d ' ')
+if [[ "$collage_cards" -ne "$tutorial_count" ]]; then
+  echo "FAIL: homepage should show $tutorial_count distinct card collages, found $collage_cards"
+  exit 1
+fi
+
+if grep -q 'sky-card-thumb"><img src="/images/359239/figure-1.jpg"' _site/index.html; then
+  echo "FAIL: a card fell back to the single-figure placeholder"
+  exit 1
+fi
+
+# descriptive internal links pointing at the survey
+check_contains "_site/index.html" 'class="sky-featured" href="/tutorials/self-evolving-agents-review-en/"'
+check_contains "_site/index.html" "A survey of 8 self-evolving agent systems"
+check_contains "_site/index.html" 'class="sky-featured-figures"'
+check_contains "_site/index.html" 'src="/images/collages/self-evolving-agents-review-en-featured.jpg"'
+check_contains "_site/index.html" "Featured survey"
+check_contains "_site/index.html" "Read the survey"
+check_contains "_site/tutorials/stateful-long-horizon-agents-review/index.html" '<a href="/tutorials/self-evolving-agents-review-en/">self-evolving agents survey</a>'
+check_contains "_site/tutorials/measuring-reward-seeking-contrastive-beliefs/index.html" '<a href="/tutorials/self-evolving-agents-review-en/">self-improving AI agents</a>'
+
 python3 - <<'PY'
 import xml.etree.ElementTree as ET
 
 root = ET.parse("_site/sitemap.xml").getroot()
 namespace = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
 urls = [node.text for node in root.findall("sm:url/sm:loc", namespace)]
-expected = {
-    "https://agentspulse.github.io/",
-    "https://agentspulse.github.io/tutorials/self-evolving-agents-review-en/",
-    "https://agentspulse.github.io/tutorials/stateful-long-horizon-agents-review/",
-    "https://agentspulse.github.io/tutorials/measuring-reward-seeking-contrastive-beliefs/",
-}
+from pathlib import Path
+import re
+
+expected = {"https://agentspulse.github.io/"}
+for source in Path("_tutorials").glob("*.md"):
+    text = source.read_text()
+    match = re.search(r"^permalink:\s*([^\s]+)", text, re.MULTILINE)
+    path = match.group(1) if match else f"/tutorials/{source.stem}/"
+    expected.add("https://agentspulse.github.io" + path)
 if set(urls) != expected or len(urls) != len(expected):
     raise SystemExit(f"FAIL: sitemap URLs differ from expected canonical set: {urls}")
 PY
