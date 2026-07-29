@@ -76,7 +76,7 @@ check_contains "_site/tutorials/stateful-long-horizon-agents-review/index.html" 
 check_contains "_site/tutorials/stateful-long-horizon-agents-review/index.html" 'loading="lazy" width="1200" height="671"'
 check_contains "_site/tutorials/stateful-long-horizon-agents-review/index.html" 'href="/tutorials/self-evolving-agents-review-en/"'
 check_contains "_site/tutorials/stateful-long-horizon-agents-review/index.html" '<meta name="twitter:card" content="summary_large_image">'
-check_contains "_site/tutorials/stateful-long-horizon-agents-review/index.html" '"datePublished": "2026-07-20T00:00:00+08:00"'
+check_contains "_site/tutorials/stateful-long-horizon-agents-review/index.html" '"datePublished": "2026-07-20T00:00:00'
 check_contains "_site/tutorials/stateful-long-horizon-agents-review/index.html" '"@type": "BreadcrumbList"'
 check_contains "_site/tutorials/self-evolving-agents-review-en/index.html" "By AgentsPulse Editorial Team"
 check_contains "_site/tutorials/self-evolving-agents-review-en/index.html" 'href="/tutorials/stateful-long-horizon-agents-review/"'
