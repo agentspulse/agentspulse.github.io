@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - README.md
+      - docs/**
   workflow_dispatch:
   schedule:
     # Refresh the rolling popularity window every day at 03:20 UTC.
@@ -65,6 +68,20 @@ jobs:
       - name: Verify SEO metadata
         run: bash tests/seo_metadata.sh
 
+      - name: Detect changed public URLs
+        run: >-
+          python3 scripts/find_changed_urls.py
+          --sitemap _site/sitemap.xml
+          --site-dir _site
+          --output indexnow-urls.txt
+
+      - name: Upload IndexNow URL list
+        uses: actions/upload-artifact@v4
+        with:
+          name: indexnow-urls
+          path: indexnow-urls.txt
+          retention-days: 1
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
@@ -81,6 +98,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Download IndexNow URL list
+        uses: actions/download-artifact@v4
+        with:
+          name: indexnow-urls
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
@@ -91,3 +113,4 @@ jobs:
           --sitemap https://agentspulse.github.io/sitemap.xml
           --key-file indexnow-key.txt
           --key-location https://agentspulse.github.io/indexnow-key.txt
+          --url-file indexnow-urls.txt

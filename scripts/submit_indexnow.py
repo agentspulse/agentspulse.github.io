@@ -42,24 +42,31 @@ def fetch_bytes(url: str, attempts: int = 6, delay: int = 10) -> bytes:
     raise RuntimeError(f"Unable to fetch deployed resource after {attempts} attempts") from last_error
 
 
-def sitemap_urls(xml_data: bytes, expected_host: str) -> list[str]:
-    root = ET.fromstring(xml_data)
+def validated_urls(candidates: list[str], expected_host: str) -> list[str]:
     urls: list[str] = []
     seen: set[str] = set()
-    for element in root.iter():
-        if element.tag.rsplit("}", 1)[-1] != "loc" or not element.text:
-            continue
-        url = element.text.strip()
+    for url in candidates:
         parsed = urllib.parse.urlparse(url)
         if parsed.scheme not in {"http", "https"} or parsed.netloc != expected_host:
-            raise ValueError(f"Sitemap URL does not belong to {expected_host}: {url}")
+            raise ValueError(f"URL does not belong to {expected_host}: {url}")
         if url not in seen:
             seen.add(url)
             urls.append(url)
-    if not urls:
-        raise ValueError("Sitemap contains no URLs")
     if len(urls) > 10_000:
         raise ValueError("IndexNow accepts at most 10,000 URLs per request")
+    return urls
+
+
+def sitemap_urls(xml_data: bytes, expected_host: str) -> list[str]:
+    root = ET.fromstring(xml_data)
+    candidates = [
+        element.text.strip()
+        for element in root.iter()
+        if element.tag.rsplit("}", 1)[-1] == "loc" and element.text
+    ]
+    urls = validated_urls(candidates, expected_host)
+    if not urls:
+        raise ValueError("Sitemap contains no URLs")
     return urls
 
 
@@ -69,6 +76,7 @@ def main() -> int:
     parser.add_argument("--endpoint", default=DEFAULT_ENDPOINT)
     parser.add_argument("--key-file", help="Local UTF-8 file containing the IndexNow key")
     parser.add_argument("--key-location", help="Public HTTPS URL of the key file")
+    parser.add_argument("--url-file", help="UTF-8 file containing only URLs that changed")
     args = parser.parse_args()
 
     key = os.environ.get("INDEXNOW_KEY", "")
@@ -94,13 +102,21 @@ def main() -> int:
         print("The key location must be an HTTPS URL on the sitemap host", file=sys.stderr)
         return 2
 
+    if args.url_file:
+        candidates = [line.strip() for line in open(args.url_file, encoding="utf-8") if line.strip()]
+        urls = validated_urls(candidates, host)
+        if not urls:
+            print("No changed URLs; skipping IndexNow submission")
+            return 0
+    else:
+        urls = sitemap_urls(fetch_bytes(args.sitemap), host)
+
     # Wait until the new deployment and its verification file are publicly readable.
     deployed_key = fetch_bytes(key_location).decode("utf-8").strip()
     if deployed_key != key:
         print("The deployed IndexNow verification file does not match", file=sys.stderr)
         return 1
 
-    urls = sitemap_urls(fetch_bytes(args.sitemap), host)
     payload = json.dumps(
         {
             "host": host,

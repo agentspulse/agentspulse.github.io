@@ -35,6 +35,26 @@ class SitemapUrlsTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             MODULE.sitemap_urls(b"<urlset />", "agentspulse.github.io")
 
+    def test_validates_and_deduplicates_changed_url_file_entries(self):
+        self.assertEqual(
+            MODULE.validated_urls(
+                [
+                    "https://agentspulse.github.io/",
+                    "https://agentspulse.github.io/tutorials/example/",
+                    "https://agentspulse.github.io/",
+                ],
+                "agentspulse.github.io",
+            ),
+            [
+                "https://agentspulse.github.io/",
+                "https://agentspulse.github.io/tutorials/example/",
+            ],
+        )
+
+    def test_rejects_cross_host_changed_url(self):
+        with self.assertRaises(ValueError):
+            MODULE.validated_urls(["https://example.com/page"], "agentspulse.github.io")
+
 
 if __name__ == "__main__":
     unittest.main()

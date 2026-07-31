@@ -39,4 +39,30 @@ grep -Fq 'https://agentspulse.github.io/indexnow-key.txt' "$workflow" || {
   exit 1
 }
 
+
+grep -Fq 'paths-ignore:' "$workflow" || {
+  echo "FAIL: README and docs-only changes should not deploy"
+  exit 1
+}
+
+grep -Fq -- '- README.md' "$workflow" || {
+  echo "FAIL: README-only changes should not deploy"
+  exit 1
+}
+
+grep -Fq -- '- docs/**' "$workflow" || {
+  echo "FAIL: docs-only changes should not deploy"
+  exit 1
+}
+
+grep -Fq 'scripts/find_changed_urls.py' "$workflow" || {
+  echo "FAIL: missing changed public URL detection"
+  exit 1
+}
+
+grep -Fq -- '--url-file indexnow-urls.txt' "$workflow" || {
+  echo "FAIL: IndexNow must submit only changed public URLs"
+  exit 1
+}
+
 echo "PASS: pages workflow exists and contains required steps"
