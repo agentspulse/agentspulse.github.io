@@ -50,6 +50,9 @@ article_toc:
   - id: "references"
     label: "References"
 related_research:
+  - url: "/tutorials/deepseek-harness-and-cordis-why-everything-is-a-plugin/"
+    title: "DeepSeek Harness Architecture"
+    description: "How DeepSeek applies an everything-is-a-plugin architecture to models, tools, sessions, approvals, and sandboxes."
   - url: "/tutorials/self-evolving-agents-review-en/"
     title: "Self-Evolving Agents"
     description: "A survey of agents that improve models, harnesses, and artifacts."

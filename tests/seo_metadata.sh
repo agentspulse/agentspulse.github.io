@@ -90,6 +90,23 @@ check_contains "_site/tutorials/measuring-reward-seeking-contrastive-beliefs/ind
 check_contains "_site/tutorials/measuring-reward-seeking-contrastive-beliefs/index.html" 'href="/tutorials/stateful-long-horizon-agents-review/"'
 check_contains "_site/tutorials/stateful-long-horizon-agents-review/index.html" 'href="/tutorials/measuring-reward-seeking-contrastive-beliefs/"'
 
+# DeepSeek Harness topic cluster
+DSH_ARCH="_site/tutorials/deepseek-harness-and-cordis-why-everything-is-a-plugin/index.html"
+CORDIS="_site/tutorials/cordis-spatiotemporal-composability/index.html"
+DSH_PI="_site/tutorials/deepseek-harness-vs-pi-agent/index.html"
+
+check_contains "$DSH_ARCH" "<title>DeepSeek Harness Architecture and Adoption | AgentsPulse</title>"
+check_contains "$DSH_ARCH" ">DeepSeek Harness Architecture: How It Works and Whether to Adopt It</h1>"
+check_contains "$DSH_ARCH" 'href="/tutorials/cordis-spatiotemporal-composability/"'
+check_contains "$DSH_ARCH" 'href="/tutorials/deepseek-harness-vs-pi-agent/"'
+check_contains "$CORDIS" "<title>Cordis Spatiotemporal Composability Explained | AgentsPulse</title>"
+check_contains "$CORDIS" ">Cordis Spatiotemporal Composability: Revertible Effects, Reactive Coeffects, and Fibers</h1>"
+check_contains "$CORDIS" 'src="/images/cordis-spatiotemporal-composability/cordis-composition-axes.jpg"'
+check_contains "$DSH_PI" "<title>DeepSeek Harness vs Pi Agent | AgentsPulse</title>"
+check_contains "$DSH_PI" ">DeepSeek Harness vs Pi Agent: Plugin Runtime or Minimal Coding Harness?</h1>"
+check_contains "$DSH_PI" 'href="/tutorials/deepseek-harness-and-cordis-why-everything-is-a-plugin/"'
+check_contains "_site/tutorials/agent-framework-harness-runtime-production/index.html" 'href="/tutorials/deepseek-harness-and-cordis-why-everything-is-a-plugin/"'
+
 if grep -Fq "61.149.12.104" "_site/tutorials/self-evolving-agents-review-en/index.html"; then
   echo "FAIL: internal preview URL leaked into the published article"
   exit 1
