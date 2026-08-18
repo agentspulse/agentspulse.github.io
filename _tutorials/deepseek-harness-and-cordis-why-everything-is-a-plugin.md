@@ -54,7 +54,7 @@ related_research:
 ---
 For the past two years, the loudest arguments in the AI coding space have been about models: which one writes cleaner code, which one hallucinates less, which one wins on some leaderboard. That argument is starting to feel incomplete. The tools built *around* the model — how they manage context, call functions, ask for permission, and persist state across a session — increasingly determine whether an agent is usable at all. This is the harness layer, and it's where a lot of the real engineering is now happening.
 
-DeepSeek Harness (DSH) is DeepSeek AI's entry into this space, and it's a useful case study because its architecture makes an explicit bet: instead of shipping a single opinionated agent loop, it ships a runtime that assembles itself from composable parts. Understanding that bet — and its current limitations — is more useful than debating whether DSH is "better" than any particular competitor.
+DeepSeek Harness (DSH) is DeepSeek AI's entry into this space, and it's a useful case study because its architecture makes an explicit bet: instead of shipping a single opinionated agent loop, it ships a runtime that assembles itself from composable parts. Understanding that bet — and its current limitations — is more useful than debating whether DSH is "better" than any particular competitor. For a concrete alternative architecture, see our [DeepSeek Harness vs Pi Agent comparison](/tutorials/deepseek-harness-vs-pi-agent/).
 
 ## What DeepSeek Harness Is
 
@@ -62,7 +62,7 @@ DeepSeek Harness is an MIT-licensed, open-source agent harness released by DeepS
 
 ## The Cordis Foundation, Briefly
 
-Cordis is the composition layer underneath DSH — the mechanism that lets independently authored plugins register capabilities, declare dependencies, and be wired together into a running system without each one knowing about the others' internals. It provides the primitives for lifecycle management (starting, stopping, and reloading pieces of the runtime) and for layering configuration on top of a base set of behaviors.
+[Cordis is the composition layer underneath DSH](/tutorials/cordis-spatiotemporal-composability/) — the mechanism that lets independently authored plugins register capabilities, declare dependencies, and be wired together into a running system without each one knowing about the others' internals. It provides the primitives for lifecycle management (starting, stopping, and reloading pieces of the runtime) and for layering configuration on top of a base set of behaviors.
 
 For the purposes of this article, that's as deep as we need to go. Cordis has its own mechanics around effect handling and reactive state that are worth understanding if you're building plugins, but they're not necessary to evaluate DSH at the architecture level — we'll treat Cordis strictly as the foundation DSH is built on, not as a subject in itself.
 

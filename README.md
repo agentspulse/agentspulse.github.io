@@ -6,6 +6,9 @@ AgentsPulse 聚焦 AI Agent 研究，提供研究论文综述、架构分析与�
 
 ## 研究文章
 
+- [How DeepSeek Harness PTC Mode Actually Works](https://agentspulse.github.io/tutorials/deepseek-harness-ptc-mode/) — 从源码解释生成式 Code Mode SDK、`run_code` 调度、并发顺序、上下文与副作用边界。
+- [DeepSeek Harness Creator Mode: How It Works and Its Risks](https://agentspulse.github.io/tutorials/deepseek-harness-creator-mode/) — 分析运行时检查、动态插件、Agent Preset 创作与 Shell 等价的安全边界。
+- [DeepSeek Harness Modes Explained](https://agentspulse.github.io/tutorials/deepseek-harness-modes-explained/) — 对比 Standard、PTC、Minimal 与 Creator 的能力面、呈现方式和适用场景。
 - [DeepSeek Harness Architecture: How It Works and Whether to Adopt It](https://agentspulse.github.io/tutorials/deepseek-harness-and-cordis-why-everything-is-a-plugin/) — 分析 DSH 的插件化架构、Cordis 基础、运行边界与采用风险。
 - [DeepSeek Harness vs Pi Agent: Plugin Runtime or Minimal Coding Harness?](https://agentspulse.github.io/tutorials/deepseek-harness-vs-pi-agent/) — 对比插件运行时与极简 Coding Harness 在扩展、MCP、隔离和会话上的取舍。
 - [Cordis Spatiotemporal Composability](https://agentspulse.github.io/tutorials/cordis-spatiotemporal-composability/) — 解读可逆 Effect、响应式 Coeffect 与 Fiber 生命周期。

@@ -58,7 +58,7 @@ related_research:
     title: "The Agent Framework Is Not the Runtime"
     description: "A broader comparison of production harness designs and responsibilities."
 ---
-Choosing a coding-agent harness increasingly means choosing an architectural philosophy, not just a model wrapper. Two projects illustrate opposite ends of that spectrum: **DeepSeek Harness (DSH)**, a Cordis-based plugin runtime shipped in developer preview by DeepSeek AI, and **Pi Agent**, distributed as `@earendil-works/pi-coding-agent`, which describes itself plainly as a "minimal terminal coding harness." This article compares their architecture and fit for engineering teams. It does not compare speed, intelligence, or overall safety — no controlled, same-model, same-task benchmark is available here, and none is claimed.
+Choosing a coding-agent harness increasingly means choosing an architectural philosophy, not just a model wrapper. Two projects illustrate opposite ends of that spectrum: [**DeepSeek Harness (DSH)**](/tutorials/deepseek-harness-and-cordis-why-everything-is-a-plugin/), a [Cordis-based plugin runtime](/tutorials/cordis-spatiotemporal-composability/) shipped in developer preview by DeepSeek AI, and **Pi Agent**, distributed as `@earendil-works/pi-coding-agent`, which describes itself plainly as a "minimal terminal coding harness." This article compares their architecture and fit for engineering teams. It does not compare speed, intelligence, or overall safety — no controlled, same-model, same-task benchmark is available here, and none is claimed.
 
 ## 1. Design Philosophy and Default Complexity
 
