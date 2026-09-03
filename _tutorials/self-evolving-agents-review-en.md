@@ -2,10 +2,10 @@
 layout: article-sky
 article_variant: research-review
 lang: en
-title: "Self-Evolving Agents: Model, Harness, and Artifact Evolution"
-seo_title: "Self-Evolving Agents: A Review of 8 Key Papers"
-description: "A self-evolving agents survey of eight key papers, explaining how AI agents improve models, harnesses, and artifacts through feedback and self-play."
-keywords: "self-evolving agents, self-evolving agents survey, self-improving AI agents, self evolution in AI agents, self evolving AI agents"
+title: "Self-Evolving Agents: Survey, Taxonomy, and How Self-Improving AI Agents Work"
+seo_title: "Self-Evolving Agents: Survey, Taxonomy & How They Improve"
+description: "A self-evolving agents survey and taxonomy: how self-improving AI agents update memory, tools, workflows, and weights, with papers and a build guide."
+keywords: "self-evolving agents, self-evolving agent, self-improving AI agents, self-evolving agents survey, a taxonomy of self-evolving agents, self-evolving AI agents"
 tags: [agents, self-evolution, surveys]
 categories: [frontier-research]
 thumbnail: "/images/359239/overview.jpg"
@@ -14,22 +14,26 @@ cover_alt: "Three routes to agent self-evolution across models, harnesses, and a
 cover_width: 1200
 cover_height: 697
 date: 2026-07-14
-last_modified_at: 2026-07-29
+last_modified_at: 2026-09-03
 author_name: "AgentsPulse Editorial Team"
 paper_count: 8
-research_scope: "Models · Harnesses · Artifacts"
-dek: "A foundation-first taxonomy for understanding what changes when an AI agent persistently improves through feedback, reflection, and self-play."
+research_scope: "Taxonomy · Papers · Implementation"
+dek: "A survey and taxonomy of self-evolving agents, plus a practical map of how self-improving AI agents persist changes in memory, tools, workflows, and weights."
 key_takeaways:
-  - "Agent behavior comes from the model and its harness; self-evolution can change either layer."
-  - "Artifacts connect the feedback loops that improve algorithms, prompts, tools, and model weights."
-  - "Evaluation must distinguish durable improvement from automation, adaptation, and benchmark overfitting."
+  - "Self-evolving agents persist a change in a named layer; self-improving AI agents is the broader overlapping label."
+  - "A useful taxonomy names the write target: memory, tools, policy, workflow, model weights, or environment."
+  - "A working loop needs feedback, evaluation, safety gates, and rollback—not just another prompt rewrite."
 article_toc:
   - id: "what-are-self-evolving-agents"
     label: "What Are Self-Evolving Agents?"
+  - id: "self-evolving-vs-self-improving"
+    label: "Self-Evolving vs Self-Improving"
+  - id: "taxonomy-of-self-evolving-agents"
+    label: "A Taxonomy of Self-Evolving Agents"
+  - id: "survey-of-self-evolving-agents"
+    label: "Survey of Self-Evolving Agents"
   - id: "papers-at-a-glance"
     label: "8 Papers at a Glance"
-  - id: "introduction"
-    label: "Introduction"
   - id: "conceptual-foundations"
     label: "Conceptual Foundations"
   - id: "artifact-layer-evolution"
@@ -38,10 +42,16 @@ article_toc:
     label: "Harness-Layer Evolution"
   - id: "model-layer-evolution"
     label: "Model-Layer Evolution"
+  - id: "representative-systems"
+    label: "Representative Systems"
+  - id: "how-to-build"
+    label: "How to Build a Framework"
   - id: "open-problems"
     label: "Open Problems"
   - id: "conclusion"
     label: "Conclusion"
+  - id: "awesome-self-evolving-agents"
+    label: "Awesome Self-Evolving Agents"
   - id: "data-and-citation"
     label: "Data and Citation"
   - id: "references"
@@ -56,7 +66,103 @@ related_research:
 ---
 <h2 id="what-are-self-evolving-agents">What Are Self-Evolving Agents?</h2>
 <p class="sky-direct-answer"><strong>Self-evolving agents are AI systems that persistently improve part of themselves using feedback from their own prior execution.</strong> Depending on the architecture, the change can land in model weights, in the surrounding harness of prompts, memory, routing, and tools, or in external artifacts such as code and research outputs. Unlike temporary in-context adaptation, self evolution in AI agents produces changes that persist across tasks, sessions, or iterations, so the next run starts from a genuinely different system.</p>
-<p>This self-evolving agents survey reviews eight representative systems and sorts them by a single question: <em>which layer of the agent actually changes?</em> The answer separates papers that share the "self-improving" label but do fundamentally different things.</p>
+<p>This self-evolving agents survey reviews eight representative systems and sorts them by a single question: <em>which layer of the agent actually changes?</em> The answer separates papers that share the "self-improving" label but do fundamentally different things. The comparison and taxonomy below make that split explicit before the paper-by-paper review.</p>
+<p>Three nearby labels are easy to mix up. An <strong>autonomous agent</strong> can act without a human in the loop, but it need not change itself. An <strong>adaptive agent</strong> may change behavior within a session—retrieving extra context, switching tools, or rewriting a plan—without leaving a durable update. A <strong>self-improving AI agent</strong> is the overlapping commercial and research label for systems that get better over time. This review treats self-evolving agents as the stricter case: some component of the agent is updated from feedback, and that update is still there on the next run.</p>
+<h2 id="self-evolving-vs-self-improving">Self-Evolving Agents vs Self-Improving AI Agents</h2>
+<p>In papers and product copy the two phrases are often treated as synonyms. They overlap, but they are not identical. <strong>Self-improving AI agents</strong> is the broader search and marketing term: any agent that claims to get better from experience. <strong>Self-evolving agents</strong> is the more specific research term: the system runs a closed loop that writes a persistent change into memory, tools, policy, workflow, model weights, or the environment.</p>
+<p>The practical test is persistence. If the next session starts from the same persistent state—including memory, prompts, tools, policies, workflows, and weights—the system adapted once; it did not evolve.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Self-evolving agents</th>
+<th>Self-improving AI agents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>What is learned</td>
+<td>A named layer: memory, tools, policy, workflow, weights, or environment</td>
+<td>Any claimed gain over time; the write target is often left unspecified</td>
+</tr>
+<tr>
+<td>Where feedback comes from</td>
+<td>Stored traces, evaluators, or self-play that close a loop</td>
+<td>Task outcomes, human ratings, or informal "it got better"</td>
+</tr>
+<tr>
+<td>How the update is written</td>
+<td>A persistent write to the harness, artifacts, or model weights</td>
+<td>Prompt edits, logs, fine-tunes, or no durable write at all</td>
+</tr>
+<tr>
+<td>Main risk</td>
+<td>Drift, unsafe self-modification, irreversible tool or weight updates</td>
+<td>The label outruns the mechanism</td>
+</tr>
+</tbody>
+</table>
+<h2 id="taxonomy-of-self-evolving-agents">A Taxonomy of Self-Evolving Agents</h2>
+<p>Readers looking for a taxonomy of self-evolving agents usually want the evolution target, not a paper-by-paper recap. Gao et al. organize the field by <em>what</em>, <em>when</em>, and <em>how</em> to evolve. This review keeps a complementary cut: <em>which layer changes</em> (Model, Harness, Artifact), then names the write target inside that layer.</p>
+<table>
+<thead>
+<tr>
+<th>Evolution target</th>
+<th>Layer in this review</th>
+<th>What actually changes</th>
+<th>Typical feedback</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Memory</td>
+<td>Harness or Hybrid</td>
+<td>Experience stores, templates, retrieved strategies, or trained memory modules</td>
+<td>Task success or failure, contrastive traces</td>
+<td>UI-Mem, BoundaryRouter, ReasoningBank, MemGen</td>
+</tr>
+<tr>
+<td>Tools</td>
+<td>Harness</td>
+<td>MCP inventory, generated tools, dispatch rules</td>
+<td>Tool tests and task success</td>
+<td>Alita</td>
+</tr>
+<tr>
+<td>Policy</td>
+<td>Harness or Model</td>
+<td>Routing, prompt choice, or a parametric policy</td>
+<td>Retention, latency, execution reward</td>
+<td>EEVEE, BoundaryRouter, AZR, AgentEvolver</td>
+</tr>
+<tr>
+<td>Workflow</td>
+<td>Harness or Artifact</td>
+<td>Prompts, pipelines, experiment plans, research stages</td>
+<td>Benchmark scores or structured human review</td>
+<td>GEPA, FARS</td>
+</tr>
+<tr>
+<td>Model weights</td>
+<td>Model or Hybrid</td>
+<td>Full weights, LoRA adapters, or trained memory modules</td>
+<td>Verifiable execution or task reward</td>
+<td>AZR, UI-Mem (hybrid), MemGen (hybrid), AgentEvolver</td>
+</tr>
+<tr>
+<td>Environment</td>
+<td>Artifact</td>
+<td>Code, algorithms, or the tasks the agent trains on</td>
+<td>Executable evaluators; self-questioning</td>
+<td>AlphaEvolve, AZR proposer, AgentEvolver</td>
+</tr>
+</tbody>
+</table>
+<p>A system can occupy more than one row. UI-Mem updates memory and weights. MemGen trains memory modules without a full backbone fine-tune. AgentEvolver generates tasks, reuses experience, and trains a policy. The taxonomy locates the write; it does not claim that each paper occupies a single cell.</p>
+<h2 id="survey-of-self-evolving-agents">Survey of Self-Evolving Agents</h2>
+<p>Two recent surveys map the broader literature. Gao, Geng, Hua, Wang and colleagues organize self-evolving agents by what, when, how, and where to evolve (<a href="https://arxiv.org/abs/2507.21046">arXiv:2507.21046</a>). Fang, Peng, Zhang and colleagues review self-evolving AI agents as a bridge from static foundation models to lifelong agentic systems, with a feedback loop over system inputs, the agent, the environment, and optimisers (<a href="https://arxiv.org/abs/2508.07407">arXiv:2508.07407</a>).</p>
+<p>This page is a narrower self-evolving agents survey: eight systems scored by a single question—which layer changes?—then three additional representative systems that engineers now search for by name. The eight-paper table below is the reading cut; the surveys above are the map of the field.</p>
 <h2 id="papers-at-a-glance">8 Papers at a Glance</h2>
 <p>The table below compares all eight systems on the layer they evolve, the feedback signal that drives evolution, whether model weights are updated, and the headline result reported by the authors.</p>
 <table>
@@ -148,12 +254,8 @@ related_research:
 </table>
 <p>UI-Mem is the one hybrid case: its memory component is a harness artifact, but it is trained jointly with online reinforcement learning, so weights move as well.</p>
 <hr />
-<h2 id="introduction">Introduction</h2>
-<p>Terms like "self-evolving," "self-improving," "autonomous adaptation," and "meta-learning" appear interchangeably across papers doing fundamentally different things to fundamentally different parts of the system. One paper updates weights through self-generated training signal. Another rewrites system prompts based on trajectory reflection. A third iteratively mutates a population of algorithms scored by an external evaluator. All three call themselves self-improving—but the label obscures more than it reveals.</p>
-<p>This review focuses on eight representative papers from the past year or so, selected to cover three routes to self-evolution: changing the artifact, changing the harness, and changing the model itself. They range from a zero-data reinforcement learning paradigm (Absolute Zero) to a fully automated research system deployed across 166 papers and 67 topics (FARS), from prompt evolution that outperforms gradient-based optimization (GEPA) to an evolutionary coding agent that discovered improvements to Strassen's algorithm after 56 years (AlphaEvolve).</p>
-<p>This survey introduces three anchoring constructs—<strong>Model</strong>, <strong>Harness</strong>, and <strong>Artifact</strong>—and uses them to partition self-evolution strategies into three mutually exclusive categories, each defined by one question: <em>which layer of the agent is changing?</em></p>
-<hr />
 <h2 id="conceptual-foundations">Conceptual Foundations: Model, Harness, Artifact, and the Agent Identity</h2>
+<p>The eight-paper cut covers three primary loci of evolution—changing the artifact, the harness, or the model. They range from a zero-data reinforcement learning paradigm (Absolute Zero) to a fully automated research system deployed across 166 papers and 67 topics (FARS), from prompt evolution that outperforms gradient-based optimization (GEPA) to an evolutionary coding agent that discovered improvements to Strassen's algorithm after 56 years (AlphaEvolve). Model, Harness, and Artifact are analytical lenses for locating the write, not mutually exclusive buckets. Hybrid systems such as UI-Mem can change more than one layer.</p>
 <p><strong>Model</strong> denotes the parametric language model whose weights encode compressed knowledge. Those weights may be frozen or trainable; when the Model changes, gradient updates flow into it and weights shift.</p>
 <p><strong>Harness</strong> denotes everything surrounding the Model at inference time without requiring weight updates: prompts, system instructions, routing logic, memory stores, tool dispatchers, workflow scaffolds, MCP libraries. The Harness is software, not learned parameters; it can be rewritten between calls with no gradient involved.</p>
 <p><img alt="Alita: Generalist Agent Enabling Scalable Agentic Reasoning with Minimal Predefinition and Maximal Self-Evolution" src="/images/359239/figure-1.jpg" loading="lazy" width="1200" height="409" />
@@ -240,38 +342,97 @@ related_research:
 <p>The separation of proposer and solver roles within a single model prevents reward collapse. Tasks the model already solves trivially produce no gradient signal, pushing the proposer toward tasks at the boundary of current capability. The three task types provide structural diversity preventing collapse to a narrow class of easily-generated tasks.</p>
 <p>The scope limitation is equally important: AZR is bounded by the verifiable domain. Open-ended dialogue, subjective judgment, and aesthetic evaluation cannot be automatically verified. This is an honest boundary condition on the entire Model-layer self-evolution paradigm as it currently exists.</p>
 <hr />
+<h2 id="representative-systems">Representative Systems: ReasoningBank, MemGen, and AgentEvolver</h2>
+<p>The eight-paper cut above is organized by layer. Three later systems extend the taxonomy with memory, latent recall, and an end-to-end training stack. They do not replace AlphaEvolve, GEPA, or AZR.</p>
+<h3 id="reasoningbank">ReasoningBank <a class="sky-paper-source" href="https://arxiv.org/abs/2509.25140" aria-label="Read the ReasoningBank paper on arXiv">Original paper ↗</a></h3>
+<p>ReasoningBank, from Ouyang, Yan, Hsu and colleagues at UIUC, Google Cloud AI Research, and Yale, distills generalizable reasoning strategies from an agent's self-judged successes <em>and</em> failures. At test time the agent retrieves relevant memories, acts, then writes new learnings back. Memory-aware test-time scaling (MaTTS) spends extra compute on each task to produce diverse traces, which in turn yield higher-quality memory. On web browsing and software engineering benchmarks the authors report better success and fewer steps than memory that stores raw trajectories or only successful routines. Code: <a href="https://github.com/google-research/reasoning-bank">google-research/reasoning-bank</a>.</p>
+<p>In this taxonomy ReasoningBank is harness-layer memory evolution. Weights stay frozen; what persists is a structured strategy bank, not a transcript dump.</p>
+<h3 id="memgen">MemGen <a class="sky-paper-source" href="https://arxiv.org/abs/2509.24704" aria-label="Read the MemGen paper on arXiv">Original paper ↗</a></h3>
+<p>MemGen, from Zhang, Fu, and Yan at the National University of Singapore, argues that neither full weight updates nor an external retrieval database captures how memory and reasoning interleave. A <em>memory trigger</em> decides when to invoke memory; a <em>memory weaver</em> turns the current state into a latent token sequence that is woven into ongoing reasoning. The backbone is not fully fine-tuned; the trigger and weaver are trained modules, typically as LoRA adapters, so some parameters do move. Across eight benchmarks the authors report gains of up to 38.22% over external memory systems such as ExpeL and AWM, and up to 13.44% over GRPO, with unplanned emergence of planning, procedural, and working-memory behaviors.</p>
+<p>MemGen is hybrid. The write lands in trained memory modules rather than a document store or a full backbone update, which is why it appears in both the memory and model-weights rows.</p>
+<h3 id="agentevolver">AgentEvolver <a class="sky-paper-source" href="https://arxiv.org/abs/2511.10395" aria-label="Read the AgentEvolver paper on arXiv">Original paper ↗</a></h3>
+<p>AgentEvolver, from Zhai, Tao, Chen and colleagues, is a self-evolving agent system aimed at the cost of RL for tool-using agents. It combines three mechanisms: <em>self-questioning</em> (curiosity-driven task generation, so novel environments do not require a hand-built dataset), <em>self-navigating</em> (experience reuse and hybrid policy guidance), and <em>self-attributing</em> (credit that distinguishes which states and actions actually contributed). The authors report more efficient exploration and better sample use than standard RL baselines. Code: <a href="https://github.com/modelscope/AgentEvolver">modelscope/AgentEvolver</a>.</p>
+<p>AgentEvolver is the closest of the three to a full training stack: it evolves the task distribution, the exploration policy, and the learned policy together. That is why it appears under environment, policy, and model weights in the taxonomy table.</p>
+<h2 id="how-to-build">How to Build a Self-Evolving Agent Framework</h2>
+<p>A self-evolving agent framework is not "add memory." It is a write path with an evaluation gate. The papers above disagree on <em>where</em> the write lands; they converge on five engineering pieces.</p>
+<pre><code>collect trace
+  -&gt; evaluate against a frozen holdout
+  -&gt; propose one update to a named layer
+  -&gt; regression-test the candidate
+  -&gt; promote a versioned snapshot
+  -&gt; monitor live metrics
+  -&gt; roll back if retention or safety drops</code></pre>
+<p>Keep a versioned record for every promoted change, for example:</p>
+<pre><code>UpdateRecord
+  id: mem-0142
+  layer: memory | tools | policy | workflow | weights | environment
+  parent: mem-0141
+  evidence: eval-suite-v3 score, trace ids
+  gate: pass | reject
+  rollback_to: mem-0141</code></pre>
+<h3 id="feedback-collection">1. Feedback collection</h3>
+<p>Log the trajectory, the outcome, and the evaluator that scored it. Prefer executable checks (unit tests, sandbox traces, structured graders) over a single LLM-as-judge scalar. GEPA shows that natural-language reflection is useful <em>in addition to</em> a score, not instead of one. If you cannot say what counted as success, you cannot say the agent evolved.</p>
+<h3 id="memory-update-loop">2. Memory and update loop</h3>
+<p>Decide the write target before you store anything: strategy memory (ReasoningBank), tool inventory (Alita), prompt population (GEPA), or weights (AZR, AgentEvolver). Retrieve before acting, write after judging, and keep failed traces—success-only memory repeats the same blind spots. Version every write. A memory store with no schema is a log, not a loop.</p>
+<h3 id="evaluation-harness">3. Evaluation harness</h3>
+<p>Hold out tasks the updater cannot see. Measure retention across domains, not only the latest benchmark; EEVEE exists because prompt evolution on one stream destroys another. Separate <em>automation</em> (the agent finished) from <em>durable improvement</em> (the next run starts better). If the only eval is the training distribution, you are overfitting a loop.</p>
+<h3 id="safety-gates">4. Safety gates</h3>
+<p>Do not let the agent promote a change that failed evaluation, changed permissions, or cannot be explained. Put a gate in front of tool installation, prompt replacement, and any weight update. Self-play and self-questioning can invent tasks that are easy to reward-hack; treat proposer output as untrusted data.</p>
+<h3 id="rollback-versioning">5. Rollback and versioning</h3>
+<p>Every promoted prompt, memory item, tool, and checkpoint needs an ID and a rollback command. Artifact-layer systems already do this with program databases; harness-layer systems often skip it and then cannot undo a bad prompt. Without rollback, a bad write is hard to undo; treat versioning as part of the loop, not an afterthought.</p>
+<p>A minimal production skeleton: collect traces → judge with a frozen eval set → write to one named layer → promote only behind a gate → keep the previous version. That is the implementation counterpart of the taxonomy.</p>
 <h2 id="open-problems">Boundaries, Open Problems, and Real-World Deployment Constraints</h2>
 <p><strong>Verifiability is the master constraint.</strong> Both Artifact-layer and Model-layer evolution require automated correctness signals: AlphaEvolve's code executor, AZR's verification environment. When such signals are unavailable, neither category can function without human evaluation in the loop. FARS demonstrates what happens at the boundary: automated metrics for research quality are insufficient, so evaluation relies on 282 volunteer reviews—an honest acknowledgment that automated verifiability for open-ended scientific writing does not yet exist at acceptable quality. Harness-layer evolution remains the most broadly applicable category for domains where verification is soft or subjective.</p>
 <p><img alt="Learning Agent Routing From Early Experience" src="/images/359239/figure-8.jpg" loading="lazy" width="1200" height="581" />
 <em>Learning Agent Routing workflow</em></p>
 <p><strong>Cold-start scarcity affects all categories differently.</strong> BoundaryRouter confronts routing cold-start—no prior routing labels exist for new deployments—and builds a behavioral reference from a seed set. EEVEE confronts prompt cold-start under domain shift—as new benchmark domains enter the stream, existing configurations have no experience with them. FARS confronts quality cold-start at scale—in early deployment, there is no evidence about which experimental configurations produce strong papers. Each paper develops a specific mitigation, but none eliminates the cold-start problem; they manage it.</p>
 <p><strong>Proxy optimization and faithfulness failures are structurally analogous.</strong> AZR faces reward hacking risk: a sufficiently powerful proposer could generate tasks that are technically executable-verifiable but solved by surface pattern matching rather than actual reasoning. FARS faces faithfulness failures: the writing agent occasionally overclaims or inadequately represents experimental evidence, optimizing for plausible-sounding language rather than accurate scientific description. Both represent the same structural issue—optimizing a measurable proxy at the expense of the intended objective.</p>
-<p><strong>The Model ceiling limits Harness evolution.</strong> Every Harness-layer approach in this survey operates on a frozen Model with a capability ceiling: there are tasks it cannot solve regardless of prompt quality or memory richness. Once Harness optimization saturates, further gains require Model-layer updates. This motivates co-evolution architectures in which Harness improvements generate training data for Model updates, which in turn enable further Harness optimization. No paper in this survey implements full three-layer co-evolution, but the taxonomy points toward it as the natural next step.</p>
+<p><strong>The Model ceiling limits Harness evolution.</strong> Most Harness-layer approaches in this survey operate on a frozen Model with a capability ceiling: there are tasks it cannot solve regardless of prompt quality or memory richness. UI-Mem is the hybrid exception, because it also updates weights. Once Harness optimization saturates, further gains require Model-layer updates. This motivates co-evolution architectures in which Harness improvements generate training data for Model updates, which in turn enable further Harness optimization. No paper in this survey implements full three-layer co-evolution, but the taxonomy points toward it as the natural next step.</p>
 <p><strong>Evaluation methodology is itself an open problem.</strong> A central difficulty for self evolution in AI agents is showing that a reported gain is durable improvement rather than automation, one-off adaptation, or benchmark overfitting. FARS's structured volunteer reviews, AlphaEvolve's formal correctness proofs, and AZR's out-of-distribution benchmark transfer are not interchangeable. Formal proofs are available only for well-specified mathematical problems. Volunteer reviews require significant human effort and carry inter-reviewer variance. Benchmark transfer measures a specific proxy for generalization but says nothing about real-world utility. FARS's decision to publish all 166 papers with all 282 reviews—including failures—is a methodological commitment that the field would benefit from adopting more broadly.</p>
 <p><strong>Multi-domain heterogeneity requires explicit architectural accommodation.</strong> EEVEE prevents prompt specialization for one domain from destroying performance on others; BoundaryRouter prevents routing experience from failing to transfer to out-of-domain queries. In both cases the solution involves explicit structure in the Harness—a router partitioning the input space, rubric-guided reasoning encoding structural knowledge—rather than hoping a single configuration generalizes.</p>
 <hr />
 <h2 id="conclusion">Conclusion</h2>
 <p>What evolves, where feedback comes from, and where the loop closes each have a clean answer per category.</p>
 <p>In Artifact-layer evolution (AlphaEvolve, FARS), the Artifact population evolves while the agent stays fixed. Feedback comes from automated evaluators—code executors, benchmark scores—or structured human review when automation is insufficient. The loop closes at the Artifact store: surviving Artifacts seed the next generation, and neither Model weights nor Harness configuration are modified. The power of this category—genuine discovery at scale—is inseparable from its prerequisite: reliable evaluation.</p>
-<p>In Harness-layer evolution (GEPA, EEVEE, UI-Mem, Alita, BoundaryRouter), the Harness configuration evolves while Model weights remain frozen. Feedback comes from task outcomes consumed by meta-level optimizers operating in language space (GEPA, EEVEE), abstracted into structured memory (UI-Mem, Alita), or encoded as behavioral reference (BoundaryRouter). The loop closes inside the Harness: updated prompts, memory entries, routing policies, and tool libraries alter future behavior without any gradient flowing into the Model. This is the most broadly applicable category because it requires no weight access.</p>
+<p>In Harness-layer evolution (GEPA, EEVEE, Alita, BoundaryRouter), the Harness configuration evolves while Model weights remain frozen. Feedback comes from task outcomes consumed by meta-level optimizers operating in language space (GEPA, EEVEE), converted into reusable tools (Alita), or encoded as behavioral reference (BoundaryRouter). The loop closes inside the Harness: updated prompts, memory entries, routing policies, and tool libraries alter future behavior without any gradient flowing into the Model. This is the most broadly applicable category because it requires no weight access. UI-Mem is hybrid: its memory store is a harness artifact, but online RL also moves weights.</p>
 <p>In Model-layer evolution (AZR), parametric weights evolve through a fully internal self-play circuit. Feedback comes exclusively from verifiable execution outcomes—compiler results, test-case pass rates—that substitute for human annotation. The loop closes inside the training process: the Model proposes tasks, solves them, receives execution-verified rewards, updates its own weights, and proposes harder tasks aligned with its new capability level. The result matches curated supervised training in well-verifiable domains with zero external data, bounded precisely by what can be automatically verified.</p>
+<h2 id="awesome-self-evolving-agents">Awesome Self-Evolving Agents: Papers, Repos, and Tools</h2>
+<p>A short reading and tooling list, not a second bibliography. Use it when you want the survey papers, the named systems, or a repo to clone.</p>
+<h3 id="surveys-and-taxonomies">Surveys and taxonomies</h3>
+<ul>
+<li><a href="https://arxiv.org/abs/2507.21046">A Survey of Self-Evolving Agents</a> (Gao et al., arXiv:2507.21046) — what / when / how / where to evolve. Companion list: <a href="https://github.com/CharlesQ9/Self-Evolving-Agents">CharlesQ9/Self-Evolving-Agents</a>.</li>
+<li><a href="https://arxiv.org/abs/2508.07407">A Comprehensive Survey of Self-Evolving AI Agents</a> (Fang et al., arXiv:2508.07407) — lifelong agentic systems and the input–agent–environment–optimiser loop. Companion list: <a href="https://github.com/EvoAgentX/Awesome-Self-Evolving-Agents">EvoAgentX/Awesome-Self-Evolving-Agents</a>.</li>
+<li><a href="https://lsl.zone/blog/2026/a-taxonomy-of-self-evolving-agents/">A Taxonomy of Self-evolving Agents</a> — a short public taxonomy organized by what the agent changes.</li>
+</ul>
+<h3 id="named-systems">Named systems</h3>
+<ul>
+<li>ReasoningBank — <a href="https://arxiv.org/abs/2509.25140">paper</a>, <a href="https://github.com/google-research/reasoning-bank">code</a></li>
+<li>MemGen — <a href="https://arxiv.org/abs/2509.24704">paper</a>, <a href="https://github.com/bingreeky/MemGen">code</a></li>
+<li>AgentEvolver — <a href="https://arxiv.org/abs/2511.10395">paper</a>, <a href="https://github.com/modelscope/AgentEvolver">code</a></li>
+<li>The eight systems in the table above — AlphaEvolve, FARS, GEPA, EEVEE, UI-Mem, Alita, BoundaryRouter, Absolute Zero</li>
+</ul>
+<h3 id="implementation-guides">Implementation guides</h3>
+<ul>
+<li><a href="https://developers.openai.com/cookbook/examples/partners/self_evolving_agents/autonomous_agent_retraining">OpenAI Cookbook: Autonomous Agent Retraining</a> — evals, a retraining loop, and LLM-as-a-judge in an executable notebook.</li>
+<li>This page's <a href="#how-to-build">build checklist</a> — feedback, memory writes, eval harness, safety gates, rollback.</li>
+</ul>
 <h2 id="data-and-citation">Data and Citation</h2>
 <p>The comparison table above and the full reference list are available as downloadable files for reuse in your own reading notes, slides, or literature reviews.</p>
 <ul class="sky-resource-links">
 <li><a href="/assets/data/self-evolving-agents-survey.csv" download>Comparison table (CSV, 8 papers)</a></li>
-<li><a href="/assets/bibliography/self-evolving-agents-survey.bib" download>All references (BibTeX, 8 entries)</a></li>
+<li><a href="/assets/bibliography/self-evolving-agents-survey.bib" download>All references (BibTeX, 13 entries)</a></li>
 </ul>
 <p><strong>Suggested citation</strong></p>
 <blockquote class="sky-citation">
-<p>AgentsPulse Editorial Team. "Self-Evolving Agents: Model, Harness, and Artifact Evolution." <em>AgentsPulse</em>, July 29, 2026. https://agentspulse.github.io/tutorials/self-evolving-agents-review-en/</p>
+<p>AgentsPulse Editorial Team. "Self-Evolving Agents: Survey, Taxonomy, and How Self-Improving AI Agents Work." <em>AgentsPulse</em>, September 3, 2026. https://agentspulse.github.io/tutorials/self-evolving-agents-review-en/</p>
 </blockquote>
 <p><strong>BibTeX for this survey</strong></p>
 {% raw %}<pre><code>@misc{agentspulse2026selfevolving,
-  title        = {Self-Evolving Agents: Model, Harness, and Artifact Evolution},
+  title        = {Self-Evolving Agents: Survey, Taxonomy, and How Self-Improving AI Agents Work},
   author       = {{AgentsPulse Editorial Team}},
   year         = {2026},
   howpublished = {AgentsPulse},
-  note         = {Survey of eight self-evolving agent systems},
+  note         = {Survey, taxonomy, and implementation guide for self-evolving agents},
   url          = {https://agentspulse.github.io/tutorials/self-evolving-agents-review-en/}
 }</code></pre>{% endraw %}
 <h2 id="references">Original Papers</h2>
@@ -284,4 +445,9 @@ related_research:
 <li>AlphaEvolve: A coding agent for scientific and algorithmic discovery. arXiv:2506.13131v1. 2025. <a href="https://arxiv.org/abs/2506.13131">View on arXiv</a>.</li>
 <li>Alita: Generalist Agent Enabling Scalable Agentic Reasoning with Minimal Predefinition and Maximal Self-Evolution. arXiv:2505.20286v1. 2025. <a href="https://arxiv.org/abs/2505.20286">View on arXiv</a>.</li>
 <li>Absolute Zero: Reinforced Self-play Reasoning with Zero Data. arXiv:2505.03335v2. 2025. <a href="https://arxiv.org/abs/2505.03335">View on arXiv</a>.</li>
+<li>A Survey of Self-Evolving Agents: What, When, How, and Where to Evolve on the Path to Artificial Super Intelligence. arXiv:2507.21046. 2025. <a href="https://arxiv.org/abs/2507.21046">View on arXiv</a>.</li>
+<li>A Comprehensive Survey of Self-Evolving AI Agents: A New Paradigm Bridging Foundation Models and Lifelong Agentic Systems. arXiv:2508.07407. 2025. <a href="https://arxiv.org/abs/2508.07407">View on arXiv</a>.</li>
+<li>ReasoningBank: Scaling Agent Self-Evolving with Reasoning Memory. arXiv:2509.25140. 2025. <a href="https://arxiv.org/abs/2509.25140">View on arXiv</a>.</li>
+<li>MemGen: Weaving Generative Latent Memory for Self-Evolving Agents. arXiv:2509.24704. 2025. <a href="https://arxiv.org/abs/2509.24704">View on arXiv</a>.</li>
+<li>AgentEvolver: Towards Efficient Self-Evolving Agent System. arXiv:2511.10395. 2025. <a href="https://arxiv.org/abs/2511.10395">View on arXiv</a>.</li>
 </ol>

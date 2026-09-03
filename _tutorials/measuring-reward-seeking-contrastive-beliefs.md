@@ -41,8 +41,8 @@ article_toc:
     label: "References"
 related_research:
   - url: "/tutorials/self-evolving-agents-review-en/"
-    title: "Self-Evolving Agents: Model, Harness, and Artifact Evolution"
-    description: "A taxonomy of persistent model, harness, memory, and capability updates."
+    title: "Self-Evolving Agents: Survey, Taxonomy, and How Self-Improving AI Agents Work"
+    description: "A survey and taxonomy of self-evolving agents, plus how self-improving AI agents persist updates."
   - url: "/tutorials/stateful-long-horizon-agents-review/"
     title: "Stateful Long-Horizon Agents: 10 Key Papers"
     description: "How agent systems preserve state, recover from failure, and operate over long horizons."

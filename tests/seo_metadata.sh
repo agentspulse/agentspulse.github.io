@@ -59,9 +59,9 @@ check_contains "_site/about/index.html" '"@type": "AboutPage"'
 check_contains "_site/404.html" "<title>Page Not Found | AgentsPulse</title>"
 check_contains "_site/404.html" "<meta name=\"description\" content=\"Return to AgentsPulse to explore frontier AI papers, surveys, and practical explainers across LLMs, agents, reasoning, and benchmarks.\""
 
-check_contains "_site/tutorials/self-evolving-agents-review-en/index.html" "<title>Self-Evolving Agents: A Review of 8 Key Papers | AgentsPulse</title>"
-check_contains "_site/tutorials/self-evolving-agents-review-en/index.html" "<meta name=\"description\" content=\"A self-evolving agents survey of eight key papers, explaining how AI agents improve models, harnesses, and artifacts through feedback and self-play.\""
-check_contains "_site/tutorials/self-evolving-agents-review-en/index.html" "<h1>Self-Evolving Agents: Model, Harness, and Artifact Evolution</h1>"
+check_contains "_site/tutorials/self-evolving-agents-review-en/index.html" "<title>Self-Evolving Agents: Survey, Taxonomy &amp; How They Improve | AgentsPulse</title>"
+check_contains "_site/tutorials/self-evolving-agents-review-en/index.html" "<meta name=\"description\" content=\"A self-evolving agents survey and taxonomy: how self-improving AI agents update memory, tools, workflows, and weights, with papers and a build guide.\""
+check_contains "_site/tutorials/self-evolving-agents-review-en/index.html" "<h1>Self-Evolving Agents: Survey, Taxonomy, and How Self-Improving AI Agents Work</h1>"
 check_contains "_site/tutorials/self-evolving-agents-review-en/index.html" "aria-label=\"Table of contents\""
 check_contains "_site/tutorials/self-evolving-agents-review-en/index.html" "href=\"https://arxiv.org/abs/2506.13131\""
 check_contains "_site/tutorials/self-evolving-agents-review-en/index.html" "<html lang=\"en\">"
@@ -126,7 +126,13 @@ fi
 SEA="_site/tutorials/self-evolving-agents-review-en/index.html"
 
 check_contains "$SEA" '<h2 id="what-are-self-evolving-agents">What Are Self-Evolving Agents?</h2>'
+check_contains "$SEA" '<h2 id="self-evolving-vs-self-improving">Self-Evolving Agents vs Self-Improving AI Agents</h2>'
+check_contains "$SEA" '<h2 id="taxonomy-of-self-evolving-agents">A Taxonomy of Self-Evolving Agents</h2>'
+check_contains "$SEA" '<h2 id="survey-of-self-evolving-agents">Survey of Self-Evolving Agents</h2>'
 check_contains "$SEA" '<h2 id="papers-at-a-glance">8 Papers at a Glance</h2>'
+check_contains "$SEA" '<h2 id="representative-systems">Representative Systems: ReasoningBank, MemGen, and AgentEvolver</h2>'
+check_contains "$SEA" '<h2 id="how-to-build">How to Build a Self-Evolving Agent Framework</h2>'
+check_contains "$SEA" '<h2 id="awesome-self-evolving-agents">Awesome Self-Evolving Agents: Papers, Repos, and Tools</h2>'
 check_contains "$SEA" '<h2 id="data-and-citation">Data and Citation</h2>'
 
 # target keyword phrases must appear in body copy
@@ -159,14 +165,14 @@ if [[ "$csv_rows" -ne 8 ]]; then
 fi
 
 bib_authors=$(grep -c "^  author " "_site/assets/bibliography/self-evolving-agents-survey.bib")
-if [[ "$bib_authors" -ne 8 ]]; then
+if [[ "$bib_authors" -ne 13 ]]; then
   echo "FAIL: every BibTeX entry needs an author list, found $bib_authors"
   exit 1
 fi
 
 bib_entries=$(grep -c "^@misc{" "_site/assets/bibliography/self-evolving-agents-survey.bib")
-if [[ "$bib_entries" -ne 8 ]]; then
-  echo "FAIL: BibTeX file should hold 8 entries, found $bib_entries"
+if [[ "$bib_entries" -ne 13 ]]; then
+  echo "FAIL: BibTeX file should hold 13 entries, found $bib_entries"
   exit 1
 fi
 

@@ -39,8 +39,8 @@ article_toc:
     label: "References"
 related_research:
   - url: "/tutorials/self-evolving-agents-review-en/"
-    title: "Self-Evolving Agents: Model, Harness, and Artifact Evolution"
-    description: "A foundation-first taxonomy for persistent improvement across the agent stack."
+    title: "Self-Evolving Agents: Survey, Taxonomy, and How Self-Improving AI Agents Work"
+    description: "A survey and taxonomy of self-evolving agents, plus how self-improving AI agents persist updates."
   - url: "/tutorials/measuring-reward-seeking-contrastive-beliefs/"
     title: "Measuring Reward-Seeking in RL-Trained Models"
     description: "A causal evaluation of whether RL-trained models follow intent or inferred grader preferences."

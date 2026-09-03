@@ -12,7 +12,7 @@ AgentsPulse 聚焦 AI Agent 研究，提供研究论文综述、架构分析与�
 - [DeepSeek Harness Architecture: How It Works and Whether to Adopt It](https://agentspulse.github.io/tutorials/deepseek-harness-and-cordis-why-everything-is-a-plugin/) — 分析 DSH 的插件化架构、Cordis 基础、运行边界与采用风险。
 - [DeepSeek Harness vs Pi Agent: Plugin Runtime or Minimal Coding Harness?](https://agentspulse.github.io/tutorials/deepseek-harness-vs-pi-agent/) — 对比插件运行时与极简 Coding Harness 在扩展、MCP、隔离和会话上的取舍。
 - [Cordis Spatiotemporal Composability](https://agentspulse.github.io/tutorials/cordis-spatiotemporal-composability/) — 解读可逆 Effect、响应式 Coeffect 与 Fiber 生命周期。
-- [Self-Evolving Agents: Model, Harness, and Artifact Evolution](https://agentspulse.github.io/tutorials/self-evolving-agents-review-en/) — 通过 8 篇代表性论文，梳理模型、Harness 与 Artifact 三类自进化路径。
+- [Self-Evolving Agents: Survey, Taxonomy, and How Self-Improving AI Agents Work](https://agentspulse.github.io/tutorials/self-evolving-agents-review-en/) — 定义、taxonomy、8 篇论文综述、代表系统与实现清单。
 - [Stateful Long-Horizon Agents: 10 Key Papers](https://agentspulse.github.io/tutorials/stateful-long-horizon-agents-review/) — 综述长时程 Agent 的记忆、执行连续性、恢复与延迟行动机制。
 - [Measuring Reward-Seeking in RL-Trained Models](https://agentspulse.github.io/tutorials/measuring-reward-seeking-contrastive-beliefs/) — 分析 Contrastive SDF 如何识别模型是在遵循用户意图，还是迎合推测出的评分偏好。
 - [When AI Agents Get Internal Access: The Security Boundary Has Changed](https://agentspulse.github.io/tutorials/ai-agent-internal-access-security-boundary/) — 讨论 Agent 获得内部访问权限后的身份、最小权限、隔离和行为监控问题。
