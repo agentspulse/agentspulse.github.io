@@ -12,7 +12,7 @@ permalink: /tutorials/deepseek-harness-vs-pi-agent/
 thumbnail: "/images/deepseek-harness-vs-pi-agent/model-provider-settings.jpg"
 og_image: "/images/deepseek-harness-vs-pi-agent/model-provider-settings.jpg"
 date: 2026-08-15
-last_modified_at: 2026-08-15
+last_modified_at: 2026-09-07
 author_name: "AgentsPulse Editorial Team"
 cover_alt: "DeepSeek Harness model provider settings used in the Pi Agent comparison"
 cover_width: 1200
@@ -48,6 +48,9 @@ article_toc:
   - id: "references"
     label: "References"
 related_research:
+  - url: "/tutorials/pi-agent-harness-v2-crash-recovery/"
+    title: "Pi Harness v2 Crash Recovery"
+    description: "What survives a restart, when tools can replay, and how durable outcomes return in order."
   - url: "/tutorials/deepseek-harness-and-cordis-why-everything-is-a-plugin/"
     title: "DeepSeek Harness Architecture"
     description: "A deeper look at DSH profiles, bundles, plugins, approval, and sandbox boundaries."
@@ -96,7 +99,7 @@ Comparing these two models fairly: DSH has a named, built-in approval/sandbox su
 
 ## 5. Context, Sessions, and Compaction
 
-Pi's session model is explicit and specific: sessions are stored as JSONL trees, supporting branching, forking, resuming, and compaction. This tree structure is a distinctive design choice — it allows a user to explore multiple conversational branches from a shared history point and resume any of them later, with compaction available to manage context size as sessions grow. Extensions can customize compaction behavior, per the extension capabilities described above.
+Pi's session model is explicit and specific: sessions are stored as JSONL trees, supporting branching, forking, resuming, and compaction. This tree structure is a distinctive design choice — it allows a user to explore multiple conversational branches from a shared history point and resume any of them later, with compaction available to manage context size as sessions grow. Extensions can customize compaction behavior, per the extension capabilities described above. For the newer durable runtime design—including crash recovery, operation state, and safe tool replay—see [Pi Harness v2: What Survives a Crash?](/tutorials/pi-agent-harness-v2-crash-recovery/).
 
 DSH's architecture composes "sessions" as one of the plugin/service categories wired through profiles and bundles, alongside model adapters, tools, and telemetry. The verified facts describe sessions as a first-class composed component of the runtime, but do not specify an equivalent branching/forking data structure. Teams evaluating DSH for long-running or branch-heavy workflows should check the current session plugin's documented behavior directly rather than assuming feature parity with Pi's JSONL tree model.
 

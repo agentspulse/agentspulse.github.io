@@ -107,6 +107,21 @@ check_contains "$DSH_PI" ">DeepSeek Harness vs Pi Agent: Plugin Runtime or Minim
 check_contains "$DSH_PI" 'href="/tutorials/deepseek-harness-and-cordis-why-everything-is-a-plugin/"'
 check_contains "_site/tutorials/agent-framework-harness-runtime-production/index.html" 'href="/tutorials/deepseek-harness-and-cordis-why-everything-is-a-plugin/"'
 
+# Pi Agent Harness v2 crash-recovery guide
+PI_HARNESS="_site/tutorials/pi-agent-harness-v2-crash-recovery/index.html"
+check_contains "$PI_HARNESS" "<title>Pi Harness v2: Crash Recovery and Tool Replay | AgentsPulse</title>"
+check_contains "$PI_HARNESS" '<meta name="description" content="How Pi Agent Harness v2 handles crash recovery, durable operations, safe tool replay, staged results, and the limits of exactly-once execution."'
+check_contains "$PI_HARNESS" ">Pi Harness v2: What Survives a Crash?</h1>"
+check_contains "$PI_HARNESS" 'src="/images/pi-agent-harness-v2-crash-recovery/session-model.png"'
+check_contains "$PI_HARNESS" 'href="/tutorials/deepseek-harness-vs-pi-agent/"'
+check_contains "$PI_HARNESS" 'href="/tutorials/agent-framework-harness-runtime-production/"'
+check_contains "$DSH_PI" 'href="/tutorials/pi-agent-harness-v2-crash-recovery/"'
+check_contains "_site/tutorials/agent-framework-harness-runtime-production/index.html" 'href="/tutorials/pi-agent-harness-v2-crash-recovery/"'
+if grep -Fq '<!-- C0' "$PI_HARNESS"; then
+  echo "FAIL: internal evidence markers leaked into Pi Harness article"
+  exit 1
+fi
+
 if grep -Fq "61.149.12.104" "_site/tutorials/self-evolving-agents-review-en/index.html"; then
   echo "FAIL: internal preview URL leaked into the published article"
   exit 1

@@ -12,7 +12,7 @@ permalink: /tutorials/agent-framework-harness-runtime-production/
 thumbnail: "/images/agent-framework-harness-runtime-production/githubio_harness_runtime_00_architecture.jpg"
 og_image: "/images/agent-framework-harness-runtime-production/githubio_harness_runtime_00_architecture.jpg"
 date: 2026-08-05
-last_modified_at: 2026-08-05
+last_modified_at: 2026-09-07
 author_name: "AgentsPulse Editorial Team"
 cover_alt: "The Agent Framework Is Not the Runtime: Why Harnesses Are Taking Over Production"
 cover_width: 1200
@@ -50,6 +50,9 @@ article_toc:
   - id: "references"
     label: "References"
 related_research:
+  - url: "/tutorials/pi-agent-harness-v2-crash-recovery/"
+    title: "Pi Harness v2 Crash Recovery"
+    description: "A code-level walkthrough of durable operations, replay policy, and staged tool outcomes."
   - url: "/tutorials/deepseek-harness-and-cordis-why-everything-is-a-plugin/"
     title: "DeepSeek Harness Architecture"
     description: "How DeepSeek applies an everything-is-a-plugin architecture to models, tools, sessions, approvals, and sandboxes."
@@ -151,7 +154,7 @@ It is tempting to focus on the more visible harness features — permissions, sa
 
 *The harness owns the repeated control path between request context, execution policy, and evaluated outcomes.*
 
-Kiro's team reports that after consolidating three separate compaction implementations into one, they "shipped improved compaction prompts in the harness for better context retention," along with "improved retry logic for model inference requests, faster permission evaluation, and more resilient MCP server connections" — and that "every client benefits from these changes" without client-side code ([Kiro](https://kiro.dev/blog/one-agent/)). This is the clearest illustration of the durability argument for a harness layer: retry logic, compaction strategy, and connection resilience are the kind of code that degrades when reimplemented three times under time pressure, and improves when there is exactly one implementation that all surfaces depend on.
+Kiro's team reports that after consolidating three separate compaction implementations into one, they "shipped improved compaction prompts in the harness for better context retention," along with "improved retry logic for model inference requests, faster permission evaluation, and more resilient MCP server connections" — and that "every client benefits from these changes" without client-side code ([Kiro](https://kiro.dev/blog/one-agent/)). Pi’s current `AgentHarness` makes the same reliability boundary concrete through durable operation state; the [Pi Harness v2 crash-recovery walkthrough](/tutorials/pi-agent-harness-v2-crash-recovery/) traces exactly what happens when a process stops between a tool intent and its committed outcome. This is the clearest illustration of the durability argument for a harness layer: retry logic, compaction strategy, and connection resilience are the kind of code that degrades when reimplemented three times under time pressure, and improves when there is exactly one implementation that all surfaces depend on.
 
 The CNCF observability post supplies a different angle on the same theme: it describes agent failure modes that do not resemble traditional service failures at all. "Agents don't crash with stack traces. They loop, hallucinate, burn tokens, and produce plausible-looking output that's subtly wrong" ([CNCF](https://www.cncf.io/blog/2026/08/04/you-cant-debug-what-you-cant-see-observability-for-ai-agents/)). This is a first-person operational account from an unnamed team ("we've been running AI agents in production for months"), not a named case study, so its claims should be read as one team's practitioner experience rather than an industry-wide statistic. But the specific failure mechanism it describes — geometric token burn from a tool-calling loop that a traditional APM system would report as normal request volume — is mechanically plausible given how agent loops are structured, and it is precisely the kind of failure that only a harness sitting inside the execution path can detect, because detecting it requires seeing consecutive identical tool calls within a single session, not aggregate service metrics.
 
