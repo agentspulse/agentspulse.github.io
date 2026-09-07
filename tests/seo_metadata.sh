@@ -111,7 +111,7 @@ check_contains "_site/tutorials/agent-framework-harness-runtime-production/index
 PI_HARNESS="_site/tutorials/pi-agent-harness-v2-crash-recovery/index.html"
 check_contains "$PI_HARNESS" "<title>Pi Harness v2: Crash Recovery and Tool Replay | AgentsPulse</title>"
 check_contains "$PI_HARNESS" '<meta name="description" content="How Pi Agent Harness v2 handles crash recovery, durable operations, safe tool replay, staged results, and the limits of exactly-once execution."'
-check_contains "$PI_HARNESS" ">Pi Harness v2: What Survives a Crash?</h1>"
+check_contains "$PI_HARNESS" ">Pi Harness v2: Crash Recovery and Tool Replay</h1>"
 check_contains "$PI_HARNESS" 'src="/images/pi-agent-harness-v2-crash-recovery/session-model.png"'
 check_contains "$PI_HARNESS" 'href="/tutorials/deepseek-harness-vs-pi-agent/"'
 check_contains "$PI_HARNESS" 'href="/tutorials/agent-framework-harness-runtime-production/"'

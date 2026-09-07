@@ -2,7 +2,7 @@
 layout: article-sky
 article_variant: research-review
 lang: en
-title: "Pi Harness v2: What Survives a Crash?"
+title: "Pi Harness v2: Crash Recovery and Tool Replay"
 seo_title: "Pi Harness v2: Crash Recovery and Tool Replay"
 description: "How Pi Agent Harness v2 handles crash recovery, durable operations, safe tool replay, staged results, and the limits of exactly-once execution."
 keywords: "Pi Harness v2, Pi Agent crash recovery, AgentHarness, tool replay, durable agent operations"
