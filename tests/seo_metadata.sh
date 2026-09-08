@@ -122,6 +122,25 @@ if grep -Fq '<!-- C0' "$PI_HARNESS"; then
   exit 1
 fi
 
+# HarnessDev benchmark review
+HARNESSDEV="_site/tutorials/harnessdev-agent-harness-benchmark/index.html"
+RUNTIME="_site/tutorials/agent-framework-harness-runtime-production/index.html"
+check_contains "$HARNESSDEV" "<title>HarnessDev Benchmark: Can LLMs Improve Their Harnesses? | AgentsPulse</title>"
+check_contains "$HARNESSDEV" '<meta name="description" content="How HarnessDev tests LLM-built agent harnesses: creation results, executor transfer, held-out evolution gains, and the cost of running the generated systems."'
+check_contains "$HARNESSDEV" ">HarnessDev Benchmark: Can LLMs Improve Their Harnesses?</h1>"
+check_contains "$HARNESSDEV" 'src="/images/harnessdev-agent-harness-benchmark/creation-runtime.png"'
+check_contains "$HARNESSDEV" 'src="/images/harnessdev-agent-harness-benchmark/completion-check.png"'
+check_contains "$HARNESSDEV" 'src="/images/harnessdev-agent-harness-benchmark/heldout-gains.png"'
+check_contains "$HARNESSDEV" 'href="/tutorials/self-evolving-agents-review-en/"'
+check_contains "$HARNESSDEV" 'href="/tutorials/agent-framework-harness-runtime-production/"'
+check_contains "_site/tutorials/self-evolving-agents-review-en/index.html" 'href="/tutorials/harnessdev-agent-harness-benchmark/"'
+check_contains "$RUNTIME" 'href="/tutorials/harnessdev-agent-harness-benchmark/"'
+h1_count=$(grep -c '<h1' "$HARNESSDEV")
+if [[ "$h1_count" -ne 1 ]]; then
+  echo "FAIL: HarnessDev article should have exactly one h1, found $h1_count"
+  exit 1
+fi
+
 if grep -Fq "61.149.12.104" "_site/tutorials/self-evolving-agents-review-en/index.html"; then
   echo "FAIL: internal preview URL leaked into the published article"
   exit 1

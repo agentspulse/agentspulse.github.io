@@ -12,7 +12,7 @@ permalink: /tutorials/agent-framework-harness-runtime-production/
 thumbnail: "/images/agent-framework-harness-runtime-production/githubio_harness_runtime_00_architecture.jpg"
 og_image: "/images/agent-framework-harness-runtime-production/githubio_harness_runtime_00_architecture.jpg"
 date: 2026-08-05
-last_modified_at: 2026-09-07
+last_modified_at: 2026-09-08
 author_name: "AgentsPulse Editorial Team"
 cover_alt: "The Agent Framework Is Not the Runtime: Why Harnesses Are Taking Over Production"
 cover_width: 1200
@@ -50,6 +50,9 @@ article_toc:
   - id: "references"
     label: "References"
 related_research:
+  - url: "/tutorials/harnessdev-agent-harness-benchmark/"
+    title: "HarnessDev Benchmark"
+    description: "Whether models can create and improve reusable harness software, and whether those edits hold out."
   - url: "/tutorials/pi-agent-harness-v2-crash-recovery/"
     title: "Pi Harness v2 Crash Recovery"
     description: "A code-level walkthrough of durable operations, replay policy, and staged tool outcomes."
@@ -197,6 +200,8 @@ Build tracing and cost accounting into the execution path itself, not as a downs
 If you train or fine-tune against agent traces, verify that your training environment reproduces the deployment harness's tool-call format and state handling. Orchard's Codex-harness result is a single data point, not a general rule, but the direction of the effect is a reasonable prior to test against your own harness before assuming a simplified training loop will transfer.
 
 Do not conflate harness maturity with model capability. None of the four sources claim their harness improves the underlying model's reasoning; they claim it improves reliability, consistency, and operability of whatever model sits behind it. Evaluate harness changes and model changes separately.
+
+If the question is whether a model can generate or improve that harness software, [HarnessDev](/tutorials/harnessdev-agent-harness-benchmark/) separates creation, executor transfer, and held-out evolution instead of treating the result as a model leaderboard.
 
 ## Evidence and Limits
 

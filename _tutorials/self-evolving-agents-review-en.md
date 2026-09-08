@@ -14,7 +14,7 @@ cover_alt: "Three routes to agent self-evolution across models, harnesses, and a
 cover_width: 1200
 cover_height: 697
 date: 2026-07-14
-last_modified_at: 2026-09-03
+last_modified_at: 2026-09-08
 author_name: "AgentsPulse Editorial Team"
 paper_count: 8
 research_scope: "Taxonomy · Papers · Implementation"
@@ -57,6 +57,9 @@ article_toc:
   - id: "references"
     label: "Original Papers"
 related_research:
+  - url: "/tutorials/harnessdev-agent-harness-benchmark/"
+    title: "HarnessDev Benchmark"
+    description: "Whether models can write and revise harness code, and whether those edits help on held-out tasks."
   - url: "/tutorials/stateful-long-horizon-agents-review/"
     title: "Stateful Long-Horizon Agents: 10 Key Papers"
     description: "See how memory, causal state, failover, and recovery support reliable long-running agents."
@@ -312,6 +315,7 @@ related_research:
 <hr />
 <h2 id="harness-layer-evolution">Harness-Layer Evolution: Self-Improvement Without Touching Model Weights</h2>
 <p>Most self-improving AI agents that are practical to deploy today operate at this layer. Harness-layer evolution requires no gradient computation and no weight update, making it applicable to any Model including black-box APIs. What evolves is the Harness configuration: prompt text, routing assignments, memory structures, and tool inventories. Feedback comes from task outcomes consumed by a meta-level optimizer operating entirely on Harness components. The loop closes inside the Harness. Five papers instantiate this category through distinct mechanisms.</p>
+<p>Those papers mainly evolve harness <em>configuration</em>—prompts, routing, memory, and tools. <a href="/tutorials/harnessdev-agent-harness-benchmark/">HarnessDev</a> instead asks whether a model can write and later revise the harness <em>code</em> itself, then checks whether those revisions help on held-out tasks.</p>
 <h3 id="gepa">GEPA <a class="sky-paper-source" href="https://arxiv.org/abs/2507.19457" aria-label="Read the GEPA paper on arXiv">Original paper ↗</a></h3>
 <p>GEPA was developed by Lakshya A Agrawal, Omar Khattab and colleagues, with participating institutions including Stanford University, MIT. GEPA (Genetic-Pareto) argues directly against gradient-based RL as the right tool for adapting LLM agents. A trajectory contains nothing but language—instructions, reasoning chains, tool calls, compiler messages, reward signals—which is precisely what LLMs are best at understanding. Rather than compress that richness into a scalar reward and run policy gradient ascent, GEPA reflects on trajectories in natural language to diagnose problems and propose prompt mutations, then maintains a Pareto frontier of top-performing prompts to avoid greedy convergence.</p>
 <p>On HotpotQA, HoVer, IFBench, and PUPA, GEPA outperforms GRPO (with 24,000 rollouts and LoRA fine-tuning) by an average of 10% and up to 20%, while requiring up to 35× fewer rollouts. It also outperforms MIPROv2 by over 10% across two LLMs. GEPA never updates Model weights. The information-efficiency asymmetry is the key insight: prompt optimization operates in language space, where each rollout carries a full natural-language explanation of what went wrong, whereas RL operates in weight space via scalar rewards.</p>
