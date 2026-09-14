@@ -13,8 +13,6 @@ replica_variant: replica-sky
 {% include sky-paper-body.liquid title='AI Agent Research Papers and Surveys' subtitle='Clear reviews of the research shaping AI agents—from reasoning and tool use to self-evolution, evaluation, and safety.' %}
 </main>
 
-<footer class="sky-footer">
-<span>© {{ site.time | date: '%Y' }} AgentsPulse</span>
-</footer>
+{% include sky-footer.liquid %}
 
 {% include sky-script.liquid %}

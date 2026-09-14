@@ -13,6 +13,9 @@ thumbnail: "/images/deepseek-harness-vs-pi-agent/model-provider-settings.jpg"
 og_image: "/images/deepseek-harness-vs-pi-agent/model-provider-settings.jpg"
 date: 2026-08-15
 last_modified_at: 2026-09-07
+ads:
+  enabled: true
+  end: true
 author_name: "AgentsPulse Editorial Team"
 cover_alt: "DeepSeek Harness model provider settings used in the Pi Agent comparison"
 cover_width: 1200
@@ -72,6 +75,8 @@ Pi takes the opposite default stance. It ships with four model tools — read, w
 Neither posture is inherently more "capable." DSH's complexity buys you a structured way to compose many subsystems consistently; Pi's minimalism buys you a small, auditable core whose behavior is easy to reason about before any extensions are added.
 
 ![DeepSeek Harness model provider settings](/images/deepseek-harness-vs-pi-agent/model-provider-settings.jpg)
+
+{% include ad-slot.liquid slot="article_primary" position="after-first-section" %}
 
 ## 2. Extension/Composition Model
 

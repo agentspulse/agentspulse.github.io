@@ -49,6 +49,9 @@
 <ul>{% for takeaway in page.key_takeaways %}<li>{{ takeaway }}</li>{% endfor %}</ul>
 </aside>
 {{ content }}
+{% if page.ads.enabled and page.ads.end %}
+  {% include ad-slot.liquid slot="article_end" position="article-end" %}
+{% endif %}
 {% if page.related_research %}
 <section class="sky-related-research" aria-labelledby="related-research-title">
 <h2 id="related-research-title">Related research</h2>
@@ -68,9 +71,7 @@
 </article>
 {% endif %}
 </main>
-<footer class="sky-footer">
-<span>© {{ site.time | date: '%Y' }} AgentsPulse</span>
-</footer>
+{% include sky-footer.liquid %}
     </div>
   </body>
 </html>

@@ -13,6 +13,9 @@ thumbnail: "/images/cordis-spatiotemporal-composability/cordis-three-mechanisms.
 og_image: "/images/cordis-spatiotemporal-composability/cordis-three-mechanisms.jpg"
 date: 2026-08-15
 last_modified_at: 2026-08-15
+ads:
+  enabled: true
+  end: true
 author_name: "AgentsPulse Editorial Team"
 cover_alt: "Cordis revertible effects, reactive coeffects, and Fiber lifecycle"
 cover_width: 1200
@@ -59,6 +62,8 @@ related_research:
 Anyone who has built a plugin system in a long-running process knows the failure mode: a plugin registers an event listener, opens a resource, or patches some shared state, and then the host application decides to unload it. The plugin's `dispose` function — if it exists at all — removes *some* of what it did, but not all. A listener stays attached to an emitter. A timer keeps firing. A monkey-patched method never gets restored. Over time, repeated load/unload cycles (common during development with hot reload, or in systems that let users toggle plugins at runtime) leave the process in a state that no longer matches any single, coherent configuration. Debugging becomes an exercise in archaeology: which of the last five plugin toggles left this handler behind?
 
 This is not a bug in any one plugin. It is a structural gap: most plugin frameworks give authors a place to write setup code, but only a weak, manually maintained convention for teardown. The Cordis framework, developed within the Koishi ecosystem and described in an August 2026 preprint, treats this gap as the central design problem and proposes a runtime-level answer rather than a documentation-level one.
+
+{% include ad-slot.liquid slot="article_primary" position="after-first-section" %}
 
 ## Time and topology are different axes
 

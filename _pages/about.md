@@ -12,14 +12,15 @@ replica_variant: replica-sky
 
 {% include sky-nav.liquid active='about' %}
 
-<main class="sky-main sky-about-main">
+<a class="sky-skip-link" href="#main-content">Skip to content</a>
+<main class="sky-main sky-about-main" id="main-content">
 
 <section class="sky-about-hero" aria-labelledby="about-title">
 <div class="sky-about-hero-copy">
 <p class="sky-about-kicker">About AgentsPulse</p>
 <h1 id="about-title">AI agent research, read clearly.</h1>
-<p class="sky-about-lede">A focused research digest that traces claims back to papers, experiments, figures, and stated limitations.</p>
-<a class="sky-about-primary-link" href="{{ '/tutorials/self-evolving-agents-review-en/' | relative_url }}">Read the latest review <span aria-hidden="true">→</span></a>
+<p class="sky-about-lede">For people building and studying agents: understand the mechanism, inspect the evidence, and decide what is worth testing next.</p>
+<a class="sky-about-primary-link" href="{{ '/tutorials/self-evolving-agents-review-en/' | relative_url }}">Explore the self-evolution survey <span aria-hidden="true">→</span></a>
 </div>
 <figure class="sky-about-hero-figure">
 <img src="{{ '/images/359239/overview.jpg' | relative_url }}" width="1200" height="697" alt="Diagram showing model, harness, and artifact routes to AI agent self-evolution" loading="eager" fetchpriority="high">
@@ -30,82 +31,58 @@ replica_variant: replica-sky
 <div class="sky-about-content">
 <section class="sky-about-intro" aria-labelledby="about-purpose">
 <h2 id="about-purpose">What AgentsPulse is</h2>
-<p>AgentsPulse turns dense primary papers and surveys into structured reviews for researchers, engineers, and practitioners. The goal is not to replace the paper. It is to make the research question, mechanism, evidence, and limits easier to see before you decide where to read deeper.</p>
+<div class="sky-about-prose">
+<p>AgentsPulse is a research publication for people building and studying AI agents. We turn papers, open-source projects, and engineering accounts into clear explanations of how systems work and where their limits lie.</p>
+<p>For researchers, that means a map of methods and open questions. For engineers, it means architectural trade-offs worth investigating before implementation. The goal is to help you choose what to read deeply and what to test yourself.</p>
+</div>
 </section>
 
 <section class="sky-about-scope" aria-labelledby="about-coverage">
 <div class="sky-about-section-heading">
-<h2 id="about-coverage">Research we follow</h2>
-<p>Coverage follows the layers and questions that shape capable, useful, and dependable agents.</p>
+<h2 id="about-coverage">What we cover</h2>
+<p>Research surveys, architecture breakdowns, and engineering comparisons across agent memory, tool use, self-evolution, evaluation, and safety. Start with two examples:</p>
 </div>
-<div class="sky-about-scope-grid">
-<article class="sky-about-scope-item sky-about-scope-system">
-<h3>System design</h3>
-<p>Agent architectures, harnesses, memory, and multi-agent coordination.</p>
+<div class="sky-about-reading-list">
+<article>
+<span class="sky-about-reading-index" aria-hidden="true">01</span>
+<div>
+<h3>How agents improve</h3>
+<p>A survey of eight systems, organized by what they update and how they evaluate progress.</p>
+<a href="{{ '/tutorials/self-evolving-agents-review-en/' | relative_url }}">Self-evolving agents <span aria-hidden="true">→</span></a>
+</div>
 </article>
-<article class="sky-about-scope-item sky-about-scope-capability">
-<h3>Capabilities</h3>
-<p>Reasoning, planning, tool use, adaptation, and self-evolution.</p>
-</article>
-<article class="sky-about-scope-item sky-about-scope-reliability">
-<h3>Reliability</h3>
-<p>Evaluation, safety, failure modes, and the boundaries of reported evidence.</p>
+<article>
+<span class="sky-about-reading-index" aria-hidden="true">02</span>
+<div>
+<h3>How harnesses differ</h3>
+<p>A comparison of extensions, sessions, and security boundaries—not a claim about which agent is smarter.</p>
+<a href="{{ '/tutorials/deepseek-harness-vs-pi-agent/' | relative_url }}">DeepSeek Harness vs Pi Agent <span aria-hidden="true">→</span></a>
+</div>
 </article>
 </div>
 </section>
 
-<section class="sky-about-process" aria-labelledby="about-process">
+<section class="sky-about-evidence" aria-labelledby="about-process">
 <div class="sky-about-section-heading">
 <h2 id="about-process">How a review is built</h2>
-<p>Every article uses the same source-first editorial sequence.</p>
+<p>Our editorial standards are straightforward: link to primary sources, explain the mechanism, and distinguish reported results from our interpretation.</p>
+<p>Articles use the <strong>AgentsPulse Editorial Team</strong> byline; the underlying research belongs to its cited authors. Coverage does not imply their endorsement. Unless an article explicitly describes an independent test, treat it as analysis of published evidence, not a reproduction or product certification.</p>
 </div>
-<ol class="sky-about-process-list">
-<li>
-<span class="sky-about-process-label">Select</span>
-<p>Prioritize work with a meaningful method, an emerging research direction, or practical evidence for agent builders.</p>
-</li>
-<li>
-<span class="sky-about-process-label">Read</span>
-<p>Examine the original paper, assumptions, experiments, limitations, and figures instead of relying on secondary coverage.</p>
-</li>
-<li>
-<span class="sky-about-process-label">Explain</span>
-<p>Separate the research question, mechanism, evidence, and interpretation so the strength of each claim stays visible.</p>
-</li>
-<li>
-<span class="sky-about-process-label">Source</span>
-<p>Link directly to every paper discussed and retain enough figure context for readers to verify the underlying work.</p>
-</li>
-</ol>
-</section>
-
-<section class="sky-about-standards" aria-labelledby="about-standards">
-<div>
-<h2 id="about-standards">Editorial standards</h2>
-<p>Reviews are published by the AgentsPulse editorial team. We aim to represent authors' claims accurately, identify important limitations, and label interpretation as interpretation. When a source changes or a material error is found, the review is updated.</p>
-</div>
-<aside class="sky-about-principle" aria-label="AgentsPulse source standard">
-<strong>Primary sources first</strong>
-<p>Each review should let a reader move from our explanation to the original evidence without losing the thread.</p>
-</aside>
 </section>
 
 <section class="sky-about-contact" aria-labelledby="about-contact">
 <div>
 <h2 id="about-contact">Corrections and contact</h2>
-<p>Questions, source corrections, and reproducible evidence are welcome. Use the channels below to follow AgentsPulse or report an issue.</p>
+<p>Found an error or have a topic suggestion? Open a GitHub issue with the article URL, relevant passage, and a supporting source.</p>
+<p>For general enquiries, copyright, or privacy requests, email <a href="mailto:agentspulsecontact@163.com">agentspulsecontact@163.com</a>. Issues are public, so please leave out personal information. See our <a href="{{ '/privacy/' | relative_url }}">Privacy Policy</a> for details.</p>
 </div>
 <div class="sky-about-contact-links" aria-label="Contact AgentsPulse">
 <a href="https://github.com/agentspulse/agentspulse.github.io/issues" target="_blank" rel="noopener noreferrer">GitHub issues <span aria-hidden="true">↗</span></a>
-<a href="https://x.com/AgentsPulse" target="_blank" rel="noopener noreferrer">X <span aria-hidden="true">↗</span></a>
-<a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer">LinkedIn <span aria-hidden="true">↗</span></a>
-<a href="https://slack.com/" target="_blank" rel="noopener noreferrer">Slack <span aria-hidden="true">↗</span></a>
+<a href="https://x.com/AgentsPulse" target="_blank" rel="noopener noreferrer">Follow on X <span aria-hidden="true">↗</span></a>
 </div>
 </section>
 </div>
 
 </main>
 
-<footer class="sky-footer">
-<span>© {{ site.time | date: '%Y' }} AgentsPulse</span>
-</footer>
+{% include sky-footer.liquid %}

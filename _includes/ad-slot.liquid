@@ -1,0 +1,18 @@
+{% assign adsense_client = site.adsense.client | default: '' | strip %}
+{% assign adsense_slot = site.adsense.slots[include.slot] | default: '' | strip %}
+{% if jekyll.environment == 'production' and site.adsense.enabled and page.ads.enabled and adsense_client != '' and adsense_slot != '' %}
+  <aside class="sky-ad-slot sky-ad-slot--{{ include.position | default: 'inline' }}" aria-label="Advertisement">
+    <span class="sky-ad-label">Advertisement</span>
+    <ins
+      class="adsbygoogle"
+      style="display: block"
+      data-ad-client="{{ adsense_client | escape }}"
+      data-ad-slot="{{ adsense_slot | escape }}"
+      data-ad-format="auto"
+      data-full-width-responsive="true"
+    ></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </aside>
+{% endif %}

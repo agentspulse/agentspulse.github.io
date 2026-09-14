@@ -53,9 +53,24 @@ check_contains "_site/about/index.html" "<title>AI Agent Research Editorial Proc
 check_contains "_site/about/index.html" "<html lang=\"en\">"
 check_contains "_site/about/index.html" "<h1 id=\"about-title\">AI agent research, read clearly.</h1>"
 check_contains "_site/about/index.html" "How a review is built"
-check_contains "_site/about/index.html" "Editorial standards"
+check_contains "_site/about/index.html" "What we cover"
+check_contains "_site/about/index.html" "AgentsPulse Editorial Team"
+check_contains "_site/about/index.html" 'href="mailto:agentspulsecontact@163.com"'
 check_contains "_site/about/index.html" "Corrections and contact"
 check_contains "_site/about/index.html" '"@type": "AboutPage"'
+check_contains "_site/privacy/index.html" "<title>AgentsPulse Privacy Policy | AgentsPulse</title>"
+check_contains "_site/privacy/index.html" 'href="mailto:agentspulsecontact@163.com"'
+check_contains "_site/index.html" 'href="/privacy/"'
+check_contains "_site/about/index.html" 'href="/privacy/"'
+check_contains "_site/tutorials/self-evolving-agents-review-en/index.html" 'href="/privacy/"'
+if grep -R -Eq 'href="https://(www\.)?linkedin\.com/"|href="https://slack\.com/"' _site --include='*.html'; then
+  echo "FAIL: placeholder LinkedIn or Slack link remains"
+  exit 1
+fi
+if grep -R -Eq 'pagead2\.googlesyndication\.com|class="adsbygoogle"' _site --include='*.html'; then
+  echo "FAIL: AdSense output must stay absent while adsense.enabled is false"
+  exit 1
+fi
 check_contains "_site/404.html" "<title>Page Not Found | AgentsPulse</title>"
 check_contains "_site/404.html" "<meta name=\"description\" content=\"Return to AgentsPulse to explore frontier AI papers, surveys, and practical explainers across LLMs, agents, reasoning, and benchmarks.\""
 
@@ -259,7 +274,7 @@ urls = [node.text for node in root.findall("sm:url/sm:loc", namespace)]
 from pathlib import Path
 import re
 
-expected = {"https://agentspulse.github.io/"}
+expected = {"https://agentspulse.github.io/", "https://agentspulse.github.io/privacy/"}
 for source in Path("_tutorials").glob("*.md"):
     text = source.read_text()
     match = re.search(r"^permalink:\s*([^\s]+)", text, re.MULTILINE)

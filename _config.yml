@@ -80,6 +80,16 @@ pirsch_analytics: # your Pirsch analytics site ID (length 32 characters)
 openpanel_analytics: # your Openpanel analytics client ID (format: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX)
 
 google_site_verification: 8u4PCbrircV5d7boSnZPDyhrseiHo2Q_icuHiPjn04o
+
+# Google AdSense stays disabled until the site is approved and the real
+# publisher/ad-slot IDs are configured. Production-only guards in the
+# includes prevent requests from local and preview builds.
+adsense:
+  enabled: false
+  client: ""
+  slots:
+    article_primary: ""
+    article_end: ""
 enable_bing_verification: true
 bing_site_verification: FC670854123D4478EC382A01882CE6C9
 

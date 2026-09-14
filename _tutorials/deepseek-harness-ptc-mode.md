@@ -13,6 +13,9 @@ thumbnail: "/images/deepseek-harness-ptc-mode/ptc-mechanism.jpg"
 og_image: "/images/deepseek-harness-ptc-mode/ptc-mechanism.jpg"
 date: 2026-08-18
 last_modified_at: 2026-08-18
+ads:
+  enabled: true
+  end: true
 author_name: "AgentsPulse Editorial Team"
 cover_alt: "How DeepSeek Harness PTC Mode changes tool presentation"
 cover_width: 1200
@@ -82,6 +85,8 @@ The display name "PTC Mode" therefore labels a concrete code-presentation mechan
 ![How DeepSeek Harness PTC Mode changes tool presentation](/images/deepseek-harness-ptc-mode/ptc-mechanism.jpg)
 
 *PTC retains the Standard agent composition and inserts a generated SDK plus the `run_code` transport between the model and the existing tool registry.*
+
+{% include ad-slot.liquid slot="article_primary" position="after-first-section" %}
 
 ## PTC Mode vs Standard Mode
 
