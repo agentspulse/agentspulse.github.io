@@ -86,7 +86,7 @@ google_site_verification: 8u4PCbrircV5d7boSnZPDyhrseiHo2Q_icuHiPjn04o
 # includes prevent requests from local and preview builds.
 adsense:
   enabled: false
-  client: ""
+  client: "ca-pub-4406319666283164"
   slots:
     article_primary: ""
     article_end: ""
