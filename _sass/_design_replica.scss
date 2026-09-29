@@ -1624,6 +1624,423 @@
       font-size: 0.88em;
       padding: 2px 6px;
     }
+
+    /* Preserve authored line breaks in fenced code blocks. */
+    pre.highlight {
+      background: #f7f9fc;
+      border: 1px solid var(--sky-border);
+      border-radius: 10px;
+      color: var(--sky-blue);
+      line-height: 1.55;
+      margin: 16px 0 24px;
+      overflow-x: auto;
+      padding: 14px 16px;
+      scrollbar-color: #94a3b8 #eef2f7;
+    }
+
+    pre.highlight code {
+      background: transparent;
+      border-radius: 0;
+      display: block;
+      overflow-wrap: normal;
+      padding: 0;
+      white-space: pre;
+      word-break: normal;
+      word-wrap: normal;
+    }
+
+
+    /* Compact editorial diagram for one-request speculative targeting. */
+    .sky-decision-flow {
+      align-items: stretch;
+      background: #f7f9fc;
+      border: 1px solid var(--sky-border);
+      border-radius: 14px;
+      display: grid;
+      gap: 12px;
+      grid-template-columns: minmax(112px, 0.72fr) 20px minmax(280px, 1.75fr) 20px minmax(136px, 0.86fr);
+      margin: 24px 0 30px;
+      padding: 18px;
+    }
+
+    .sky-flow-arrow {
+      align-self: center;
+      color: #7890a7;
+      font-size: 20px;
+      justify-self: center;
+    }
+
+    .sky-flow-endpoint {
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-width: 0;
+      padding: 16px;
+
+      > span {
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        margin-bottom: 6px;
+        text-transform: uppercase;
+      }
+
+      > strong {
+        font-size: 16px;
+        line-height: 1.25;
+      }
+
+      > small {
+        font-size: 11px;
+        line-height: 1.35;
+        margin-top: 6px;
+      }
+    }
+
+    .sky-flow-input {
+      background: #e9f5fb;
+      border: 1px solid #b9dceb;
+
+      > span { color: #08789b; }
+      > strong { color: #12344a; }
+      > small { color: #5f7687; }
+    }
+
+    .sky-flow-output {
+      background: #12344a;
+      border: 1px solid #12344a;
+
+      > span { color: #8fd5e8; }
+      > strong { color: #fff; }
+      > small { color: #c4d7e1; }
+    }
+
+    .sky-flow-request {
+      background: #fff;
+      border: 1px solid #ced9e5;
+      border-radius: 10px;
+      min-width: 0;
+      padding: 14px;
+
+      header {
+        align-items: baseline;
+        display: flex;
+        gap: 10px;
+        justify-content: space-between;
+        margin-bottom: 10px;
+
+        span {
+          color: var(--sky-blue);
+          font-size: 10px;
+          font-weight: 800;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+        }
+
+        strong {
+          color: var(--sky-primary);
+          font-size: 14px;
+        }
+      }
+    }
+
+    .sky-flow-heads {
+      display: grid;
+      gap: 6px;
+
+      > div {
+        align-items: center;
+        background: #f7f9fc;
+        border-left: 3px solid #d0a43c;
+        border-radius: 4px 7px 7px 4px;
+        display: flex;
+        gap: 10px;
+        justify-content: space-between;
+        min-width: 0;
+        padding: 7px 9px;
+      }
+
+      > div:nth-child(2) { border-left-color: #17906f; }
+      > div:nth-child(3) { border-left-color: #d97706; }
+      > div:nth-child(4) { border-left-color: #1686aa; }
+
+      code {
+        background: transparent;
+        color: #183b56;
+        flex: 0 0 auto;
+        font-size: 11px;
+        padding: 0;
+        white-space: nowrap;
+      }
+
+      span {
+        color: #718096;
+        font-size: 10.5px;
+        line-height: 1.25;
+        min-width: 0;
+        text-align: right;
+      }
+    }
+
+
+    /* Operation vocabulary as a compact reference, not a long bullet list. */
+    .sky-operation-set {
+      border-top: 1px solid var(--sky-border);
+      display: grid;
+      gap: 0 28px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      list-style: none;
+      margin: 20px 0 30px;
+      padding: 0;
+
+      li {
+        align-items: center;
+        border-bottom: 1px solid var(--sky-border);
+        display: grid;
+        gap: 12px;
+        grid-template-columns: minmax(7.7rem, auto) 1fr;
+        margin: 0;
+        min-width: 0;
+        padding: 10px 0;
+      }
+
+      code {
+        background: #edf4fb;
+        color: #0b5f94;
+        font-size: 11px;
+        font-weight: 750;
+        justify-self: start;
+        letter-spacing: 0.02em;
+        padding: 3px 7px;
+        white-space: nowrap;
+      }
+
+      span {
+        color: #64748b;
+        font-size: 12px;
+        line-height: 1.35;
+      }
+    }
+
+    /* Five-stage action compiler rail. */
+    .sky-compiler-flow {
+      counter-reset: none;
+      display: grid;
+      gap: 0;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      list-style: none;
+      margin: 22px 0 0;
+      padding: 0;
+
+      li {
+        border-top: 2px solid #b7c8d9;
+        margin: 0;
+        min-width: 0;
+        padding: 15px 12px 13px 0;
+        position: relative;
+      }
+
+      li:not(:last-child)::after {
+        color: #8298ad;
+        content: "→";
+        font-size: 14px;
+        position: absolute;
+        right: 8px;
+        top: 13px;
+      }
+
+      span {
+        color: #0b6e9e;
+        display: block;
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        margin-bottom: 3px;
+      }
+
+      strong {
+        color: var(--sky-primary);
+        display: block;
+        font-size: 13px;
+        line-height: 1.3;
+      }
+
+      small {
+        color: #718096;
+        display: block;
+        font-size: 10.5px;
+        line-height: 1.3;
+        margin-top: 3px;
+      }
+    }
+
+    .sky-compiler-loop {
+      align-items: center;
+      background: #edf7f5;
+      border-left: 3px solid #16866f;
+      color: #41695f;
+      display: flex;
+      font-size: 12px;
+      gap: 7px;
+      margin: 0 0 28px;
+      padding: 9px 12px;
+
+      i { color: #16866f; font-size: 15px; }
+    }
+
+    /* Clear timer boundary: measured work vs setup and verification. */
+    .sky-timing-boundary {
+      border-bottom: 1px solid var(--sky-border);
+      border-top: 1px solid var(--sky-border);
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin: 22px 0 28px;
+
+      section {
+        padding: 17px 20px 13px 0;
+      }
+
+      section + section {
+        border-left: 1px solid var(--sky-border);
+        padding-left: 24px;
+      }
+
+      section > span {
+        align-items: center;
+        color: #0d7966;
+        display: flex;
+        font-size: 11px;
+        font-weight: 800;
+        gap: 7px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      section + section > span { color: #7c5b43; }
+      ul { margin: 11px 0 0; padding-left: 1.1em; }
+      li { color: #52677b; font-size: 12.5px; line-height: 1.45; margin-bottom: 5px; }
+    }
+
+    /* Cost calculation shown as evidence, not terminal output. */
+    .sky-cost-breakdown {
+      border: 1px solid var(--sky-border);
+      border-radius: 12px;
+      margin: 22px 0 26px;
+      overflow: hidden;
+    }
+
+    .sky-cost-equation {
+      align-items: center;
+      background: #f7f9fc;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      justify-content: center;
+      padding: 16px;
+
+      span {
+        color: #52677b;
+        font-family: var(--global-code-font, monospace);
+        font-size: 12px;
+      }
+
+      i { color: #94a3b8; font-style: normal; }
+      strong { color: #0b6e9e; font-size: 18px; font-variant-numeric: tabular-nums; }
+    }
+
+    .sky-cost-breakdown dl { margin: 0; }
+    .sky-cost-breakdown dl > div {
+      align-items: center;
+      border-top: 1px solid var(--sky-border);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      padding: 10px 16px;
+    }
+    .sky-cost-breakdown dt { color: #52677b; font-size: 12.5px; font-weight: 550; }
+    .sky-cost-breakdown dd {
+      color: var(--sky-primary);
+      font-family: var(--global-code-font, monospace);
+      font-size: 12.5px;
+      font-variant-numeric: tabular-nums;
+      margin: 0;
+    }
+    .sky-cost-breakdown .sky-cost-total { background: #12344a; border-top: 0; }
+    .sky-cost-breakdown .sky-cost-total dt,
+    .sky-cost-breakdown .sky-cost-total dd { color: #fff; font-weight: 750; }
+
+    /* Current gaps presented as a scannable technical checklist. */
+    .sky-limit-grid {
+      border-top: 1px solid var(--sky-border);
+      display: grid;
+      gap: 0 28px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      list-style: none;
+      margin: 20px 0 28px;
+      padding: 0;
+
+      li {
+        align-items: center;
+        border-bottom: 1px solid var(--sky-border);
+        color: #52677b;
+        display: flex;
+        font-size: 12.5px;
+        gap: 10px;
+        margin: 0;
+        padding: 11px 0;
+      }
+
+      i { color: #ad5b4d; flex: 0 0 auto; font-size: 17px; }
+    }
+  }
+
+
+  @media (max-width: 720px) {
+    .sky-article .sky-decision-flow {
+      grid-template-columns: 1fr;
+    }
+
+    .sky-article .sky-flow-arrow {
+      transform: rotate(90deg);
+    }
+
+    .sky-article .sky-flow-request header {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+
+    .sky-article .sky-operation-set,
+    .sky-article .sky-limit-grid,
+    .sky-article .sky-timing-boundary {
+      grid-template-columns: 1fr;
+    }
+
+    .sky-article .sky-timing-boundary section + section {
+      border-left: 0;
+      border-top: 1px solid var(--sky-border);
+      padding-left: 0;
+    }
+
+    .sky-article .sky-compiler-flow {
+      grid-template-columns: 1fr;
+    }
+
+    .sky-article .sky-compiler-flow li {
+      border-left: 2px solid #b7c8d9;
+      border-top: 0;
+      padding: 9px 12px 9px 16px;
+    }
+
+    .sky-article .sky-compiler-flow li:not(:last-child)::after {
+      bottom: -6px;
+      content: "↓";
+      left: 0;
+      right: auto;
+      top: auto;
+      transform: translateX(-50%);
+    }
   }
 
   /* Research-review article variant: editorial hierarchy + persistent navigation */

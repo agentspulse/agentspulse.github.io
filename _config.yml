@@ -176,6 +176,11 @@ kramdown:
 # Includes & excludes
 include: ["_pages", "_scripts"]
 exclude:
+  - archify_*
+  - canvas-design_*
+  - code-documentation_*
+  - feishu-cli_*
+  - images/jev-ultrafast-browser-agent/interactive-architecture.html
   - bin/
   - CONTRIBUTING.md
   - CUSTOMIZE.md

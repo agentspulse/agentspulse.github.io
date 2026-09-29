@@ -33,7 +33,7 @@
 </header>
 {% if page.thumbnail %}
 <figure class="sky-research-cover">
-<img src="{{ page.thumbnail | relative_url }}" alt="{{ page.cover_alt | default: page.title }}" width="{{ page.cover_width }}" height="{{ page.cover_height }}" fetchpriority="high">
+<img src="{{ page.thumbnail | relative_url }}" alt="{{ page.cover_alt | default: page.title }}" width="{{ page.cover_width }}" height="{{ page.cover_height }}" fetchpriority="high"{% if page.zoomable_images %} data-zoomable title="Click to enlarge"{% endif %}>
 </figure>
 {% endif %}
 <div class="sky-research-layout">
@@ -73,5 +73,14 @@
 </main>
 {% include sky-footer.liquid %}
     </div>
+{% if page.zoomable_images and site.enable_medium_zoom %}
+    <script
+      defer
+      src="{{ site.third_party_libraries.medium_zoom.url.js }}"
+      integrity="{{ site.third_party_libraries.medium_zoom.integrity.js }}"
+      crossorigin="anonymous"
+    ></script>
+    <script defer src="{{ '/assets/js/zoom.js' | relative_url | bust_file_cache }}"></script>
+{% endif %}
   </body>
 </html>
