@@ -182,6 +182,7 @@ exclude:
   - feishu-cli_*
   - images/jev-ultrafast-browser-agent/interactive-architecture.html
   - bin/
+  - CHANGELOG.md
   - CONTRIBUTING.md
   - CUSTOMIZE.md
   - Dockerfile
