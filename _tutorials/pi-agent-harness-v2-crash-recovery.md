@@ -1,46 +1,50 @@
 ---
 layout: article-sky
 article_variant: research-review
+zoomable_images: true
 lang: en
-title: "Pi Harness v2: Crash Recovery and Tool Replay"
-seo_title: "Pi Harness v2: Crash Recovery and Tool Replay"
-description: "How Pi Agent Harness v2 handles crash recovery, durable operations, safe tool replay, staged results, and the limits of exactly-once execution."
-keywords: "Pi Harness v2, Pi Agent crash recovery, AgentHarness, tool replay, durable agent operations"
+title: "Pi Harness v2 to Pi Durable: Crash Recovery Explained"
+seo_title: "Pi Harness v2 to Pi Durable: Crash Recovery"
+description: "Follow Pi Harness v2 into Pi Durable: understand safe tool replay, interrupted model requests, result ordering, and what survives a process restart."
+keywords: "Pi Harness v2, Pi Durable, pi-durable, agent harness architecture, agent crash recovery, safe tool replay"
 tags: [pi-agent, coding-agents, agent-infrastructure]
 categories: [frontier-research]
 permalink: /tutorials/pi-agent-harness-v2-crash-recovery/
-thumbnail: "/images/pi-agent-harness-v2-crash-recovery/pi-harness-recovery-cover.jpg"
-og_image: "/images/pi-agent-harness-v2-crash-recovery/pi-harness-recovery-cover.jpg"
+thumbnail: "/baoyu-cover-image_20261001_213950/首图.webp"
+og_image: "/baoyu-cover-image_20261001_213950/首图.webp"
 date: 2026-09-07
-last_modified_at: 2026-09-07
+last_modified_at: 2026-10-08
 author_name: "AgentsPulse Editorial Team"
-cover_alt: "Pi Agent Harness crash recovery across saved session state, effect boundaries, and parallel tool results"
-cover_width: 1200
-cover_height: 675
-paper_count: 1
-research_scope: "Pi Agent · AgentHarness · Crash recovery"
-dek: "What Pi preserves across a crash, when tool calls can replay, and where exactly-once execution remains impossible."
+cover_alt: "Conceptual illustration of layered durable records spanning an interruption, with two faint possible paths around an unknown effect"
+cover_width: 1536
+cover_height: 864
+review_eyebrow: "Source-code analysis"
+scope_note: "Pinned implementation, recovery-test assertions, and integration boundaries."
+research_scope: "Pi Durable · Crash recovery · Tool replay"
+dek: "The old AgentHarness API is gone. Understand how the current Pi Durable harness restores committed work, decides which tools may rerun, and keeps history distinct from model context."
 key_takeaways:
-  - "Persistent Sessions preserve conversation and operation state, but the process-local Drive must be recreated by the host."
-  - "External effects can remain unknown after a crash; replay requires both the stored policy and current tool declaration to be safe."
-  - "Completed parallel tool outcomes are staged durably and later enter the conversation in source order."
+  - "Current durable-agent integrations use experimental pi-durable, not the removed AgentHarness exports in pi-agent-core."
+  - "Tool replay needs both stored and current safe declarations; an execute checkpoint alone cannot prove whether the external effect happened."
+  - "Parallel results enter history in completion order but model context in call order; restart recovery reuses completed work."
 article_toc:
-  - id: "what-survives-a-restart"
-    label: "What Survives a Restart?"
-  - id: "how-harness-v2-evolved"
-    label: "How Harness v2 Evolved"
-  - id: "between-intent-and-outcome"
-    label: "Between Intent and Outcome"
-  - id: "which-tools-can-run-again"
-    label: "Which Tools Can Run Again?"
-  - id: "when-completion-order-differs-from-conversation-order"
-    label: "Parallel Result Ordering"
-  - id: "an-interrupted-model-response"
-    label: "Interrupted Model Responses"
-  - id: "who-continues-the-work"
-    label: "Who Continues the Work?"
-  - id: "implementation-progress"
-    label: "Implementation Progress"
+  - id: "todays-api"
+    label: "Today’s API"
+  - id: "state-and-execution"
+    label: "State and Execution"
+  - id: "the-crash-window"
+    label: "The Crash Window"
+  - id: "safe-tool-replay"
+    label: "Safe Tool Replay"
+  - id: "parallel-result-order"
+    label: "Two Result Orders"
+  - id: "model-request-recovery"
+    label: "Model Request Recovery"
+  - id: "storage-boundaries"
+    label: "Storage Boundaries"
+  - id: "integration-checklist"
+    label: "Integration Checklist"
+  - id: "check-your-understanding"
+    label: "Predict a Restart"
   - id: "sources-and-version"
     label: "Sources and Version"
 related_research:
@@ -54,176 +58,208 @@ related_research:
     title: "DeepSeek Harness Architecture"
     description: "How a plugin-runtime approach differs from Pi's minimal coding harness."
 ---
-Pi's historical Harness v2 proposal evolved into the current unified `AgentHarness`. This review uses **Harness v2** for the design lineage, while distinguishing the older operation-log proposal from the current durable operation-state implementation.
+Pi Harness v2 raised a question that still matters for agent applications: **after a crash, what can the runtime safely do again?** The answer now belongs to a different API. Since October 1, the experimental `AgentHarness` has been removed from `pi-agent-core`; new durable-agent integrations should inspect **Pi Durable**, the experimental `@earendil-works/pi-durable` package.
 
-**Short answer:** Pi can preserve the conversation, branch position, operation state, staged tool outcomes, and settled usage when a persistent backend is used. It cannot always prove whether an external side effect happened during the gap between invoking a tool and committing its outcome. Recovery therefore replays only calls whose stored policy **and** current tool declaration are safe, unless the batch was cancelled.
+This is not just a renamed import. The current agent harness uses conversations, documents, and task checkpoints. It also handles parallel result ordering and interrupted model requests differently from the old design. This article follows the October 8 source snapshot and teaches one practical distinction: **recovering a committed local decision is not the same as knowing what happened in an external system.**
 
-| Recovery question | What the harness can say |
+<h2 id="todays-api">Today’s API: Pi Durable, not the old AgentHarness</h2>
+
+Earendil [introduced Pi Durable alongside Pi 1.0][announcement] on October 1. The announcement distinguishes it from the terminal coding agent: Pi Durable is a framework for building agent applications whose conversations and work need to survive restarts. It does **not** replace the coding-agent CLI or remove its separate session features.
+
+The [agent-core changelog][agent-changelog] records the removal of the experimental harness and its public subpaths. The current [Pi Durable README][readme] explicitly warns that its API is experimental and can change without notice.
+
+| Earlier v2/AgentHarness design | Current Pi Durable design |
 |---|---|
-| What survives a process restart? | Persistent Session data: conversation entries, branch tips, operation state, pending outcomes, and settled usage. |
-| What does not survive? | The process-local Drive; Memory-backed Sessions also disappear with the process. |
-| Can an unfinished tool run again? | Only when both the stored replay policy and current declaration are `safe`, and the batch is not cancelled. |
-| Can it guarantee exactly-once external effects? | No. A crash after the action but before outcome commit leaves the external result unknown. |
-| Who resumes execution? | The host reopens the Session and schedules a new Drive. |
+| Session, AgentLane, Operation, and process-local Drive | Conversations, Entries, Documents, Submissions, and durable Tasks |
+| Tool replay declarations `safe` / `never` | `safe` / `unsafe`; omission means `unsafe` |
+| Save parallel results as `outcome_ready`, then place them in source order | Append tool results in completion order; order them for model context |
+| Reopen a Session, then schedule `drive` | Open the Harness over storage, then start its task scheduler |
 
-For the broader runtime boundary around state, tools, retries, and observability, see [The Agent Framework Is Not the Runtime](/tutorials/agent-framework-harness-runtime-production/).
+The left column is a [historical implementation][old-harness], not a list of current imports. Do not migrate an integration by changing only the package name.
 
-<p>Suppose a coding agent is deleting a directory when its process crashes. After restarting, it can read the conversation and find the tool call. But did the deletion start? Did it finish? Would running the call again repeat an action that already happened?</p>
-<p>These questions motivated Pi’s <strong>harness v2</strong> design: make ongoing agent work recoverable beyond the conversation itself. The design evolved into the current <code>AgentHarness</code>, which stores the state of an operation and uses it to decide how work can continue. We will follow a tool call through that process, from the first saved intent to the result that eventually appears in the conversation. <a href="https://github.com/earendil-works/pi/blob/9767ba275f3e9a5ee0f5c5342249b629ab1b2282/packages/agent/docs/harness.md#05-worked-example--a-crash-mid-tool">1</a> </p>
-<p>The difficult part is the interval between performing an external action and saving its outcome. A runtime can preserve the evidence around that interval. It cannot always determine what happened inside it.</p>
-<h2 id="what-survives-a-restart">What survives a restart?</h2>
-<p>Pi separates the history of a conversation from the state of the work being performed over it. Four objects make that separation easier to follow:</p>
-<ul>
-<li>A <strong>Session</strong> holds the shared conversation, execution data and usage records.</li>
-<li>A <strong>Branch</strong> names a path through the conversation’s entry tree. Its tip identifies the current end of that path.</li>
-<li>An <strong>AgentLane</strong> adds model and tool configuration, an inbox and at most one active operation to a branch.</li>
-<li>An <strong>Operation</strong> represents accepted work, such as an agent run, with its own identity and current state.</li>
-</ul>
-<p>A <strong>Drive</strong> is the process-local execution pass that advances an operation. With a persistent storage backend, the operation can survive the loss of its Drive. Loading the Session restores the saved state; the host then schedules a new drive to continue it. <a href="https://github.com/earendil-works/pi/blob/9767ba275f3e9a5ee0f5c5342249b629ab1b2282/packages/agent/docs/harness.md#23-branches-and-agentlanes">2</a> </p>
-<p>Figure 1 shows two branches sharing the same prefix. The branch tips and operations are saved data. The Drives below them belong to the running process.</p>
-<figure><a aria-label="Open Figure 1 at full size" class="figure-link" href="/images/pi-agent-harness-v2-crash-recovery/session-model.png" rel="noopener" target="_blank"><img alt="A tree with a shared prefix and two branch tips. Each branch has its own lane and operation inside the Session; a matching process-local Drive sits outside the saved state." height="1536" loading="lazy" src="/images/pi-agent-harness-v2-crash-recovery/session-model.png" width="1024"/><span class="image-hint">Select diagram to enlarge</span></a><p class="caption"><em>Figure 1. Branches share conversation entries while their lanes maintain separate operations. With persistent storage, the data inside the Session survives process loss; the Drives must be recreated. The host assigns one writable owner to the whole Session.</em></p></figure>
+The [October 7, 1.1.0 changelog][durable-changelog] adds integration-relevant details: explicit storage scan order and cursor direction, historical conversation-context lookup, task timestamps, and tool-attempt `durationMs`. These are API and observability changes, not measured speedups. Custom storage implementations should read the current scan contract rather than copy the older one.
 
-<p>The Session stores three kinds of data with different lifetimes. <strong>Conversation entries</strong> are immutable nodes linked to their parents. <strong>Bound values and lists</strong> hold changing information: branch tips, current operation state, pending output and inbox contents. The <strong>usage ledger</strong> retains settled accounting records independently of operation cleanup.</p>
-<p>When an operation finishes, a terminal transaction removes its temporary state and retains an immutable result record. Conversation entries and usage remain. Conversation compaction changes the context presented to the model; it does not erase the underlying history. <a href="https://github.com/earendil-works/pi/blob/9767ba275f3e9a5ee0f5c5342249b629ab1b2282/packages/agent/docs/harness.md#313-terminal-transactions-and-result-records">3</a> </p>
-<h2 id="how-harness-v2-evolved">How Harness v2 evolved</h2>
-<p>The original v2 proposal and the current harness recover work differently. In the <a href="https://github.com/earendil-works/pi/blob/a0014c1a83ea0b6fd98762a9bdaa90f517a73cbf/packages/agent/docs/harness-v2.md">early design</a>, each lane had an operation log. Recovery reduced those records and resolved unfinished intents.</p>
-<p>The <a href="https://github.com/earendil-works/pi/blob/9767ba275f3e9a5ee0f5c5342249b629ab1b2282/packages/agent/docs/harness.md#32-operation-state--the-durable-restart-point">current design</a> saves the operation’s complete current state. Each durable transition replaces it atomically, along with the entries, values, lists and usage rows needed to make that new state true. After a restart, the driver reads the state’s <code>at</code> field and enters the corresponding procedure. </p>
-<p>This makes the restart point explicit. If a transition publishes a response and advances execution, both changes commit together. Recovery does not have to guess which step follows from a partially updated transcript.</p>
-<p>The JSONL backend still reads physical records to reconstruct its storage maps when opening a file. That is how it decodes the saved data; the harness then continues from the resulting operation state. The two uses of a log should not be confused. <a href="https://github.com/earendil-works/pi/blob/9767ba275f3e9a5ee0f5c5342249b629ab1b2282/packages/agent/docs/harness.md#jsonl">4</a> </p>
-<p>The implementation reached this point through several distinct stages. Dates below follow the 2026 commit history in UTC.</p>
-<ul>
-<li><p><strong>July 29 — The v2 design appears.</strong> The first <a href="https://github.com/earendil-works/pi/commit/4f0437e2d58d651dd934119ecabea2893975f62f">v2 document</a> organizes Sessions around a conversation tree, lanes and per-lane operation logs, with recovery expressed as reduction. </p></li>
-<li><p><strong>August 3 — The effects design is selected.</strong> The project <a href="https://github.com/earendil-works/pi/commit/a0014c1a83ea0b6fd98762a9bdaa90f517a73cbf">chooses the effects variant</a> over the generator variant. Explicit intents, outcomes and crash-site behavior become the chosen basis for v2. </p></li>
-<li><p><strong>August 4–5 — Storage and recovery foundations land.</strong> <a href="https://github.com/earendil-works/pi/commit/1d0c97471359a7c1dc6bfc9ac7ce5b4aa9afd705">In-memory sessions</a> arrive first, followed by a <a href="https://github.com/earendil-works/pi/commit/651d5d6a53690b3ec87b72fca0b3f993ac5ec748">JSONL v4 backend</a> and the <a href="https://github.com/earendil-works/pi/commit/2bb7ba49661e88e0c692facb537972287792af69">durable lane reducer</a>. These are early implementations of the log-based design. </p></li>
-<li><p><strong>August 11 — The specification is consolidated.</strong> The design documents <a href="https://github.com/earendil-works/pi/commit/85a2060811a23f1580c13ab59a210b1409092837">merge into harness.md</a>, giving the storage, Session and runtime contracts a shared reference. </p></li>
-<li><p><strong>August 14 — The first runtime gains execution.</strong> The earlier runtime gains a <a href="https://github.com/earendil-works/pi/commit/1d882a7eca12d07fec9468db0192d13d922bdb31">minimal model run</a> and <a href="https://github.com/earendil-works/pi/commit/d411d7b05e68aa45cde6e33658bd3f51ecb6bc8c">tool execution</a>. This is the implementation replaced by runtime2 in the next stage. </p></li>
-<li><p><strong>August 17–18 — The runtime is replaced, then acceptance is rebuilt.</strong> <a href="https://github.com/earendil-works/pi/commit/877c2d0eaaa8a36d27eeeabf54430c863cf96303">WP00 switches the public factory to runtime2</a> and removes the old runtime while execution is still incomplete. <a href="https://github.com/earendil-works/pi/commit/beac75ecc2254713cc2d7f3ab682c015762cc481">Atomic acceptance and coherent observation</a> follow as a separate step. </p></li>
-<li><p><strong>August 26 — The durable execution graph and public lane API land.</strong> The <a href="https://github.com/earendil-works/pi/commit/8b6910732992521bcf907ce39101f8a633a5ba8d">direct driver</a> advances saved state through generation, tools, waits, structural work and cancellation. The <a href="https://github.com/earendil-works/pi/commit/89356540fb7318e04e9599a1bc742f5e8f358fe2">public lane operations</a> expose that execution flow. </p></li>
-<li><p><strong>August 31 — SQLite ownership moves to the host.</strong> <a href="https://github.com/earendil-works/pi/commit/ef11444b6e0c434bb72ff59a9b2944de0b5c5018">WP07</a> removes the backend ownership mechanism and adds read-only snapshots for forking live source Sessions. The host remains responsible for assigning the writable owner. </p></li>
-<li><p><strong>September 1 — Forks gain explicit named-branch selection.</strong> The <a href="https://github.com/earendil-works/pi/commit/f8da63be590e14080dc06eed8c8986bc2eec8310">fork contract</a> requires a scope and source branch. This is the first slice of WP08; bounded-memory copies remain unfinished. </p></li>
-<li><p><strong>September 2 — Settled tools stay visible until placement.</strong> <a href="https://github.com/earendil-works/pi/commit/e26afb63a46c374f4f482f4808317336790abb7a">WP09</a> closes a display gap: a completed tool result now remains in the lane snapshot while waiting for its position in the conversation. </p></li>
-</ul>
-<h2 id="between-intent-and-outcome">Between intent and outcome</h2>
-<p>Atomic transactions can keep local state consistent, but a tool may act on a filesystem or remote service outside that transaction. Pi therefore separates an effect into four steps:</p>
-<ol type="1">
-<li>Prepare the inputs.</li>
-<li>Commit the intent, including the arguments and reserved output identities.</li>
-<li>Perform the external action.</li>
-<li>Commit the outcome and the next operation state together.</li>
-</ol>
-<p>The intent survives a crash. So does a committed outcome. The gap between them can leave the external result unknown. Consider the two paths in Figure 2: one process dies before performing the action; another dies after the action but before saving its result. Both can reopen with the same saved intent. <a href="https://github.com/earendil-works/pi/blob/9767ba275f3e9a5ee0f5c5342249b629ab1b2282/packages/agent/docs/harness.md#45-driving-and-crash-recovery">5</a> </p>
-<figure><a aria-label="Open Figure 2 at full size" class="figure-link" href="/images/pi-agent-harness-v2-crash-recovery/effect-boundary.png" rel="noopener" target="_blank"><img alt="An intent forks into two possible histories: crash before the action, or action followed by crash. Both converge on the same saved state with an unknown outcome. A separately committed outcome can be kept." height="1536" loading="lazy" src="/images/pi-agent-harness-v2-crash-recovery/effect-boundary.png" width="1024"/><span class="image-hint">Select diagram to enlarge</span></a><p class="caption"><em>Figure 2. Different external histories can leave identical local evidence. A committed outcome removes this particular uncertainty; an intent alone does not.</em></p></figure>
+<h2 id="state-and-execution">What survives: saved work, not the process running it</h2>
 
-<p>This is why the harness cannot promise exactly-once external effects. Saving a marker before a call does not prove the call happened, and saving one afterward leaves a window in which the action may have happened without that marker. Hooks with side effects face a related issue: if their consuming transaction did not commit, they may run again and need their own idempotency discipline. </p>
-<h2 id="which-tools-can-run-again">Which tools can run again?</h2>
-<p>Return to the directory deletion. Suppose the tool’s stored policy is <code>replay: "never"</code>. It starts work and may save progress, then crashes before committing a final result.</p>
-<p>On recovery, the harness preserves the latest durable progress snapshot, if one exists, and synthesizes an interruption result. It leaves the external outcome unknown. This is useful information for the next agent step: some work may have completed, but the transcript cannot claim that the deletion succeeded. Skipping a second execution also does not undo the first one. <a href="https://github.com/earendil-works/pi/blob/9767ba275f3e9a5ee0f5c5342249b629ab1b2282/packages/agent/src/harness/runtime/drive/tools.ts#L45">6</a> </p>
-<p>For an orphaned call to run again, <strong>both its stored policy and the current tool declaration must be <code>safe</code></strong>, and the batch must not be cancelled. Checking the current declaration matters: the tool implementation or its replay policy may have changed since the original call was accepted. The <a href="https://github.com/earendil-works/pi/blob/9767ba275f3e9a5ee0f5c5342249b629ab1b2282/packages/agent/src/harness/runtime/drive/tools.ts#L527">recovery condition</a> checks all three conditions. </p>
-<p>A <code>safe</code> declaration is the tool author’s contract. The harness does not prove that an arbitrary action is idempotent. If the declaration is unsafe or the implementation is missing, recovery records interruption rather than invoking the tool. A restored cancelled batch follows cancellation reconciliation instead of ordinary replay.</p>
-<h2 id="when-completion-order-differs-from-conversation-order">When completion order differs from conversation order</h2>
-<p>Now suppose the assistant requests tools A and B in that order, and the runtime executes them in parallel. B finishes first. Its result cannot yet appear as the next tool entry because A precedes it, but there is no reason to leave B’s completed work unsaved.</p>
-<p>Pi first <strong>stages</strong> B’s outcome at a pending address and marks it <code>outcome_ready</code>. As earlier calls become ready, the runtime materializes the contiguous ready prefix into the conversation. Saving a result and placing it in conversation order are separate steps. <a href="https://github.com/earendil-works/pi/blob/9767ba275f3e9a5ee0f5c5342249b629ab1b2282/packages/agent/docs/harness.md#38-tools">7</a> </p>
-<p>Figure 3 adds a crash while A is still running. Assume A is eligible for safe replay: its stored and current declarations are safe, and the batch is not cancelled. After restart, A can run again while B’s saved outcome is retained.</p>
-<figure><a aria-label="Open Figure 3 at full size" class="figure-link" href="/images/pi-agent-harness-v2-crash-recovery/parallel-staging.png" rel="noopener" target="_blank"><img alt="Before the crash, B finishes and is staged while A is still running. After restart, only A safely replays. A and the retained B result then enter the conversation in source order." height="1536" loading="lazy" src="/images/pi-agent-harness-v2-crash-recovery/parallel-staging.png" width="1024"/><span class="image-hint">Select diagram to enlarge</span></a><p class="caption"><em>Figure 3. B waits for its place in the conversation without losing its result. In this example only A is replayed; if A were unsafe to replay, its interruption result could instead settle that position. The trace illustrates ordering, not measured durations.</em></p></figure>
+The current [concepts and resume contract][resume] separate stored state from the machinery that advances it:
 
-<p>The staging commit is the decisive boundary for B. Once its complete outcome is durable, recovery can place it without resolving or executing that tool again. The repository’s <a href="https://github.com/earendil-works/pi/blob/9767ba275f3e9a5ee0f5c5342249b629ab1b2282/packages/agent/test/harness/runtime/drive-tools.test.ts#L382">tool runtime tests</a> cover out-of-order staging and materializing already saved outcomes. </p>
-<h2 id="an-interrupted-model-response">An interrupted model response</h2>
-<p>A provider stream has a different recovery policy. If the process dies during generation, the harness reconstructs the latest committed assistant-frame prefix and settles a synthetic error response under the reserved identifiers. Partial tool calls from that response never execute. <a href="https://github.com/earendil-works/pi/blob/9767ba275f3e9a5ee0f5c5342249b629ab1b2282/packages/agent/src/harness/runtime/drive/recovery.ts">8</a> </p>
-<p>Recovery does not reconnect to the old stream. A retry policy may subsequently schedule a new numbered attempt, which is a new provider request. This separates preserving the partial response from deciding whether to try again.</p>
-<p>The synthetic settlement records zero usage. That value cannot tell us what the provider charged for the interrupted request: the runtime may never have received the final accounting. The append-only ledger preserves settled usage and accepts caller-supplied adjustments so that accounting can be reconciled separately. <a href="https://github.com/earendil-works/pi/blob/9767ba275f3e9a5ee0f5c5342249b629ab1b2282/packages/agent/docs/harness.md#16-usage-ledger">9</a> </p>
-<h2 id="who-continues-the-work">Who continues the work?</h2>
-<p>Saving work and running it are separate responsibilities in the API as well. <code>accept</code> persists an operation without invoking a hook, provider or tool. <code>drive</code> installs or joins the lane-owned execution pass. A host can therefore accept work before a worker is ready and schedule execution later. <a href="https://github.com/earendil-works/pi/blob/9767ba275f3e9a5ee0f5c5342249b629ab1b2282/packages/agent/docs/harness.md#36-acceptance">10</a> </p>
-<p>The separation is visible in these consecutive <code>AgentLane</code> declarations:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb1-1"><a aria-hidden="true" href="#cb1-1" tabindex="-1"></a><span class="fu">getResult</span>(operationId<span class="op">:</span> <span class="dt">string</span><span class="op">,</span> context<span class="op">:</span> Context)<span class="op">:</span> <span class="bu">Promise</span><span class="op">&lt;</span>OperationResultRecord <span class="op">|</span> <span class="dt">undefined</span><span class="op">&gt;;</span></span>
-<span id="cb1-2"><a aria-hidden="true" href="#cb1-2" tabindex="-1"></a><span class="fu">accept</span>(request<span class="op">:</span> OperationRequest<span class="op">,</span> context<span class="op">:</span> Context)<span class="op">:</span> <span class="bu">Promise</span><span class="op">&lt;</span>OperationAdmissionResult<span class="op">&gt;;</span></span>
-<span id="cb1-3"><a aria-hidden="true" href="#cb1-3" tabindex="-1"></a><span class="fu">drive</span>(options<span class="op">:</span> DriveOptions<span class="op">,</span> context<span class="op">:</span> Context)<span class="op">:</span> <span class="bu">Promise</span><span class="op">&lt;</span>DriveResult<span class="op">&gt;;</span></span>
-<span id="cb1-4"><a aria-hidden="true" href="#cb1-4" tabindex="-1"></a><span class="fu">requestAbort</span>(operationId<span class="op">:</span> <span class="dt">string</span><span class="op">,</span> context<span class="op">:</span> Context)<span class="op">:</span> <span class="bu">Promise</span><span class="op">&lt;</span>AbortRequestResult<span class="op">&gt;;</span></span>
-<span id="cb1-5"><a aria-hidden="true" href="#cb1-5" tabindex="-1"></a><span class="fu">inspectExecution</span>(context<span class="op">:</span> Context)<span class="op">:</span> <span class="bu">Promise</span><span class="op">&lt;</span>LaneExecutionInfo<span class="op">&gt;;</span></span></code></pre></div>
-<p><em>TypeScript interface excerpt from <a href="https://github.com/earendil-works/pi/blob/9767ba275f3e9a5ee0f5c5342249b629ab1b2282/packages/agent/src/harness/agent-harness.ts#L545-L549">AgentLane</a>, MIT licensed.</em> </p>
-<p>Several events that look like “stop” to a user have different effects:</p>
-<ul>
-<li><strong>A caller cancels its Context after Drive installation.</strong> That caller stops observing; the operation is not durably cancelled. Other callers can still observe the same pass.</li>
-<li><strong>The host requests an abort.</strong> <code>requestAbort(operationId)</code> commits cancellation for the matching operation. A drive performs the remaining reconciliation; an old operation ID cannot cancel newer work.</li>
-<li><strong>The harness closes.</strong> New mutations are sealed and admitted mutations drain. Close writes neither cancellation nor terminal state.</li>
-<li><strong>The Session reopens.</strong> Saved state is restored, but execution waits for a later drive.</li>
-</ul>
-<p>Cancellation before Drive installation starts no work. These lifecycle rules let the host distinguish a lost connection from an explicit stop request. They also make restart scheduling and single-writer Session ownership part of the host’s job. <a href="https://github.com/earendil-works/pi/blob/9767ba275f3e9a5ee0f5c5342249b629ab1b2282/packages/agent/docs/harness.md#46-abort-and-cancellation-reconciliation">11</a> </p>
-<h2 id="implementation-progress">Implementation progress</h2>
-<p>At the September 7, 2026 source snapshot, the <a href="https://github.com/earendil-works/pi/blob/9767ba275f3e9a5ee0f5c5342249b629ab1b2282/packages/agent/docs/harness.md#part-8--work-packages">work-package list</a> marks WP00–WP07 and WP09 complete. WP08 is still in progress. The numbers identify work packages; they do not imply a strict completion order. </p>
-<div class="table-wrap"><table>
-<thead>
-<tr>
-<th>Package</th>
-<th>Status</th>
-<th>Result or remaining goal</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="https://github.com/earendil-works/pi/blob/9767ba275f3e9a5ee0f5c5342249b629ab1b2282/packages/agent/docs/work-packages/00-runtime1-removal.md">WP00</a></td>
-<td>Complete</td>
-<td>Replace runtime1 and switch the public factory to runtime2.</td>
-</tr>
-<tr>
-<td><a href="https://github.com/earendil-works/pi/blob/9767ba275f3e9a5ee0f5c5342249b629ab1b2282/packages/agent/docs/work-packages/01-bound-values-lists.md">WP01</a></td>
-<td>Complete</td>
-<td>Introduce bound values and lists across Session and storage backends.</td>
-</tr>
-<tr>
-<td><a href="https://github.com/earendil-works/pi/blob/9767ba275f3e9a5ee0f5c5342249b629ab1b2282/packages/agent/docs/work-packages/02-atomic-run-acceptance.md">WP02</a></td>
-<td>Complete</td>
-<td>Accept work atomically and capture coherent lane observations.</td>
-</tr>
-<tr>
-<td><a href="https://github.com/earendil-works/pi/blob/9767ba275f3e9a5ee0f5c5342249b629ab1b2282/packages/agent/docs/work-packages/03-remove-drive-deadlines.md">WP03</a></td>
-<td>Complete</td>
-<td>Remove wall-clock drive deadlines and the non-durable yielded outcome.</td>
-</tr>
-<tr>
-<td><a href="https://github.com/earendil-works/pi/blob/9767ba275f3e9a5ee0f5c5342249b629ab1b2282/packages/agent/docs/work-packages/04-mutation-publication.md">WP04</a></td>
-<td>Complete</td>
-<td>Publish committed mutations and their events through the Session.</td>
-</tr>
-<tr>
-<td><a href="https://github.com/earendil-works/pi/blob/9767ba275f3e9a5ee0f5c5342249b629ab1b2282/packages/agent/docs/work-packages/05-direct-durable-drive.md">WP05</a></td>
-<td>Complete</td>
-<td>Finish the durable operation graph, cancellation, results and public lane API.</td>
-</tr>
-<tr>
-<td><a href="https://github.com/earendil-works/pi/blob/9767ba275f3e9a5ee0f5c5342249b629ab1b2282/packages/agent/docs/work-packages/06-session-branch-lane-separation.md">WP06</a></td>
-<td>Complete</td>
-<td>Separate Session, Branch, AgentLane and AgentHarness responsibilities.</td>
-</tr>
-<tr>
-<td><a href="https://github.com/earendil-works/pi/blob/9767ba275f3e9a5ee0f5c5342249b629ab1b2282/packages/agent/docs/work-packages/07-sqlite-host-ownership-live-forks.md">WP07</a></td>
-<td>Complete</td>
-<td>Align SQLite with host ownership and support live-source forks.</td>
-</tr>
-<tr>
-<td><a href="https://github.com/earendil-works/pi/blob/9767ba275f3e9a5ee0f5c5342249b629ab1b2282/packages/agent/docs/work-packages/08-named-branch-streaming-forks.md">WP08</a></td>
-<td>In progress</td>
-<td>Add named-branch/tree semantics and bounded-memory fork copies.</td>
-</tr>
-<tr>
-<td><a href="https://github.com/earendil-works/pi/blob/9767ba275f3e9a5ee0f5c5342249b629ab1b2282/packages/agent/docs/work-packages/09-lane-snapshot-settled-tools.md">WP09</a></td>
-<td>Complete</td>
-<td>Keep settled tool results visible until conversation placement.</td>
-</tr>
-</tbody>
-</table></div>
-<p>WP08 has already added explicit scope and branch selection, ancestry checks, configured-lane enforcement and scalar-value fork rules. List copying, sequence preservation, direct Memory construction and bounded JSONL/SQLite transfer still remain. <a href="https://github.com/earendil-works/pi/blob/9767ba275f3e9a5ee0f5c5342249b629ab1b2282/packages/agent/docs/harness.md#09-implementation-status">Current slice</a>. </p>
-<h3 id="work-still-open">Work still open</h3>
-<p>The <a href="https://github.com/earendil-works/pi/blob/9767ba275f3e9a5ee0f5c5342249b629ab1b2282/packages/agent/docs/harness.md#09-implementation-status">implementation status</a> and <a href="https://github.com/earendil-works/pi/blob/9767ba275f3e9a5ee0f5c5342249b629ab1b2282/packages/agent/docs/post-wp05-roadmap.md">roadmap</a> identify several remaining gaps: </p>
-<ul>
-<li><strong>JSONL storage cleanup.</strong> Snapshot compaction is specified but unimplemented, so superseded operation state and deleted pending payloads can remain in the file. Conversation compaction does not reclaim those physical bytes. </li>
-<li><strong>Session-wide observation and search.</strong> Lane watches exist, but <code>watchSession</code> still throws <code>SliceNotImplemented</code>. Search has a design and a conflicting public API skeleton, with no implementation. </li>
-<li><strong>Telemetry.</strong> The span vocabulary is declared, while production instrumentation starts only the tool-hook span. RPC trace propagation remains open. </li>
-<li><strong>Remote Session access.</strong> The product uses process-local Sessions and routed semantic services. Some specification text still requires a raw remote mutation interface; that contract needs a decision before implementation. </li>
-<li><strong>Contract and storage follow-up.</strong> Operation status and abort event ordering need reconciliation. SQLite branch divergence can still copy an entire uncompacted history. Format 4 remains in development, with schema migration machinery reserved for a future stabilized-format change. </li>
-</ul>
-<p>Recovery also depends on the chosen backend. Memory storage loses its state with the process. The JSONL contract gives resolved commits process-crash durability, with no <code>fsync</code> promise. <a href="https://github.com/earendil-works/pi/blob/9767ba275f3e9a5ee0f5c5342249b629ab1b2282/packages/agent/docs/harness.md#jsonl">Storage contract</a>. </p>
-<p>For an integration, start with one real interruption point. Identify what committed, which external outcome is still unknown, whether replay is permitted, and who schedules the next drive. Those four questions connect the saved data to the behavior the application will actually have after a restart.</p>
-<p>For a broader comparison of the two tools, see <a href="/tutorials/deepseek-harness-vs-pi-agent/">DeepSeek Harness vs Pi Agent</a>. </p>
-<section aria-label="Sources and version" class="source-notes"><h2 id="sources-and-version">Sources and version</h2>
-<p>The mechanisms above follow Pi’s <a href="https://github.com/earendil-works/pi/blob/9767ba275f3e9a5ee0f5c5342249b629ab1b2282/packages/agent/docs/harness.md">AgentHarness specification and implementation at revision 9767ba2</a>, reviewed on September 7, 2026. The <a href="https://github.com/earendil-works/pi/blob/a0014c1a83ea0b6fd98762a9bdaa90f517a73cbf/packages/agent/docs/harness-v2.md">historical v2 proposal</a> uses the earlier log-based recovery model. For changes after this snapshot, consult the <a href="https://github.com/earendil-works/pi/blob/main/packages/agent/docs/harness.md">current harness documentation</a> and the <a href="https://github.com/earendil-works/pi">Pi repository</a>. Here, “v2” names a design stage in the project’s history, not a package release, and it does not refer to third-party packages that also use “harness” in their names. </p>
-</section>
+| Record or component | Role after restart |
+|---|---|
+| **Entries** | Immutable transcript records, including user inputs, assistant messages, and committed tool results |
+| **Documents** | Mutable committed state beside the transcript: agent choices, live work, inbox, usage, and provider-facing identity |
+| **Tasks** | Saved state machines with checkpoints, outcomes, and ownership |
+| **Submissions** | Accepted inputs or writes; a client can reacquire them and wait for their result |
+| **Registry, model access, and execution environment** | Host-supplied code and dependencies that must be available again |
+
+A commit can append an entry, change a document, and advance a task together. That atomic boundary keeps the local record coherent. It does not include a remote service’s transaction.
+
+<img src="/archify_20261008_190824/restart-boundary.webp" decoding="async" loading="lazy" width="1720" height="900" alt="A host opens a Harness over durable storage and starts a task scheduler. The registry and model dependencies are recreated; external systems remain outside the persisted-state boundary." data-zoomable title="Click to enlarge" />
+
+*Figure 1. Stored entries, documents, and tasks survive a process restart with a persistent backend. The host reconstructs execution dependencies. The small outline marks persisted state, not an autonomous scheduler.*
+
+### Opening storage is not the instruction to run
+
+The README’s minimal restart pattern is:
+
+```typescript
+// Recreate models and registry before this point.
+const harness = await Harness.open(
+  await openNodeSqliteStorage("./session.sqlite"),
+  { models, registry },
+  context,
+);
+const root = await harness.root(context);
+harness.resume();
+```
+
+This is a restart fragment, not a complete setup program. `openNodeSqliteStorage` comes from `@earendil-works/pi-durable/storage/sqlite/node`; tools that need files or processes also require a suitable `env` factory. `resume()` starts the scheduler, and submitting or waiting starts it too. `MemoryStorage` is useful for tests but does not preserve work across process loss.
+
+Conversations store extension names, not executable functions. Reinstall the relevant extensions before resuming. A tool that no longer resolves can change the recovery decision.
+
+<h2 id="the-crash-window">The tool checkpoint cannot prove an external action happened</h2>
+
+Consider an upload tool. The current [tool task][tool-task] validates its arguments, applies `beforeTool`, and commits an intent before calling `execute()`. The saved checkpoint contains `phase: "execute"`, the final arguments, and the tool’s replay policy.
+
+That phase name is easy to misread. It means **execution is the next recovery boundary**, not “the upload completed.” Two different histories can leave the same checkpoint:
+
+1. Pi saves the intent, then the process dies before the upload starts.
+2. The upload succeeds, then the process dies before Pi saves its result.
+
+<img src="/baoyu-article-illustrator_20261008_192341/crash-boundary.webp" decoding="async" loading="lazy" width="1536" height="1024" alt="A crash before an external action and a crash after the action but before result commit both leave phase execute and an unknown outcome." data-zoomable title="Click to enlarge" />
+
+*Figure 2. The two external histories differ, but Pi reopens with the same `execute` checkpoint. A saved intent is not a completion receipt.*
+
+### Predict recovery from the last committed boundary
+
+| Where the process stops | What Pi can recover | Consequence |
+|---|---|---|
+| Before the execution intent commits | The earlier `call` phase | Preparation and hooks can run again before execution. |
+| After intent, before the external action | An `execute` checkpoint without a final result | Apply replay policy; Pi cannot distinguish this from an action that already ran. |
+| After the action, before result settlement commits | The same checkpoint | The external outcome remains unknown. |
+| After final settlement commits | A terminal task and its tool-result entry | Reuse the saved result; do not rerun that completed task. |
+
+The [recovery tests][tool-recovery] cover both an interrupted call and interruption before intent. They simulate close/reopen with persistent storage; reading these assertions is not a power-loss experiment.
+
+<h2 id="safe-tool-replay">Safe tool replay requires two permissions</h2>
+
+On recovery from an `execute` checkpoint, Pi checks **both** the policy stored before the original attempt and the tool’s current declaration:
+
+| Stored policy | Current tool | Recovery of the unfinished call |
+|---|---|---|
+| `safe` | Resolves and declares `safe` | May rerun |
+| `safe` | Declares `unsafe`, or is unavailable | Settle as interrupted |
+| `unsafe` | Now declares `safe` | Still settle as interrupted |
+| `unsafe` | Declares `unsafe` | Settle as interrupted |
+
+This matrix follows the [implementation][tool-task] and the [policy-combination tests][tool-recovery]. Cancellation has its own abort path; marking a call safe does not override durable abort intent.
+
+For an interrupted unsafe call, the model receives an error result with the output and details committed so far. The diagnostic says the tool may have partially run. That is deliberately weaker than either “nothing happened” or “the action succeeded.”
+
+### What `safe` does not promise
+
+`safe` permits recovery execution; it does not freeze the returned data, function implementation, or working directory. A read can be repeatable without returning the same contents. The recovery tests also show a safe call using the conversation’s **current** environment after a working-directory change.
+
+Likewise, `unsafe` prevents automatic replay of this unfinished task. It does not undo the first action, and it does not prevent a later model turn from requesting a new invocation. Applications that must prohibit a duplicate upload or payment need an external operation identity and service-side idempotency or reconciliation.
+
+### Memos help only when application code uses them
+
+A durable task memo is a named, first-writer-wins value. The [runtime contract][memo-contract] lets tool code read it and return early. Here is an execution-body sketch, assuming `upload` returns a string receipt and the service actually enforces the supplied idempotency key:
+
+```typescript
+const previous = await api.memo<string>("upload", context);
+if (previous !== undefined) {
+  return { content: [{ type: "text", text: previous }] };
+}
+
+// storeKey must be a stable application namespace.
+const key = `${storeKey}:${api.taskId}:upload`;
+const receipt = await upload(args, { idempotencyKey: key });
+const saved = await api.memo("upload", receipt, context);
+return { content: [{ type: "text", text: saved }] };
+```
+
+The memo avoids calling `upload` once its receipt is committed. But a crash between the upload and the memo commit still leaves a gap. The external idempotency key addresses that gap only if the remote service honors it. A local memo alone is not exactly-once side-effect execution, and this sketch is not permission to declare an arbitrary upload tool `safe`.
+
+<h2 id="parallel-result-order">Parallel tools have two different result orders</h2>
+
+Suppose an assistant calls A, then B, and B finishes first. **Current Pi Durable appends B’s result first.** Its transcript records completion order; it does not use the old `outcome_ready` staging rule to hold B out of history.
+
+When Pi builds the model’s context, [its projection][context-order] orders tool results by the assistant’s original tool-call order. The same saved results can therefore appear as B, A in history and A, B in model context.
+
+<img src="/baoyu-article-illustrator_20261008_192341/result-order.webp" decoding="async" loading="lazy" width="1536" height="1024" alt="The transcript holds saved results B then A, while model context projects those same results as A then B." data-zoomable title="Click to enlarge" />
+
+*Figure 3. Completion order and model-context order are different views of the same results, not two executions. This assumes the model called A before B and B completed first.*
+
+Now place a crash between B’s commit and A’s settlement. B’s completed task and result remain saved. Only unfinished A needs recovery, and A reruns only if the replay gate allows it. Once the round is settled, the next model request can consume A, B in call order. This distinction matters for applications that show transcript entries directly: their visible history need not match the ordering of the model’s tool-result messages.
+
+<h2 id="model-request-recovery">A cut-off model request is resent, not resumed token by token</h2>
+
+Model recovery has a different boundary from tool replay. In the [request-recovery tests][model-recovery], an interrupted prepared request is sent again using its saved messages and options, without repeating preparation. If a partial answer was committed, recovery can turn it into an assistant entry marked `aborted` before resending the same request.
+
+That preserves evidence of the interrupted attempt. It does not attach to the former stream and continue from the last displayed token, nor does it guarantee the same answer on the next attempt.
+
+The README documents configurable partial/output commit intervals, with a 100 ms default. Treat those as progress-throttling settings, not a measured upper bound on data loss under arbitrary storage delays. Only committed progress is available after restart.
+
+Each conversation also has a persisted provider-facing session identity. The [resume documentation][resume] describes its use for prompt-cache and session affinity, and the changelog records its addition in 1.0.2. **Affinity is not external request deduplication or a final billing receipt.** Do not infer exactly-once generation or known final provider cost from the existence of that UUID.
+
+<h2 id="storage-boundaries">Durability depends on the backend and the failure being tested</h2>
+
+Pi Durable supplies persistent SQLite and JSONL storage as well as memory storage. A consistent local commit is valuable, but “survives a process restart” and “every acknowledged tail commit survives sudden power loss” are different claims.
+
+For JSONL, the reviewed [ordinary commit path][jsonl-commit] appends affected sidecar records, optionally syncs those files, and then appends a marker to the main journal. It does **not** sync that newly appended main marker in the ordinary path. Consequently, even `fsync: true` is not sufficient evidence that every newest acknowledged commit is protected against power loss. Do not generalize this observation to every backend; assess the actual adapter and storage settings.
+
+The official announcement also specifies one owning process per storage. Multiple clients can attach to that owner; independent processes opening and writing the same state are not a substitute for an ownership strategy. This [framework-versus-runtime distinction](/tutorials/agent-framework-harness-runtime-production/) is why an application needs operational recovery rules as well as an SDK.
+
+<h2 id="integration-checklist">An integration checklist you can actually test</h2>
+
+Before relying on restart recovery:
+
+- **Pin the API.** Use current Pi Durable documentation and a known package version. Keep old AgentLane/Drive examples out of new integrations.
+- **Rebuild execution dependencies.** Reopen the same persistent storage, reinstall extensions, recreate model access and environments, and start the scheduler under one writable owner.
+- **Retry admission with the same identity.** A submission’s `requestId` lets the conversation find the existing submission after a client retry. It does not deduplicate arbitrary tool effects.
+- **Audit each safe tool.** Check both its external idempotency behavior and what happens if code, environment, or policy changes before recovery.
+- **Inject failures around commits.** Check the execution-intent boundary, the side effect before settlement, and a completed parallel result before its sibling finishes. Count external calls and inspect both history and model context.
+- **Test the deployment’s failure modes.** Graceful close/reopen is a useful test but does not establish behavior under power loss, broken disks, or multiple writers.
+
+For a broader comparison of composition choices, see [DeepSeek Harness vs Pi Agent](/tutorials/deepseek-harness-vs-pi-agent/). That comparison is not evidence that the two runtimes have identical recovery guarantees.
+
+<h2 id="check-your-understanding">Predict a restart before reading the answers</h2>
+
+Assume a persistent backend, the same storage, correctly reinstalled dependencies, and a restarted scheduler:
+
+1. An upload has an `execute` checkpoint with stored `unsafe`. The new tool declaration says `safe`. Will recovery run it?
+2. A and B are called in that order. B’s final result commits; A is interrupted and has both policies `safe`. Which tool may rerun, and what are the two result orders if A finishes later?
+3. A remote upload succeeds, but the process dies before its receipt memo commits. Does the memo API alone prevent another upload?
+4. A partial model answer is committed before interruption. Does Pi reconnect to its last token?
+
+<details markdown="1">
+<summary>Show the recovery predictions</summary>
+
+1. **No.** The stored `unsafe` policy cannot be upgraded by the current declaration. The model receives an interrupted result with an unknown external outcome.
+2. **A may rerun; B’s committed result is reused.** History can contain B, A, while model context presents A, B. This is not replaying B to repair ordering.
+3. **No.** There is no committed memo to read. Preventing the duplicate requires the remote service to honor the same operation key, or an application reconciliation path.
+4. **No.** A saved partial can become an `aborted` entry, and the prepared model request is resent. Stream continuity and identical regenerated content are not promised.
+
+</details>
+
+<h2 id="sources-and-version">Sources and version scope</h2>
+
+This article was substantively rebuilt on **October 8, 2026**, against Pi revision [`ce950d7`][snapshot]. The version dates come from the agent-core and Pi Durable changelogs, not from this page’s publication date. The original September 7 publication date remains preserved.
+
+Primary sources are the [official Pi Durable announcement][announcement], [current README][readme], [tool task][tool-task], [context projection][context-order], and linked recovery tests. The earlier AgentHarness comparison uses the separate [`3e94512` snapshot][old-harness]. The current APIs and figures are not attributed to that old revision.
+
+**Verification boundary:** the upstream test assertions were inspected, not executed for this article. They describe simulated provider responses and persistent close/reopen scenarios; no live provider, upload service, or power-loss test is claimed. Local site builds, page checks, and image interactions are verified separately.
+
+[announcement]: https://earendil.com/posts/pi-durable
+[snapshot]: https://github.com/earendil-works/pi/tree/ce950d78f424dcaf9f5d6a03ce80ab141130eb1d
+[readme]: https://github.com/earendil-works/pi/blob/ce950d78f424dcaf9f5d6a03ce80ab141130eb1d/packages/durable/README.md
+[resume]: https://github.com/earendil-works/pi/blob/ce950d78f424dcaf9f5d6a03ce80ab141130eb1d/packages/durable/README.md#persist-and-resume
+[agent-changelog]: https://github.com/earendil-works/pi/blob/ce950d78f424dcaf9f5d6a03ce80ab141130eb1d/packages/agent/CHANGELOG.md#100---2026-10-01
+[durable-changelog]: https://github.com/earendil-works/pi/blob/ce950d78f424dcaf9f5d6a03ce80ab141130eb1d/packages/durable/CHANGELOG.md
+[old-harness]: https://github.com/earendil-works/pi/blob/3e9451238337071b74ba5cdd53f1ab7cf4100ae8/packages/agent/docs/harness.md
+[tool-task]: https://github.com/earendil-works/pi/blob/ce950d78f424dcaf9f5d6a03ce80ab141130eb1d/packages/durable/src/harness/tool.ts#L38-L119
+[tool-recovery]: https://github.com/earendil-works/pi/blob/ce950d78f424dcaf9f5d6a03ce80ab141130eb1d/packages/durable/test/harness-tools-recovery.test.ts#L112-L207
+[memo-contract]: https://github.com/earendil-works/pi/blob/ce950d78f424dcaf9f5d6a03ce80ab141130eb1d/packages/durable/src/types.ts#L203-L206
+[context-order]: https://github.com/earendil-works/pi/blob/ce950d78f424dcaf9f5d6a03ce80ab141130eb1d/packages/durable/src/harness/context.ts
+[model-recovery]: https://github.com/earendil-works/pi/blob/ce950d78f424dcaf9f5d6a03ce80ab141130eb1d/packages/durable/test/harness-generation-recovery.test.ts#L74-L160
+[jsonl-commit]: https://github.com/earendil-works/pi/blob/ce950d78f424dcaf9f5d6a03ce80ab141130eb1d/packages/durable/src/storage/jsonl/storage.ts#L277-L305

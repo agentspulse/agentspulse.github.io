@@ -15,7 +15,7 @@
 {% assign read_time = content | number_of_words | divided_by: 180 | plus: 1 %}
 <header class="sky-research-header">
 <div class="sky-research-heading">
-<p class="sky-research-eyebrow">Research review <span aria-hidden="true">/</span> {{ page.paper_count }} {% if page.paper_count == 1 %}paper{% else %}papers{% endif %}</p>
+<p class="sky-research-eyebrow">{% if page.review_eyebrow %}{{ page.review_eyebrow }}{% else %}Research review <span aria-hidden="true">/</span> {{ page.paper_count }} {% if page.paper_count == 1 %}paper{% else %}papers{% endif %}{% endif %}</p>
 <h1>{{ page.title }}</h1>
 <p class="sky-research-dek">{{ page.dek | default: page.description }}</p>
 <div class="sky-research-meta" aria-label="Article details">
@@ -28,7 +28,7 @@
 <div class="sky-research-scope" aria-label="Review scope">
 <span>Review scope</span>
 <strong>{{ page.research_scope }}</strong>
-<p>Primary papers, system diagrams, benchmarks, and stated limitations.</p>
+<p>{{ page.scope_note | default: "Primary papers, system diagrams, benchmarks, and stated limitations." }}</p>
 </div>
 </header>
 {% if page.thumbnail %}

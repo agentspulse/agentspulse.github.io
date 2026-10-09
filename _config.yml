@@ -174,12 +174,23 @@ kramdown:
       start_line: 1
 
 # Includes & excludes
-include: ["_pages", "_scripts"]
+include:
+  - "_pages"
+  - "_scripts"
+  - "baoyu-cover-image_20261001_213950/首图.webp"
+  - "baoyu-article-illustrator_20261008_192341/crash-boundary.webp"
+  - "baoyu-article-illustrator_20261008_192341/result-order.webp"
+  - "archify_20261008_190824/restart-boundary.webp"
 exclude:
+  - baoyu-cover-image_*
+  - baoyu-article-illustrator_*
   - archify_*
   - canvas-design_*
   - code-documentation_*
   - feishu-cli_*
+  - technical-article-writing_*
+  - 技术文章写作_*
+  - adsense-site-auditor_*
   - images/jev-ultrafast-browser-agent/interactive-architecture.html
   - bin/
   - CONTRIBUTING.md

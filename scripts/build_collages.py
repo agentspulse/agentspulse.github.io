@@ -34,8 +34,8 @@ TRIM_TOL = 246   # pixels brighter than this count as page margin
 CARD_SIZE = (900, 563)      # 16:10
 FEATURED_SIZE = (1040, 780)  # 4:3 side panel
 
-IMG_RE = re.compile(r'(?:src="|!\[[^\]]*\]\()(/images/[^")\s]+)')
-FM_IMG_RE = re.compile(r'^\s*(?:thumbnail|og_image):\s*"?(/images/[^"\s]+)"?', re.M)
+IMG_RE = re.compile(r'(?:src="|!\[[^\]]*\]\()(/[^")\s]+\.(?:png|jpe?g|webp|avif))', re.I)
+FM_IMG_RE = re.compile(r'^\s*(?:thumbnail|og_image):\s*"?(/[^"\s]+\.(?:png|jpe?g|webp|avif))"?', re.M | re.I)
 
 
 def figures_for(md_path: pathlib.Path) -> list[pathlib.Path]:
