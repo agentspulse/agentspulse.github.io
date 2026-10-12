@@ -184,10 +184,10 @@ include:
   - "technical-article-writing_20261012_090412/资源/封面-1280.webp"
   - "technical-article-writing_20261012_090412/资源/封面-1536.webp"
   - "technical-article-writing_20261012_090412/资源/封面-640.webp"
-  - "technical-article-writing_20261012_090412/资源/校准-1536.webp"
-  - "technical-article-writing_20261012_090412/资源/校准-手机.webp"
-  - "technical-article-writing_20261012_090412/资源/题型-1536.webp"
-  - "technical-article-writing_20261012_090412/资源/题型-手机.webp"
+  - "image-gen_20261012_103040/decision-types/article.webp"
+  - "image-gen_20261012_103040/decision-types-mobile/article.webp"
+  - "image-gen_20261012_103040/calibration/article.webp"
+  - "image-gen_20261012_103040/calibration-mobile/article.webp"
 exclude:
   - skill-install_*
   - websape-browser_*
