@@ -5,47 +5,49 @@
   </head>
   <body class="design-replica-body">
     <div class="design-replica-shell replica-sky">
-<a class="sky-skip-link" href="#main-content">Skip to content</a>
+<a class="sky-skip-link" href="#main-content">{{ page.ui_labels.skip | default: "Skip to content" }}</a>
 {% include sky-nav.liquid active='paper' %}
 <main class="sky-article-wrap{% if page.article_variant == 'research-review' %} sky-research-review{% endif %}" id="main-content">
 {% if page.article_variant == 'research-review' %}
 <nav class="sky-breadcrumb" aria-label="Breadcrumb">
-<a href="{{ '/' | relative_url }}">Papers</a><i class="ti ti-chevron-right" aria-hidden="true"></i><span aria-current="page">Research review</span>
+<a href="{{ '/' | relative_url }}">{{ page.ui_labels.home | default: "Papers" }}</a><i class="ti ti-chevron-right" aria-hidden="true"></i><span aria-current="page">{{ page.ui_labels.review | default: "Research review" }}</span>
 </nav>
 {% assign read_time = content | number_of_words | divided_by: 180 | plus: 1 %}
+{% assign article_date_format = page.date_format | default: '%B %-d, %Y' %}
+{% if page.read_time_minutes %}{% assign read_time = page.read_time_minutes %}{% endif %}
 <header class="sky-research-header">
 <div class="sky-research-heading">
 <p class="sky-research-eyebrow">{% if page.review_eyebrow %}{{ page.review_eyebrow }}{% else %}Research review <span aria-hidden="true">/</span> {{ page.paper_count }} {% if page.paper_count == 1 %}paper{% else %}papers{% endif %}{% endif %}</p>
-<h1>{{ page.title }}</h1>
+<h1>{{ page.display_title | default: page.title }}</h1>
 <p class="sky-research-dek">{{ page.dek | default: page.description }}</p>
 <div class="sky-research-meta" aria-label="Article details">
-<span><i class="ti ti-user-edit" aria-hidden="true"></i>By {{ page.author_name | default: 'AgentsPulse Editorial Team' }}</span>
-<span><i class="ti ti-clock" aria-hidden="true"></i>{{ read_time }} min read</span>
-<span><i class="ti ti-calendar" aria-hidden="true"></i>Published {{ page.date | date: '%B %-d, %Y' }}</span>
-{% if page.last_modified_at %}<span><i class="ti ti-refresh" aria-hidden="true"></i>Updated {{ page.last_modified_at | date: '%B %-d, %Y' }}</span>{% endif %}
+<span><i class="ti ti-user-edit" aria-hidden="true"></i>{{ page.ui_labels.by | default: "By" }} {{ page.author_name | default: 'AgentsPulse Editorial Team' }}</span>
+<span><i class="ti ti-clock" aria-hidden="true"></i>{{ read_time }} {{ page.ui_labels.minutes | default: "min read" }}</span>
+<span><i class="ti ti-calendar" aria-hidden="true"></i>{{ page.ui_labels.published | default: "Published" }} {{ page.date | date: article_date_format }}</span>
+{% if page.last_modified_at %}<span><i class="ti ti-refresh" aria-hidden="true"></i>{{ page.ui_labels.updated | default: "Updated" }} {{ page.last_modified_at | date: article_date_format }}</span>{% endif %}
 </div>
 </div>
 <div class="sky-research-scope" aria-label="Review scope">
-<span>Review scope</span>
+<span>{{ page.ui_labels.scope | default: "Review scope" }}</span>
 <strong>{{ page.research_scope }}</strong>
 <p>{{ page.scope_note | default: "Primary papers, system diagrams, benchmarks, and stated limitations." }}</p>
 </div>
 </header>
 {% if page.thumbnail %}
 <figure class="sky-research-cover">
-<img src="{{ page.thumbnail | relative_url }}" alt="{{ page.cover_alt | default: page.title }}" width="{{ page.cover_width }}" height="{{ page.cover_height }}" fetchpriority="high"{% if page.zoomable_images %} data-zoomable title="Click to enlarge"{% endif %}>
+<img src="{{ page.thumbnail | relative_url }}" alt="{{ page.cover_alt | default: page.title }}" width="{{ page.cover_width }}" height="{{ page.cover_height }}" fetchpriority="high" decoding="async"{% if page.cover_srcset %} srcset="{{ page.cover_srcset }}" sizes="(max-width: 760px) calc(100vw - 54px), 1100px"{% endif %}{% if page.zoomable_images %} data-zoomable title="Click to enlarge"{% endif %}>
 </figure>
 {% endif %}
 <div class="sky-research-layout">
 <aside class="sky-research-rail" aria-label="On this page">
 <nav class="sky-research-toc" aria-label="Table of contents">
-<strong>On this page</strong>
+<strong>{{ page.ui_labels.toc | default: "On this page" }}</strong>
 <ol>{% for item in page.article_toc %}<li><a href="#{{ item.id }}">{{ item.label }}</a></li>{% endfor %}</ol>
 </nav>
 </aside>
 <article class="sky-article">
 <aside class="sky-key-takeaways" aria-labelledby="key-takeaways-title">
-<p id="key-takeaways-title">Key takeaways</p>
+<p id="key-takeaways-title">{{ page.ui_labels.takeaways | default: "Key takeaways" }}</p>
 <ul>{% for takeaway in page.key_takeaways %}<li>{{ takeaway }}</li>{% endfor %}</ul>
 </aside>
 {{ content }}
@@ -54,7 +56,7 @@
 {% endif %}
 {% if page.related_research %}
 <section class="sky-related-research" aria-labelledby="related-research-title">
-<h2 id="related-research-title">Related research</h2>
+<h2 id="related-research-title">{{ page.ui_labels.related | default: "Related research" }}</h2>
 <div>{% for item in page.related_research %}<a href="{{ item.url | relative_url }}"><strong>{{ item.title }}</strong><span>{{ item.description }}</span><i class="ti ti-arrow-up-right" aria-hidden="true"></i></a>{% endfor %}</div>
 </section>
 {% endif %}

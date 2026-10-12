@@ -47,7 +47,13 @@ def figures_for(md_path: pathlib.Path) -> list[pathlib.Path]:
     for u in IMG_RE.findall(body):
         if u not in urls:
             urls.append(u)
-    for u in FM_IMG_RE.findall(front):
+    try:
+        import json
+        metadata = json.loads(front) if front.lstrip().startswith("{") else {}
+    except json.JSONDecodeError:
+        metadata = {}
+    front_urls = [metadata.get("thumbnail") or metadata.get("og_image")] if metadata.get("thumbnail") or metadata.get("og_image") else FM_IMG_RE.findall(front)
+    for u in front_urls:
         if u not in urls:
             urls.append(u)
 
@@ -131,6 +137,47 @@ def layout_featured(figs: list[Image.Image], size: tuple[int, int]) -> Image.Ima
     return board
 
 
+
+def tutorial_sources() -> list[pathlib.Path]:
+    """Enumerate normal tutorials plus the explicit, repository-contained artifact list."""
+    import ast
+    config = (ROOT / "_config.yml").read_text(encoding="utf-8")
+    match = re.search(r"^tutorial_artifact_sources:\s*\n((?:[ \t]+-.*\n)*)", config, re.M)
+    paths = sorted((ROOT / "_tutorials").glob("*.md"))
+    for line in match.group(1).splitlines() if match else []:
+        relative = ast.literal_eval(line.strip()[1:].strip())
+        if not re.fullmatch(r"(?:技术文章写作|technical-article-writing)_\d{8}_\d{6}/[^/]+\.md", relative):
+            raise ValueError("Invalid controlled tutorial artifact source")
+        path = (ROOT / relative).resolve(strict=True)
+        if ROOT.resolve() not in path.parents:
+            raise ValueError("Tutorial artifact is outside the repository")
+        paths.append(path)
+    slugs = [tutorial_slug(p) for p in paths]
+    if len(set(slugs)) != len(slugs):
+        raise ValueError("Duplicate tutorial slug")
+    return paths
+
+
+def tutorial_permalink(path: pathlib.Path) -> str:
+    import json
+    front = path.read_text(encoding="utf-8").split("---", 2)[1]
+    if front.lstrip().startswith("{"):
+        value = json.loads(front).get("permalink", "")
+    else:
+        match = re.search(r"^permalink:\s*([^\n]+)", front, re.M)
+        value = match.group(1).strip().strip("\"'") if match else "/tutorials/" + path.stem + "/"
+    if not re.fullmatch(r"/tutorials/[^/]+/", value):
+        raise ValueError("Tutorial needs a canonical /tutorials/<slug>/ permalink")
+    return value
+
+
+def tutorial_slug(path: pathlib.Path) -> str:
+    # Jekyll's existing collection slugs are file stems. Controlled inputs must match.
+    slug = path.stem
+    tutorial_permalink(path)  # Validate the public URL as well.
+    return slug
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--check", action="store_true",
@@ -143,8 +190,8 @@ def main() -> int:
     entries = []
     stale = []
 
-    for md in sorted(TUTORIALS.glob("*.md")):
-        slug = md.stem
+    for md in tutorial_sources():
+        slug = tutorial_slug(md)
         figs_paths = figures_for(md)
         if len(figs_paths) < 2:
             print(f"skip {slug}: needs at least 2 figures, found {len(figs_paths)}")
