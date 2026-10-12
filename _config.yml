@@ -181,7 +181,19 @@ include:
   - "baoyu-article-illustrator_20261008_192341/crash-boundary.webp"
   - "baoyu-article-illustrator_20261008_192341/result-order.webp"
   - "archify_20261008_190824/restart-boundary.webp"
+  - "technical-article-writing_20261012_090412/资源/封面-1280.webp"
+  - "technical-article-writing_20261012_090412/资源/封面-1536.webp"
+  - "technical-article-writing_20261012_090412/资源/封面-640.webp"
+  - "technical-article-writing_20261012_090412/资源/校准-1536.webp"
+  - "technical-article-writing_20261012_090412/资源/校准-手机.webp"
+  - "technical-article-writing_20261012_090412/资源/题型-1536.webp"
+  - "technical-article-writing_20261012_090412/资源/题型-手机.webp"
 exclude:
+  - skill-install_*
+  - websape-browser_*
+  - web-artifacts-builder-v2_*
+  - grounded-writing_*
+  - image-gen_*
   - baoyu-cover-image_*
   - baoyu-article-illustrator_*
   - archify_*
@@ -639,3 +651,7 @@ third_party_libraries:
       css: "https://cdn.jsdelivr.net/npm/venobox@{{version}}/dist/venobox.min.css"
       js: "https://cdn.jsdelivr.net/npm/venobox@{{version}}/dist/venobox.min.js"
     version: "2.1.8"
+
+# Explicit tutorial inputs remain in their artifact folder; all other outputs are private.
+tutorial_artifact_sources:
+  - "technical-article-writing_20261012_090412/microsoft-decision-1.md"
