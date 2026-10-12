@@ -59,3 +59,31 @@ module Jekyll
     end
   end
 end
+
+# Controlled in-place ingestion: source artifacts stay in their Skill output folder.
+Jekyll::Hooks.register :site, :post_read do |site|
+  collection = site.collections['tutorials']
+  next unless collection
+  root = File.realpath(site.source)
+  Array(site.config['tutorial_artifact_sources']).each do |source|
+    relative = source.to_s
+    unless relative.match?(/\A(?:技术文章写作|technical-article-writing)_\d{8}_\d{6}\/[^\/]+\.md\z/)
+      raise Jekyll::Errors::FatalException, "Invalid tutorial artifact source"
+    end
+    path = File.realpath(File.join(root, relative))
+    unless path.start_with?(root + File::SEPARATOR)
+      raise Jekyll::Errors::FatalException, "Tutorial artifact must remain inside the repository"
+    end
+    document = Jekyll::Document.new(path, :site => site, :collection => collection)
+    document.read
+    # Jekyll otherwise infers a category from the private output directory.
+    document.data['categories'] = Array(document.data['categories']).reject { |value| value.to_s.match?(/\A(?:技术文章写作|technical-article-writing)_\d{8}_\d{6}\z/) }
+    unless document.data['permalink'].to_s.match?(/\A\/tutorials\/[a-z0-9][a-z0-9-]*\/\z/)
+      raise Jekyll::Errors::FatalException, "Tutorial artifact requires an explicit /tutorials/ permalink"
+    end
+    if collection.docs.any? { |existing| existing.url == document.url }
+      raise Jekyll::Errors::FatalException, "Duplicate tutorial artifact permalink"
+    end
+    collection.docs << document
+  end
+end

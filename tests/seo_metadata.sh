@@ -230,7 +230,7 @@ shopt -s nullglob
 built_collages=(_site/images/collages/*-card.jpg)
 shopt -u nullglob
 
-tutorial_count=$(ls _tutorials/*.md | wc -l | tr -d ' ')
+tutorial_count=$(python3 -c 'import sys; sys.path.insert(0, "scripts"); from build_collages import tutorial_sources; print(len(tutorial_sources()))')
 if [[ "${#built_collages[@]}" -ne "$tutorial_count" ]]; then
   echo "FAIL: expected $tutorial_count card collages, found ${#built_collages[@]}."
   echo "      Collages are generated artifacts. Run: python3 scripts/build_collages.py"
@@ -275,13 +275,15 @@ from pathlib import Path
 import re
 
 expected = {"https://agentspulse.github.io/", "https://agentspulse.github.io/privacy/"}
-for source in Path("_tutorials").glob("*.md"):
-    text = source.read_text()
-    match = re.search(r"^permalink:\s*([^\s]+)", text, re.MULTILINE)
-    path = match.group(1) if match else f"/tutorials/{source.stem}/"
-    expected.add("https://agentspulse.github.io" + path)
+import sys
+sys.path.insert(0, "scripts")
+from build_collages import tutorial_sources, tutorial_permalink
+for source in tutorial_sources():
+    expected.add("https://agentspulse.github.io" + tutorial_permalink(source))
 if set(urls) != expected or len(urls) != len(expected):
     raise SystemExit(f"FAIL: sitemap URLs differ from expected canonical set: {urls}")
 PY
 
 echo "PASS: SEO metadata matches expected homepage and article values"
+
+python3 technical-article-writing_20261012_090412/检查站点SEO.py _site
