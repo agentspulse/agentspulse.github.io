@@ -188,6 +188,12 @@ include:
   - "image-gen_20261012_103040/decision-types-mobile/article.webp"
   - "image-gen_20261012_103040/calibration/article.webp"
   - "image-gen_20261012_103040/calibration-mobile/article.webp"
+  - "image-gen_20261013_132100/cover/rea-cover-640.webp"
+  - "image-gen_20261013_132100/cover/rea-cover-1280.webp"
+  - "image-gen_20261013_132100/cover/rea-cover-1536.webp"
+  - "archify_20261013_160204/rea-architecture.webp"
+  - "archify_20261013_160204/rea-layers.webp"
+  - "archify_20261013_160204/rea-feature-trace.webp"
 exclude:
   - skill-install_*
   - websape-browser_*
@@ -655,3 +661,4 @@ third_party_libraries:
 # Explicit tutorial inputs remain in their artifact folder; all other outputs are private.
 tutorial_artifact_sources:
   - "technical-article-writing_20261012_090412/microsoft-decision-1.md"
+  - "技术文章写作_20261013_160204/rea-reverse-engineer-anything-mcp.md"

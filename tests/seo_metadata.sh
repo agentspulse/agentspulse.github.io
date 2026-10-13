@@ -265,6 +265,15 @@ check_contains "_site/index.html" "Read the survey"
 check_contains "_site/tutorials/stateful-long-horizon-agents-review/index.html" '<a href="/tutorials/self-evolving-agents-review-en/">self-evolving agents survey</a>'
 check_contains "_site/tutorials/measuring-reward-seeking-contrastive-beliefs/index.html" '<a href="/tutorials/self-evolving-agents-review-en/">self-improving AI agents</a>'
 
+# REA explainer ingested from its preserved Skill output location.
+REA="_site/tutorials/rea-reverse-engineer-anything-mcp/index.html"
+check_contains "$REA" '<title>What Is REA? AI Reverse Engineering with MCP | AgentsPulse</title>'
+check_contains "$REA" 'id="rea-faq"'
+check_contains "$REA" 'src="/archify_20261013_160204/rea-architecture.webp"'
+check_contains "$REA" 'src="/archify_20261013_160204/rea-layers.webp"'
+check_contains "$REA" 'src="/archify_20261013_160204/rea-feature-trace.webp"'
+check_contains "$REA" '"@type":"FAQPage"'
+
 python3 - <<'PY'
 import xml.etree.ElementTree as ET
 
