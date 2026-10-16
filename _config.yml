@@ -175,6 +175,28 @@ kramdown:
 
 # Includes & excludes
 include:
+  - "image-gen_20261016_094707/cover/jev-1-14-cover-640.webp"
+  - "image-gen_20261016_094707/cover/jev-1-14-cover-1280.webp"
+  - "image-gen_20261016_094707/cover/jev-1-14-cover-1536.webp"
+  - "archify_20261016_094035/jev-architecture-article.webp"
+  - "archify_20261016_094035/jev-architecture-mobile-article.webp"
+  - "archify_20261016_094035/box-workflow-article.webp"
+  - "archify_20261016_094035/box-workflow-mobile-article.webp"
+  - "technical-article-writing_20261016_093029/figures/images-anatomy.webp"
+  - "technical-article-writing_20261016_093029/figures/images-anatomy-mobile.webp"
+  - "technical-article-writing_20261016_093029/figures/box-edges.webp"
+  - "technical-article-writing_20261016_093029/figures/box-edges-mobile.webp"
+  - "technical-article-writing_20261016_093029/figures/bench-intelligence.webp"
+  - "technical-article-writing_20261016_093029/figures/bench-intelligence-mobile.webp"
+  - "technical-article-writing_20261016_093029/figures/bench-calibration.webp"
+  - "technical-article-writing_20261016_093029/figures/bench-calibration-mobile.webp"
+  - "technical-article-writing_20261016_093029/v2/figures/typesafe-eyes-poster.webp"
+  - "technical-article-writing_20261016_093029/v2/figures/aa-compare.webp"
+  - "technical-article-writing_20261016_093029/v2/figures/aa-compare-mobile.webp"
+  - "technical-article-writing_20261016_093029/v2/figures/liquid-results.webp"
+  - "technical-article-writing_20261016_093029/v2/figures/liquid-results-mobile.webp"
+  - "technical-article-writing_20261016_093029/v2/figures/liquid-calibration.webp"
+  - "technical-article-writing_20261016_093029/v2/figures/liquid-calibration-mobile.webp"
   - "_pages"
   - "_scripts"
   - "baoyu-cover-image_20261001_213950/首图.webp"
@@ -660,5 +682,6 @@ third_party_libraries:
 
 # Explicit tutorial inputs remain in their artifact folder; all other outputs are private.
 tutorial_artifact_sources:
+  - "technical-article-writing_20261016_093029/jev-1-14.md"
   - "technical-article-writing_20261012_090412/microsoft-decision-1.md"
   - "技术文章写作_20261013_160204/rea-reverse-engineer-anything-mcp.md"
