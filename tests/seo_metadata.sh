@@ -274,6 +274,27 @@ check_contains "$REA" 'src="/archify_20261013_160204/rea-layers.webp"'
 check_contains "$REA" 'src="/archify_20261013_160204/rea-feature-trace.webp"'
 check_contains "$REA" '"@type":"FAQPage"'
 
+# Drama 3 and iFixAi: explicit controlled article inputs and shared image zoom.
+DRAMA="_site/tutorials/drama-3-fish-audio-tts/index.html"
+IFIXAI="_site/tutorials/ifixai-ai-agent-auditing/index.html"
+check_contains "$DRAMA" "<title>Drama 3: Fish Audio's Directable, Editable TTS | AgentsPulse</title>"
+check_contains "$DRAMA" 'id="drama-3-faq"'
+check_contains "$DRAMA" 'src="/archify_20261016_165854/drama-3-architecture.webp"'
+check_contains "$DRAMA" 'src="/archify_20261016_165854/drama-3-controls.webp"'
+check_contains "$DRAMA" 'src="/archify_20261016_165854/drama-3-editing.webp"'
+check_contains "$IFIXAI" '<title>iFixAi: AI Agent Auditing, Setup and Scoring | AgentsPulse</title>'
+check_contains "$IFIXAI" 'id="ifixai-faq"'
+check_contains "$IFIXAI" 'src="/archify_20261015_132611/ifixai-architecture-readable.webp"'
+check_contains "$IFIXAI" 'src="/archify_20261015_132611/ifixai-surfaces-readable.webp"'
+check_contains "$IFIXAI" 'src="/archify_20261015_132611/ifixai-permission-readable.webp"'
+for article in "$DRAMA" "$IFIXAI"; do
+  check_contains "$article" '<html lang="en">'
+  check_contains "$article" 'data-zoomable'
+  check_contains "$article" '"@type":"FAQPage"'
+done
+check_contains "$DRAMA" '"dateModified": "2026-10-16T00:00:00'
+check_contains "$IFIXAI" '"dateModified": "2026-10-15T00:00:00'
+
 python3 - <<'PY'
 import xml.etree.ElementTree as ET
 

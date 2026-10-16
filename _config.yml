@@ -175,6 +175,18 @@ kramdown:
 
 # Includes & excludes
 include:
+  - "image-gen_20261014_102006/cover/ifixai-cover-1280.webp"
+  - "image-gen_20261014_102006/cover/ifixai-cover-640.webp"
+  - "image-gen_20261014_102006/cover/ifixai-cover-1536.webp"
+  - "archify_20261015_132611/ifixai-architecture-readable.webp"
+  - "archify_20261015_132611/ifixai-surfaces-readable.webp"
+  - "archify_20261015_132611/ifixai-permission-readable.webp"
+  - "archify_20261016_165854/drama-3-architecture.webp"
+  - "archify_20261016_165854/drama-3-controls.webp"
+  - "archify_20261016_165854/drama-3-editing.webp"
+  - "image-gen_20261014_102024/cover/drama-3-cover-640.webp"
+  - "image-gen_20261014_102024/cover/drama-3-cover-1280.webp"
+  - "image-gen_20261014_102024/cover/drama-3-cover-1536.webp"
   - "image-gen_20261016_094707/cover/jev-1-14-cover-640.webp"
   - "image-gen_20261016_094707/cover/jev-1-14-cover-1280.webp"
   - "image-gen_20261016_094707/cover/jev-1-14-cover-1536.webp"
@@ -217,6 +229,11 @@ include:
   - "archify_20261013_160204/rea-layers.webp"
   - "archify_20261013_160204/rea-feature-trace.webp"
 exclude:
+  - seo-report_*
+  - event-article-batch_*
+  - pdf_*
+  - humanizer_*
+  - baoyu-image-gen_*
   - skill-install_*
   - websape-browser_*
   - web-artifacts-builder-v2_*
@@ -685,3 +702,5 @@ tutorial_artifact_sources:
   - "technical-article-writing_20261016_093029/jev-1-14.md"
   - "technical-article-writing_20261012_090412/microsoft-decision-1.md"
   - "技术文章写作_20261013_160204/rea-reverse-engineer-anything-mcp.md"
+  - "technical-article-writing_20261014_104933/drama-3-fish-audio-tts.md"
+  - "technical-article-writing_20261014_101127/ifixai-ai-agent-auditing.md"
