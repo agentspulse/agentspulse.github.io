@@ -265,13 +265,15 @@ check_contains "_site/index.html" "Read the survey"
 check_contains "_site/tutorials/stateful-long-horizon-agents-review/index.html" '<a href="/tutorials/self-evolving-agents-review-en/">self-evolving agents survey</a>'
 check_contains "_site/tutorials/measuring-reward-seeking-contrastive-beliefs/index.html" '<a href="/tutorials/self-evolving-agents-review-en/">self-improving AI agents</a>'
 
-# REA explainer ingested from its preserved Skill output location.
+# REA explainer (6.7.0 rewrite) ingested from its preserved Skill output location.
 REA="_site/tutorials/rea-reverse-engineer-anything-mcp/index.html"
 check_contains "$REA" '<title>What Is REA? AI Reverse Engineering with MCP | AgentsPulse</title>'
 check_contains "$REA" 'id="rea-faq"'
-check_contains "$REA" 'src="/archify_20261013_160204/rea-architecture.webp"'
-check_contains "$REA" 'src="/archify_20261013_160204/rea-layers.webp"'
-check_contains "$REA" 'src="/archify_20261013_160204/rea-feature-trace.webp"'
+check_contains "$REA" 'src="/archify_20261019_105653/rea-architecture-wide.webp"'
+check_contains "$REA" 'srcset="/archify_20261019_105653/rea-joplin-retained-facts.webp"'
+check_contains "$REA" 'src="/archify_20261019_105653/rea-next-step-wide.webp"'
+check_contains "$REA" 'data-zoomable'
+check_contains "$REA" 'src="/technical-article-writing_20261019_104219/figures/notion-findings.webp"'
 check_contains "$REA" '"@type":"FAQPage"'
 
 # Drama 3 and iFixAi: explicit controlled article inputs and shared image zoom.
