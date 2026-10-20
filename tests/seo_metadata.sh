@@ -276,6 +276,24 @@ check_contains "$REA" 'data-zoomable'
 check_contains "$REA" 'src="/technical-article-writing_20261019_104219/figures/notion-findings.webp"'
 check_contains "$REA" '"@type":"FAQPage"'
 
+# DeepSeek V4.1 Flash 1017 explainer ingested from its preserved Skill output location.
+DS1017="_site/tutorials/deepseek-v4-1-flash-1017/index.html"
+check_contains "$DS1017" '<title>DeepSeek V4.1 Flash 1017: Benchmarks &amp; Pricing | AgentsPulse</title>'
+check_contains "$DS1017" 'id="deepseek-v4-1-flash-1017-faq"'
+check_contains "$DS1017" 'src="/technical-article-writing_20261019_145705/figures/deepseek-model-routing.webp"'
+check_contains "$DS1017" 'srcset="/technical-article-writing_20261019_145705/figures/deepseek-search-fetch-mobile.webp"'
+check_contains "$DS1017" 'data-zoomable'
+check_contains "$DS1017" '"@type":"FAQPage"'
+
+# DeepInfer explainer ingested from its preserved Skill output location.
+DEEPINFER="_site/tutorials/deepseek-deepinfer/index.html"
+check_contains "$DEEPINFER" "<title>DeepInfer: DeepSeek's Open Inference Engine | AgentsPulse</title>"
+check_contains "$DEEPINFER" 'id="deepinfer-faq"'
+check_contains "$DEEPINFER" 'src="/technical-article-writing_20261020_183325/figures/deepinfer-architecture.webp"'
+check_contains "$DEEPINFER" 'srcset="/technical-article-writing_20261020_183325/figures/deepinfer-pareto-mobile.webp"'
+check_contains "$DEEPINFER" 'data-zoomable'
+check_contains "$DEEPINFER" '"@type":"FAQPage"'
+
 # Drama 3 and iFixAi: explicit controlled article inputs and shared image zoom.
 DRAMA="_site/tutorials/drama-3-fish-audio-tts/index.html"
 IFIXAI="_site/tutorials/ifixai-ai-agent-auditing/index.html"
