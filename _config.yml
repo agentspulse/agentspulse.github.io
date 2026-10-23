@@ -175,6 +175,18 @@ kramdown:
 
 # Includes & excludes
 include:
+  - "technical-article-writing_20261023_220622/figures/cover/deepinfer-community-cover-1280.webp"
+  - "technical-article-writing_20261023_220622/figures/cover/deepinfer-community-cover-1536.webp"
+  - "technical-article-writing_20261023_220622/figures/cover/deepinfer-community-cover-640.webp"
+  - "technical-article-writing_20261023_220622/figures/deepinfer-community-ab-wide.webp"
+  - "technical-article-writing_20261023_220622/figures/deepinfer-community-ab.webp"
+  - "technical-article-writing_20261023_220622/figures/deepinfer-official-architecture.webp"
+  - "technical-article-writing_20261023_220622/figures/deepinfer-official-prefill.webp"
+  - "technical-article-writing_20261023_220622/figures/deepinfer-pr-topics.webp"
+  - "technical-article-writing_20261023_220622/figures/deepinfer-pr200-b200-mobile.webp"
+  - "technical-article-writing_20261023_220622/figures/deepinfer-pr200-b200.webp"
+  - "technical-article-writing_20261023_220622/figures/deepinfer-pr200-gb300-mobile.webp"
+  - "technical-article-writing_20261023_220622/figures/deepinfer-pr200-gb300.webp"
   - "image-gen_20261014_102006/cover/ifixai-cover-1280.webp"
   - "image-gen_20261014_102006/cover/ifixai-cover-640.webp"
   - "image-gen_20261014_102006/cover/ifixai-cover-1536.webp"
@@ -263,6 +275,8 @@ include:
   - "technical-article-writing_20261020_183325/figures/cover/deepinfer-cover-1536.webp"
 exclude:
   - seo-report_*
+  - skill-revision_*
+  - deepinfer-plan_*
   - event-article-batch_*
   - pdf_*
   - humanizer_*
@@ -739,3 +753,4 @@ tutorial_artifact_sources:
   - "technical-article-writing_20261020_183325/deepseek-deepinfer.md"
   - "technical-article-writing_20261014_104933/drama-3-fish-audio-tts.md"
   - "technical-article-writing_20261014_101127/ifixai-ai-agent-auditing.md"
+  - "technical-article-writing_20261023_220622/deepinfer-benchmarks.md"
