@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="{{ page.lang | default: site.lang }}">
+  <head>
+    {% include head.liquid %}
+  </head>
+  <body class="design-replica-body">
+    <div class="design-replica-shell replica-sky">
+<a class="sky-skip-link" href="#main-content">Skip to content</a>
+{% include sky-nav.liquid active='paper' %}
+{% assign topic_posts = '' | split: '' %}
+{% for post in site.tutorials %}
+  {% if post.tags contains page.topic_tag %}
+    {% assign topic_posts = topic_posts | push: post %}
+  {% endif %}
+{% endfor %}
+{% assign topic_posts = topic_posts | sort: 'date' | reverse %}
+<main class="sky-main sky-topic-main" id="main-content">
+<nav class="sky-breadcrumb" aria-label="Breadcrumb">
+<a href="{{ '/' | relative_url }}">Papers</a><i class="ti ti-chevron-right" aria-hidden="true"></i>
+{% if page.parent_topic_url %}<a href="{{ page.parent_topic_url | relative_url }}">{{ page.parent_topic_title }}</a><i class="ti ti-chevron-right" aria-hidden="true"></i>{% endif %}
+<span aria-current="page">{{ page.topic_name }}</span>
+</nav>
+<header class="sky-topic-hero">
+<p class="sky-topic-kicker">Research topic</p>
+<h1>{{ page.display_title | default: page.title }}</h1>
+<p>{{ page.description }}</p>
+</header>
+<div class="sky-topic-content">
+{{ content }}
+</div>
+<section class="sky-topic-articles" aria-labelledby="topic-articles-title">
+<div class="sky-topic-section-heading">
+<div>
+<p class="sky-topic-kicker">AgentsPulse coverage</p>
+<h2 id="topic-articles-title">{{ page.topic_name }} articles</h2>
+</div>
+<p>{{ topic_posts | size }} {% if topic_posts.size == 1 %}article{% else %}articles{% endif %}</p>
+</div>
+<div class="sky-grid">
+{% for post in topic_posts %}
+{% assign read_time = post.content | number_of_words | divided_by: 180 | plus: 1 %}
+{% assign thumb = site.data.collages[post.slug].card | default: post.thumbnail | default: "/images/359239/figure-1.jpg" %}
+<a class="sky-card" href="{{ post.url | relative_url }}">
+<div class="sky-card-thumb"><img src="{{ thumb | relative_url }}" alt="Figures from {{ post.title }}" loading="lazy" width="900" height="563"></div>
+<div class="sky-card-body">
+<div class="sky-card-tags">{% for tag in post.tags limit: 2 %}<span data-tag="{{ tag | downcase }}">{{ tag }}</span>{% endfor %}</div>
+<h3>{{ post.title }}</h3>
+<p>{{ post.description | strip_html | truncate: 130 }}</p>
+<div class="sky-card-meta"><span>{{ read_time }} min read</span><span class="sky-arrow"><i class="ti ti-arrow-right" aria-hidden="true"></i></span></div>
+</div>
+</a>
+{% endfor %}
+</div>
+</section>
+</main>
+{% include sky-footer.liquid %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": {{ page.title | jsonify }},
+  "description": {{ page.description | jsonify }},
+  "url": {{ page.url | absolute_url | jsonify }},
+  "inLanguage": {{ page.lang | default: site.lang | jsonify }},
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": {{ site.title | jsonify }},
+    "url": {{ site.url | append: '/' | jsonify }}
+  }
+}
+</script>
+    </div>
+  </body>
+</html>

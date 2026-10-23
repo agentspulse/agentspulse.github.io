@@ -6,7 +6,7 @@ title: "DeepSeek Harness vs Pi Agent: Plugin Runtime or Minimal Coding Harness?"
 seo_title: "DeepSeek Harness vs Pi Agent"
 description: "DeepSeek Harness and Pi Agent compared across architecture, extensions, MCP, sandboxing, sessions, deployment, and best-fit engineering workflows."
 keywords: "DeepSeek Harness vs Pi Agent, DSH vs Pi coding agent, Pi Agent harness, DeepSeek coding harness, agent harness comparison"
-tags: [deepseek-harness, coding-agents, agent-infrastructure]
+tags: [deepseek-harness, coding-agents, agent-infrastructure, deepseek]
 categories: [frontier-research]
 permalink: /tutorials/deepseek-harness-vs-pi-agent/
 thumbnail: "/images/deepseek-harness-vs-pi-agent/model-provider-settings.jpg"

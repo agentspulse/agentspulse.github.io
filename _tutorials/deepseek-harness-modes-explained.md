@@ -6,7 +6,7 @@ title: "DeepSeek Harness Modes Explained"
 seo_title: "DeepSeek Harness Modes: Standard, PTC, Minimal & Creator"
 description: "Compare DeepSeek Harness Standard, PTC, Minimal, and Creator modes by tools, execution model, security boundary, and best use case."
 keywords: "DeepSeek Harness modes, DSH Standard mode, DSH PTC mode, DSH Minimal mode, DSH Creator mode"
-tags: [deepseek-harness, coding-agents, agent-infrastructure]
+tags: [deepseek-harness, coding-agents, agent-infrastructure, deepseek]
 categories: [frontier-research]
 permalink: /tutorials/deepseek-harness-modes-explained/
 thumbnail: "/images/deepseek-harness-modes-explained/modes-map.jpg"

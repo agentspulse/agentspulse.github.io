@@ -6,7 +6,7 @@ title: "DeepSeek Harness Architecture: How It Works and Whether to Adopt It"
 seo_title: "DeepSeek Harness Architecture and Adoption"
 description: "How DeepSeek Harness uses Cordis plugins for models, tools, sessions, approvals, and sandboxes—and what its developer-preview status means for adoption."
 keywords: "DeepSeek Harness architecture, DeepSeek Harness, everything is a plugin, Cordis, agent harness developer preview"
-tags: [deepseek-harness, agent-infrastructure, frontier-research]
+tags: [deepseek-harness, agent-infrastructure, frontier-research, deepseek]
 categories: [frontier-research]
 permalink: /tutorials/deepseek-harness-and-cordis-why-everything-is-a-plugin/
 thumbnail: "/images/deepseek-harness-and-cordis-why-everything-is-a-plugin/tool-execution-pipeline.jpg"

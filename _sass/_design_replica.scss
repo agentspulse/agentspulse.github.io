@@ -585,6 +585,131 @@
     }
   }
 
+  .sky-topic-links,
+  .sky-article-topics {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    span {
+      color: #94a3b8;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    a {
+      background: #fff;
+      border: 1px solid var(--sky-border);
+      border-radius: 999px;
+      color: var(--sky-blue);
+      font-size: 12px;
+      font-weight: 650;
+      padding: 6px 11px;
+      text-decoration: none;
+
+      &:hover { border-color: #94a3b8; }
+      &:focus-visible { outline: 2px solid var(--sky-gold); outline-offset: 2px; }
+    }
+  }
+
+  .sky-topic-links { margin: -2px 0 18px; }
+
+  .sky-article-topics { margin-top: 16px; }
+
+  .sky-topic-main { max-width: 70rem; padding-top: 28px; }
+
+  .sky-topic-hero {
+    border-bottom: 1px solid var(--sky-border);
+    margin-bottom: 34px;
+    padding: 8px 0 30px;
+
+    h1 {
+      color: var(--sky-blue);
+      font-size: clamp(34px, 4.5vw, 52px);
+      letter-spacing: -0.035em;
+      line-height: 1.05;
+      margin: 8px 0 14px;
+      max-width: 18ch;
+      text-wrap: balance;
+    }
+
+    > p:last-child {
+      color: #64748b;
+      font-size: 17px;
+      line-height: 1.65;
+      margin: 0;
+      max-width: 48rem;
+    }
+  }
+
+  .sky-topic-kicker {
+    color: var(--sky-blue);
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: 0.14em;
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  .sky-topic-content {
+    color: #475569;
+    font-size: 16px;
+    line-height: 1.75;
+    max-width: 52rem;
+
+    h2 {
+      border-top: 1px solid var(--sky-border);
+      color: var(--sky-primary);
+      font-size: 25px;
+      margin: 44px 0 14px;
+      padding-top: 36px;
+    }
+
+    h2:first-child { border-top: 0; margin-top: 0; padding-top: 0; }
+    h3 { color: var(--sky-primary); font-size: 18px; margin: 26px 0 10px; }
+    a { color: var(--sky-blue); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+  }
+
+  .sky-topic-paths {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 24px 0 10px;
+
+    a {
+      background: #fff;
+      border: 1px solid var(--sky-border);
+      border-radius: 12px;
+      display: block;
+      padding: 17px;
+      text-decoration: none;
+
+      strong { color: var(--sky-primary); display: block; font-size: 15px; margin-bottom: 7px; }
+      span { color: #64748b; display: block; font-size: 13px; line-height: 1.55; }
+      &:hover { border-color: #94a3b8; }
+      &:focus-visible { outline: 2px solid var(--sky-gold); outline-offset: 3px; }
+    }
+  }
+
+  .sky-topic-articles {
+    border-top: 1px solid var(--sky-border);
+    margin-top: 56px;
+    padding-top: 38px;
+  }
+
+  .sky-topic-section-heading {
+    align-items: end;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 22px;
+
+    h2 { color: var(--sky-primary); font-size: 28px; margin: 5px 0 0; }
+    > p { color: #94a3b8; font-size: 13px; margin: 0; }
+  }
+
   .sky-results-toolbar {
     align-items: center;
     display: flex;
@@ -2410,6 +2535,7 @@
 /* Responsive */
 @media (max-width: 860px) {
   .replica-sky .sky-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .replica-sky .sky-topic-paths { grid-template-columns: 1fr; }
   .replica-sky .sky-row { height: 8.5rem; }
   .replica-sky .sky-row-thumb { width: 12rem; }
   .replica-sky .sky-about-hero {
@@ -2429,6 +2555,10 @@
   .replica-qwen .qw-menu li:not(:last-child) a span:not(.active) { display: none; }
   .replica-sky .sky-grid { grid-template-columns: 1fr; }
   .replica-sky .sky-header h1 { font-size: 26px; }
+  .replica-sky .sky-topic-main { padding: 20px 18px 8px; }
+  .replica-sky .sky-topic-hero h1 { font-size: 36px; max-width: none; }
+  .replica-sky .sky-topic-section-heading { align-items: start; display: block; }
+  .replica-sky .sky-topic-section-heading > p { margin-top: 6px; }
   .replica-sky .sky-brand-sub { display: none; }
   .replica-sky .sky-tabs { position: static; transform: none; }
   .replica-sky .sky-social { display: none; }

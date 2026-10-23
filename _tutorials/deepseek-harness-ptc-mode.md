@@ -6,7 +6,7 @@ title: "How DeepSeek Harness PTC Mode Actually Works"
 seo_title: "DeepSeek Harness PTC Mode: How run_code Works"
 description: "DeepSeek Harness PTC Mode explained from source: how the generated Code Mode SDK and run_code execute multi-tool programs, plus token and safety limits."
 keywords: "DeepSeek Harness PTC Mode, DSH Code Mode, run_code, Code Mode SDK, programmatic tool calling"
-tags: [deepseek-harness, coding-agents, agent-infrastructure]
+tags: [deepseek-harness, coding-agents, agent-infrastructure, deepseek]
 categories: [frontier-research]
 permalink: /tutorials/deepseek-harness-ptc-mode/
 thumbnail: "/images/deepseek-harness-ptc-mode/ptc-mechanism.jpg"

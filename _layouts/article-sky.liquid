@@ -26,6 +26,13 @@
 <span><i class="ti ti-calendar" aria-hidden="true"></i>{{ page.ui_labels.published | default: "Published" }} {{ page.date | date: article_date_format }}</span>
 {% if page.last_modified_at %}<span><i class="ti ti-refresh" aria-hidden="true"></i>{{ page.ui_labels.updated | default: "Updated" }} {{ page.last_modified_at | date: article_date_format }}</span>{% endif %}
 </div>
+{% if page.tags contains 'deepseek' or page.tags contains 'deepinfer' %}
+<nav class="sky-article-topics" aria-label="Article topics">
+<span>Topics</span>
+{% if page.tags contains 'deepseek' %}<a href="{{ '/topics/deepseek/' | relative_url }}">DeepSeek</a>{% endif %}
+{% if page.tags contains 'deepinfer' %}<a href="{{ '/topics/deepinfer/' | relative_url }}">DeepInfer</a>{% endif %}
+</nav>
+{% endif %}
 </div>
 <div class="sky-research-scope" aria-label="Review scope">
 <span>{{ page.ui_labels.scope | default: "Review scope" }}</span>

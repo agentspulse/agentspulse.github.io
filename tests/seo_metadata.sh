@@ -109,6 +109,25 @@ check_contains "_site/tutorials/stateful-long-horizon-agents-review/index.html" 
 DSH_ARCH="_site/tutorials/deepseek-harness-and-cordis-why-everything-is-a-plugin/index.html"
 CORDIS="_site/tutorials/cordis-spatiotemporal-composability/index.html"
 DSH_PI="_site/tutorials/deepseek-harness-vs-pi-agent/index.html"
+DEEPSEEK_TOPIC="_site/topics/deepseek/index.html"
+DEEPINFER_TOPIC="_site/topics/deepinfer/index.html"
+DEEPINFER_ARTICLE="_site/tutorials/deepseek-deepinfer/index.html"
+
+check_contains "$DEEPSEEK_TOPIC" '<link rel="canonical" href="https://agentspulse.github.io/topics/deepseek/">'
+check_contains "$DEEPSEEK_TOPIC" '<h1>DeepSeek Research, Models, Infrastructure, and Agent Systems</h1>'
+check_contains "$DEEPSEEK_TOPIC" '"@type": "CollectionPage"'
+check_contains "$DEEPSEEK_TOPIC" 'href="/topics/deepinfer/"'
+check_contains "$DEEPSEEK_TOPIC" 'href="/tutorials/deepseek-harness-ptc-mode/"'
+check_contains "$DEEPINFER_TOPIC" '<link rel="canonical" href="https://agentspulse.github.io/topics/deepinfer/">'
+check_contains "$DEEPINFER_TOPIC" '<h1>DeepInfer Updates, Releases, GitHub Activity, and Resources</h1>'
+check_contains "$DEEPINFER_TOPIC" 'href="/tutorials/deepseek-deepinfer/"'
+check_contains "$DEEPINFER_ARTICLE" '<title>DeepInfer: DeepSeek'
+check_contains "$DEEPINFER_ARTICLE" 'href="https://agentspulse.github.io/tutorials/deepseek-deepinfer/"'
+check_contains "$DEEPINFER_ARTICLE" 'href="/topics/deepinfer/"'
+check_contains "_site/index.html" 'href="/topics/deepseek/"'
+check_contains "_site/index.html" 'href="/topics/deepinfer/"'
+check_contains "_site/sitemap.xml" '<loc>https://agentspulse.github.io/topics/deepseek/</loc>'
+check_contains "_site/sitemap.xml" '<loc>https://agentspulse.github.io/topics/deepinfer/</loc>'
 
 check_contains "$DSH_ARCH" "<title>DeepSeek Harness Architecture and Adoption | AgentsPulse</title>"
 check_contains "$DSH_ARCH" ">DeepSeek Harness Architecture: How It Works and Whether to Adopt It</h1>"
@@ -324,7 +343,12 @@ urls = [node.text for node in root.findall("sm:url/sm:loc", namespace)]
 from pathlib import Path
 import re
 
-expected = {"https://agentspulse.github.io/", "https://agentspulse.github.io/privacy/"}
+expected = {
+    "https://agentspulse.github.io/",
+    "https://agentspulse.github.io/privacy/",
+    "https://agentspulse.github.io/topics/deepseek/",
+    "https://agentspulse.github.io/topics/deepinfer/",
+}
 import sys
 sys.path.insert(0, "scripts")
 from build_collages import tutorial_sources, tutorial_permalink

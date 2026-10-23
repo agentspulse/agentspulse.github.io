@@ -8,7 +8,7 @@ title: "DeepInfer: DeepSeek's Open-Source Inference Engine for V4.1 Flash, Expla
 seo_title: "DeepInfer: DeepSeek's Open Inference Engine"
 description: "DeepInfer is the engine behind DeepSeek's production serving, now open source. See what it runs, the hardware it needs, what was left out and how to try it."
 keywords: "DeepInfer, DeepSeek DeepInfer, DeepSeek inference engine, deepseek v4 flash, DeepSeek-V4.1-Flash, deepseek self host, run deepseek locally, DeepEP, expert parallelism, deepseek-recipe"
-tags: [deepseek, open-source, inference, agent-infrastructure]
+tags: [deepseek, open-source, inference, agent-infrastructure, deepinfer]
 categories: [frontier-research]
 permalink: /tutorials/deepseek-deepinfer/
 thumbnail: "/technical-article-writing_20261020_183325/figures/cover/deepinfer-cover-1280.webp"

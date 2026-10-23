@@ -6,7 +6,7 @@ title: "DeepSeek Harness Creator Mode: How It Works and Its Risks"
 seo_title: "DeepSeek Harness Creator Mode: How It Works & Risks"
 description: "DeepSeek Harness Creator Mode explained from source: runtime inspection, dynamic plugins, custom agent presets, process lifetime, and shell-level risks."
 keywords: "DeepSeek Harness Creator Mode, DSH Creator Mode, Cordis runtime, agent presets, self-modifying agents"
-tags: [deepseek-harness, agent-infrastructure, agent-security]
+tags: [deepseek-harness, agent-infrastructure, agent-security, deepseek]
 categories: [frontier-research]
 permalink: /tutorials/deepseek-harness-creator-mode/
 thumbnail: "/images/deepseek-harness-creator-mode/creator-planes.jpg"
