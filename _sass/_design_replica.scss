@@ -623,91 +623,94 @@
 
   .sky-topic-hero {
     border-bottom: 1px solid var(--sky-border);
-    margin-bottom: 34px;
-    padding: 8px 0 30px;
+    margin-bottom: 32px;
+    padding: 8px 0 26px;
 
     h1 {
       color: var(--sky-blue);
-      font-size: clamp(34px, 4.5vw, 52px);
-      letter-spacing: -0.035em;
-      line-height: 1.05;
+      font-size: clamp(30px, 4vw, 44px);
+      letter-spacing: -0.03em;
+      line-height: 1.08;
       margin: 8px 0 14px;
-      max-width: 18ch;
+      max-width: 22ch;
       text-wrap: balance;
     }
-
-    > p:last-child {
-      color: #64748b;
-      font-size: 17px;
-      line-height: 1.65;
-      margin: 0;
-      max-width: 48rem;
-    }
   }
 
-  .sky-topic-kicker {
-    color: var(--sky-blue);
-    font-size: 11px;
-    font-weight: 750;
-    letter-spacing: 0.14em;
-    margin: 0;
-    text-transform: uppercase;
-  }
-
-  .sky-topic-content {
+  .sky-topic-lede {
     color: #475569;
-    font-size: 16px;
-    line-height: 1.75;
-    max-width: 52rem;
-
-    h2 {
-      border-top: 1px solid var(--sky-border);
-      color: var(--sky-primary);
-      font-size: 25px;
-      margin: 44px 0 14px;
-      padding-top: 36px;
-    }
-
-    h2:first-child { border-top: 0; margin-top: 0; padding-top: 0; }
-    h3 { color: var(--sky-primary); font-size: 18px; margin: 26px 0 10px; }
-    a { color: var(--sky-blue); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    font-size: 17px;
+    line-height: 1.6;
+    margin: 0 0 14px;
+    max-width: 44rem;
   }
 
-  .sky-topic-paths {
-    display: grid;
-    gap: 12px;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    margin: 24px 0 10px;
+  .sky-topic-meta {
+    color: #64748b;
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 13.5px;
+    gap: 6px 18px;
+    margin: 0;
 
-    a {
-      background: #fff;
-      border: 1px solid var(--sky-border);
-      border-radius: 12px;
-      display: block;
-      padding: 17px;
-      text-decoration: none;
+    a { color: var(--sky-blue); text-decoration: none; &:hover { text-decoration: underline; } }
+    i { margin-right: 4px; }
+  }
 
-      strong { color: var(--sky-primary); display: block; font-size: 15px; margin-bottom: 7px; }
-      span { color: #64748b; display: block; font-size: 13px; line-height: 1.55; }
-      &:hover { border-color: #94a3b8; }
-      &:focus-visible { outline: 2px solid var(--sky-gold); outline-offset: 3px; }
-    }
+  .sky-topic-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 28px;
+    margin: 18px 0 0;
+
+    div { margin: 0; }
+    dt { color: #94a3b8; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+    dd { color: #0f172a; font-size: 14.5px; font-weight: 600; margin: 2px 0 0; }
+    a { color: var(--sky-blue); }
   }
 
   .sky-topic-articles {
-    border-top: 1px solid var(--sky-border);
-    margin-top: 56px;
-    padding-top: 38px;
+    margin-bottom: 40px;
+    scroll-margin-top: 90px;
+
+    h2 {
+      color: #0f172a;
+      font-size: 22px;
+      letter-spacing: -0.02em;
+      margin: 0 0 16px;
+
+      span { color: #94a3b8; font-size: 15px; font-weight: 600; margin-left: 6px; }
+    }
   }
 
-  .sky-topic-section-heading {
-    align-items: end;
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 22px;
+  .sky-topic-articles .sky-card-tags .sky-card-date {
+    background: none;
+    color: #64748b;
+    font-weight: 600;
+    padding: 0;
+  }
 
-    h2 { color: var(--sky-primary); font-size: 28px; margin: 5px 0 0; }
-    > p { color: #94a3b8; font-size: 13px; margin: 0; }
+  .sky-topic-content {
+    border-top: 1px solid var(--sky-border);
+    color: #334155;
+    font-size: 16px;
+    line-height: 1.7;
+    max-width: 46rem;
+    padding: 8px 0 24px;
+
+    h2 { color: #0f172a; font-size: 20px; letter-spacing: -0.01em; margin: 28px 0 10px; }
+    p { margin: 0 0 12px; }
+    a { color: var(--sky-blue); }
+  }
+
+  .sky-topic-log {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li { border-bottom: 1px solid #eef2f7; font-size: 15px; padding: 9px 0; }
+    li:last-child { border-bottom: 0; }
+    time { color: #64748b; display: inline-block; font-size: 13px; font-variant-numeric: tabular-nums; min-width: 7.5rem; }
   }
 
   .sky-results-toolbar {
@@ -2535,7 +2538,6 @@
 /* Responsive */
 @media (max-width: 860px) {
   .replica-sky .sky-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .replica-sky .sky-topic-paths { grid-template-columns: 1fr; }
   .replica-sky .sky-row { height: 8.5rem; }
   .replica-sky .sky-row-thumb { width: 12rem; }
   .replica-sky .sky-about-hero {
@@ -2556,9 +2558,8 @@
   .replica-sky .sky-grid { grid-template-columns: 1fr; }
   .replica-sky .sky-header h1 { font-size: 26px; }
   .replica-sky .sky-topic-main { padding: 20px 18px 8px; }
-  .replica-sky .sky-topic-hero h1 { font-size: 36px; max-width: none; }
-  .replica-sky .sky-topic-section-heading { align-items: start; display: block; }
-  .replica-sky .sky-topic-section-heading > p { margin-top: 6px; }
+  .replica-sky .sky-topic-hero h1 { font-size: 30px; max-width: none; }
+  .replica-sky .sky-topic-log time { display: block; }
   .replica-sky .sky-brand-sub { display: none; }
   .replica-sky .sky-tabs { position: static; transform: none; }
   .replica-sky .sky-social { display: none; }

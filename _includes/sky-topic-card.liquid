@@ -1,0 +1,12 @@
+{% assign post = include.post %}
+{% assign read_time = post.content | number_of_words | divided_by: 180 | plus: 1 %}
+{% assign thumb = site.data.collages[post.slug].card | default: post.thumbnail | default: "/images/359239/figure-1.jpg" %}
+<a class="sky-card" href="{{ post.url | relative_url }}">
+<div class="sky-card-thumb"><img src="{{ thumb | relative_url }}" alt="Figures from {{ post.title }}" loading="lazy" decoding="async" width="900" height="563"></div>
+<div class="sky-card-body">
+<div class="sky-card-tags"><span class="sky-card-date"><time datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date: '%b %-d, %Y' }}</time></span></div>
+<h3>{{ post.title }}</h3>
+<p>{{ post.description | strip_html | truncate: 140 }}</p>
+<div class="sky-card-meta"><span>{{ read_time }} min read</span><span class="sky-arrow"><i class="ti ti-arrow-right" aria-hidden="true"></i></span></div>
+</div>
+</a>

@@ -4,40 +4,52 @@ permalink: /topics/deepinfer/
 title: "DeepInfer Updates, Releases, GitHub Activity, and Resources"
 seo_title: "DeepInfer Updates, GitHub & Resources"
 description: "Track DeepInfer releases, important GitHub changes, official deployment sources, ecosystem projects, and carefully selected technical analysis."
+lede: "DeepSeek's open-source inference engine. Today it runs offline inference for DeepSeek-V4.1-Flash; the full serving stack is not public."
 lang: en
 sitemap: true
+date: 2026-10-20
+last_modified_at: 2026-10-23
 topic_name: "DeepInfer"
 topic_tag: deepinfer
 parent_topic_title: "DeepSeek"
 parent_topic_url: /topics/deepseek/
+about_type: "SoftwareSourceCode"
+about_url: "https://github.com/deepseek-ai/DeepInfer"
+about_license: "https://www.apache.org/licenses/LICENSE-2.0"
+repo_url: "https://github.com/deepseek-ai/DeepInfer"
+repo_label: "deepseek-ai/DeepInfer"
+og_image: "/technical-article-writing_20261020_183325/figures/cover/deepinfer-cover-1280.webp"
+facts:
+  - label: "License"
+    value: "Apache-2.0"
+  - label: "Supported model"
+    value: "DeepSeek-V4.1-Flash"
+    url: /tutorials/deepseek-v4-1-flash-1017/
+  - label: "Hardware"
+    value: "NVIDIA SM100 · Ascend 950"
+  - label: "Release scope"
+    value: "Offline inference"
+timeline:
+  - date: 2026-10-16
+    title: "Initial public release: V4.1 Flash, SM100 and Ascend 950, Apache-2.0"
+    url: "https://github.com/deepseek-ai/DeepInfer"
+sources:
+  - name: "DeepInfer repository"
+    url: "https://github.com/deepseek-ai/DeepInfer"
+    description: "Code, README, examples, evaluation, and release history."
+  - name: "Inference deployment Q&A"
+    url: "https://github.com/deepseek-ai/DeepInfer/blob/main/doc/inference_deployment_qa.md"
+    description: "Production architecture and open-source boundaries."
+  - name: "deepseek-recipe"
+    url: "https://github.com/deepseek-ai/deepseek-recipe"
+    description: "Request-to-token formatting for DeepSeek models."
+  - name: "FlashMLA"
+    url: "https://github.com/deepseek-ai/FlashMLA"
+    description: "Attention kernels used by the engine."
+  - name: "DeepGEMM"
+    url: "https://github.com/deepseek-ai/DeepGEMM"
+    description: "GEMM kernels used by the engine."
+  - name: "DeepEP"
+    url: "https://github.com/deepseek-ai/DeepEP"
+    description: "Expert-parallel communication library."
 ---
-
-## Current project boundary
-
-[DeepInfer](https://github.com/deepseek-ai/DeepInfer) is DeepSeek's open-source inference framework. The initial public scope supports offline inference for DeepSeek-V4.1-Flash on NVIDIA SM100 GPUs and Huawei Ascend 950 NPUs. It is not a complete serving stack: the public release does not include a KV-cache service, vision-encoder/prefill/decode orchestration, or data-parallel load balancing.
-
-For the architecture, hardware requirements, benchmark caveats, and first-run path, start with [our complete DeepInfer explainer](/tutorials/deepseek-deepinfer/).
-
-## Update log
-
-### October 2026 — DeepInfer becomes public
-
-DeepSeek released the engine code under Apache-2.0 with V4.1 Flash support, optimized kernels, attention and expert parallelism, DSpark verification, bounded replay, asynchronous scheduling, deterministic options, and structured outputs. The release also documents which production-serving components remain internal.
-
-Primary sources: [DeepInfer repository](https://github.com/deepseek-ai/DeepInfer), [deployment Q&A](https://github.com/deepseek-ai/DeepInfer/blob/main/doc/inference_deployment_qa.md), and [examples](https://github.com/deepseek-ai/DeepInfer/tree/main/examples).
-
-## Sources we follow
-
-- [DeepInfer GitHub repository](https://github.com/deepseek-ai/DeepInfer): code, README, examples, evaluation, and release history.
-- [DeepSeek inference deployment Q&A](https://github.com/deepseek-ai/DeepInfer/blob/main/doc/inference_deployment_qa.md): production architecture and open-source boundaries.
-- [deepseek-recipe](https://github.com/deepseek-ai/deepseek-recipe): request-to-token formatting for DeepSeek models.
-- DeepSeek kernel projects including [FlashMLA](https://github.com/deepseek-ai/FlashMLA), [DeepGEMM](https://github.com/deepseek-ai/DeepGEMM), and [DeepEP](https://github.com/deepseek-ai/DeepEP).
-
-## What we are watching
-
-- Support for additional DeepSeek models and accelerator generations.
-- Public equivalents for KV-cache storage, stage disaggregation, and load balancing.
-- Measured differences between the public engine and DeepSeek's production deployment.
-- Independent implementation reports and technically substantive comparisons with vLLM, SGLang, and TensorRT-LLM.
-
-External analysis is added only when it contributes evidence beyond the official documentation. Routine commits remain in the source history rather than being repeated here.
