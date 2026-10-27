@@ -1,14 +1,14 @@
 ---
 layout: topic-sky
 permalink: /topics/deepinfer/
-title: "DeepInfer Updates, Releases, GitHub Activity, and Resources"
-seo_title: "DeepInfer Updates, GitHub & Resources"
-description: "Track DeepInfer releases, important GitHub changes, official deployment sources, ecosystem projects, and carefully selected technical analysis."
-lede: "DeepSeek's open-source inference engine. Today it runs offline inference for DeepSeek-V4.1-Flash; the full serving stack is not public."
+title: "DeepInfer Release Tracker: Versions, Hardware, and Ecosystem"
+seo_title: "DeepInfer Release Tracker & Ecosystem Updates"
+description: "Track DeepInfer releases, supported models and hardware, serving-scope changes, and noteworthy ecosystem implementations."
+lede: "Release and ecosystem updates for DeepSeek's inference engine, including supported models, hardware, serving scope, and notable ports."
 lang: en
 sitemap: true
 date: 2026-10-20
-last_modified_at: 2026-10-23
+last_modified_at: 2026-10-27
 topic_name: "DeepInfer"
 topic_tag: deepinfer
 parent_topic_title: "DeepSeek"
