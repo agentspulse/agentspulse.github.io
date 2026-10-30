@@ -699,8 +699,14 @@
     padding: 8px 0 24px;
 
     h2 { color: #0f172a; font-size: 20px; letter-spacing: -0.01em; margin: 28px 0 10px; }
+    h3 { color: #0f172a; font-size: 17px; margin: 22px 0 8px; }
     p { margin: 0 0 12px; }
     a { color: var(--sky-blue); }
+    ul:not(.sky-topic-log) { margin: 0 0 14px; padding-left: 1.3rem; }
+    table { border-collapse: collapse; display: block; font-size: 14px; line-height: 1.5; margin: 4px 0 16px; overflow-x: auto; width: 100%; }
+    th, td { border-bottom: 1px solid #eef2f7; padding: 7px 10px 7px 0; text-align: left; vertical-align: top; }
+    th { color: #0f172a; font-weight: 600; }
+    code { font-size: 0.9em; }
   }
 
   .sky-topic-log {

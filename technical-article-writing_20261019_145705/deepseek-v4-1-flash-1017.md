@@ -46,6 +46,9 @@ article_toc:
   - id: references
     label: "References"
 related_research:
+  - url: /topics/deepinfer/
+    title: "DeepInfer release tracker"
+    description: "The open-source engine that runs V4.1 Flash: releases, hardware and changelog."
   - url: /tutorials/deepseek-harness-modes-explained/
     title: "DeepSeek Harness Modes Explained"
     description: "Standard, PTC, Minimal and Creator modes compared by tools and boundaries."

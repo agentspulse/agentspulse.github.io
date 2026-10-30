@@ -18,7 +18,7 @@ cover_width: 1280
 cover_height: 720
 cover_srcset: "/technical-article-writing_20261020_183325/figures/cover/deepinfer-cover-640.webp 640w, /technical-article-writing_20261020_183325/figures/cover/deepinfer-cover-1280.webp 1280w, /technical-article-writing_20261020_183325/figures/cover/deepinfer-cover-1536.webp 1536w"
 date: 2026-10-20
-last_modified_at: 2026-10-20
+last_modified_at: 2026-10-30
 author_name: "AgentsPulse Editorial Team"
 research_scope: "Release scope · Hardware · Engine features · Benchmarks · Getting started"
 scope_note: "Based on the DeepInfer repository at commit 8b16149, DeepSeek's deployment Q&A and Zhihu post, the deepseek-recipe README and DeepSeek's 2025 open-sourcing note. We did not run DeepInfer; chart values are read from DeepSeek's published plots."
@@ -54,6 +54,9 @@ related_research:
   - url: /tutorials/deepseek-harness-modes-explained/
     title: "DeepSeek Harness Modes Explained"
     description: "Standard, PTC, Minimal and Creator modes compared by tools and boundaries."
+  - url: /topics/deepinfer/
+    title: "DeepInfer release tracker"
+    description: "Release dates, supported hardware and changelog for DeepSeek's inference engine."
 faq_schema:
   - question: "What is DeepInfer?"
     answer: "DeepInfer is DeepSeek's high-performance inference framework, the one behind its large-scale production services. The open-source release, under Apache-2.0, provides offline inference for DeepSeek-V4.1-Flash on NVIDIA SM100 GPUs and Huawei Ascend 950 NPUs."
@@ -221,7 +224,7 @@ NVIDIA SM100 GPUs (compute capability 10.0, the B200 and GB200 class) with CUDA 
 
 ### Which models does DeepInfer support?
 
-Only DeepSeek-V4.1-Flash at release. The default checkpoint is `deepseek-ai/DeepSeek-V4.1-Flash-1017`. DeepSeek says inference code for future DeepSeek models will also be released in DeepInfer.
+Only DeepSeek-V4.1-Flash at release. The default checkpoint is `deepseek-ai/DeepSeek-V4.1-Flash-1017`. DeepSeek says inference code for future DeepSeek models will also be released in DeepInfer. New models and hardware ports are logged in our [DeepInfer release tracker](/topics/deepinfer/).
 
 ### Is DeepInfer based on vLLM?
 

@@ -17,11 +17,11 @@ cover_width: 1280
 cover_height: 720
 cover_srcset: "/image-gen_20261013_132100/cover/rea-cover-640.webp 640w, /image-gen_20261013_132100/cover/rea-cover-1280.webp 1280w, /image-gen_20261013_132100/cover/rea-cover-1536.webp 1536w"
 date: 2026-10-13
-last_modified_at: 2026-10-19
+last_modified_at: 2026-10-30
 author_name: "AgentsPulse Editorial Team"
 review_eyebrow: "Explainer / Agent tooling"
 research_scope: "Scope · Retained evidence · Proof limits"
-scope_note: "Updated for rea-agents 6.7.0. Based on the official repository, docs, and upstream verification records."
+scope_note: "Updated 30 October 2026 for rea-agents 6.7.0. Based on the official repository, docs, and upstream verification records."
 dek: "REA connects a coding agent to local reverse-engineering tools over MCP. Its real value is the investigation loop: scope a question, analyze once, query what you need, and keep track of what the evidence does not cover."
 key_takeaways:
   - "REA is a local MCP server and CLI, not a model or a new decompiler. Your agent plans; REA drives Ghidra, IDA, Hopper, Kuna, and built-in analyzers."
@@ -30,14 +30,26 @@ key_takeaways:
 article_toc:
   - id: a-bridge-not-a-model-or-a-new-decompiler
     label: "What REA is"
+  - id: reverse-engineering-with-mcp-the-end-to-end-workflow
+    label: "MCP workflow"
   - id: start-with-a-question-and-a-scope
     label: "Question and scope"
   - id: ask-the-analysis-you-already-have
     label: "Follow-up queries"
   - id: match-the-tool-to-the-layer
     label: "Choosing a tool"
+  - id: rea-decompiler-what-it-can-and-cannot-decompile
+    label: "REA decompiler"
+  - id: rea-vs-ghidra-mcp-and-ida-mcp
+    label: "vs Ghidra / IDA MCP"
   - id: what-a-result-proves-and-what-it-doesnt
     label: "What results prove"
+  - id: rea-mcp-server-setup
+    label: "MCP server setup"
+  - id: using-rea-from-github-install-and-first-run
+    label: "Install from GitHub"
+  - id: rea-repository-whats-inside-rea-agents
+    label: "Repository"
   - id: a-reproducible-first-investigation
     label: "Try it"
   - id: rea-faq
@@ -60,6 +72,10 @@ faq_schema:
     answer: "Only for native machine-code analysis. Static JavaScript/Electron and .NET inspection need no native engine. Setup can install Hopper after approval; Ghidra, IDA, and Kuna use installations you supply. Kuna currently covers ELF and thin Mach-O targets, not Windows PE."
   - question: "Do I have to rerun the analysis to ask a follow-up question?"
     answer: "Usually not. Within the same MCP connection, inspect_analysis_view reads exact files, fields, or module references from Evidence that REA already retained. Rerun the analysis when you need files you did not select, a newer analyzer, or Evidence saved by a release before 6.6."
+  - question: "How is REA different from Ghidra MCP or IDA MCP?"
+    answer: "GhidraMCP and IDA Pro MCP each expose one engine to an agent. REA is an MCP server over many engines, including Ghidra and IDA (its IDA provider runs through ida-pro-mcp), plus built-in readers for Electron, .NET, and Android, and it returns Evidence that records source locations, coverage, and unknowns."
+  - question: "Can REA decompile to source code?"
+    answer: "No. Native analysis returns pseudocode and assembly from Hopper, Ghidra, IDA, or Kuna; Android methods come from JADX; .NET is read as metadata and CIL. Original names, comments, and source that the build discarded cannot be recovered."
   - question: "Does REA upload my app?"
     answer: "REA analyzes targets locally, but its results go to your agent, and the model provider behind that agent has its own data policy. Review sensitive results before sharing them with a cloud model."
 ---
@@ -96,6 +112,18 @@ Three roles are worth keeping apart:
 Evidence is what separates REA from piping decompiler text into a chat. A record names its target by content hash, keeps source locations for its facts, and states which parts of the target were covered and which were not. [<a href="#reference-3">3</a>] The MCP server keeps these records for the life of one connection; `close_binary` clears them, and an exported Evidence bundle carries them to another session. The `rea` CLI runs the same workflows but, as a one-shot process, reads and writes Evidence as files. [<a href="#reference-3">3</a>, <a href="#reference-4">4</a>]
 
 REA suits developers who want to understand a feature in a product they did not build, security researchers and CTF players, and preservation or interoperability work. It is meant for lawful research and for software you own or are authorized to examine; commercial tools such as IDA and Hopper must also be properly licensed. [<a href="#reference-1">1</a>, <a href="#reference-5">5</a>]
+
+## Reverse engineering with MCP: the end-to-end workflow
+
+Reverse engineering with MCP means your agent calls analysis tools directly instead of you pasting decompiler output into a chat. With REA, one session runs in five steps:
+
+1. **Connect.** Register REA's MCP server once with your agent (see [REA MCP server setup](#rea-mcp-server-setup)). The agent discovers REA's tools through MCP; `binary_session` called with `{}` reports which operations are available before you open anything. [<a href="#reference-15">15</a>]
+2. **Scope.** State the question, the exact file, and whether the work is static or runtime.
+3. **Analyze once.** The agent calls the matching route: JavaScript analysis for an Electron app, Ghidra, IDA, Hopper, or Kuna for a native binary, Apktool or JADX for Android.
+4. **Query and trace.** Follow-up questions read the retained Evidence with `inspect_analysis_view` or a trace tool, instead of rerunning the analyzer.
+5. **Verify.** Behavior claims get a runtime observation or a test; everything else keeps its source location and coverage.
+
+The rest of this explainer walks through those steps. The difference from a plain "Ghidra MCP" or "IDA MCP" bridge is steps 2, 4, and 5: REA keeps the scope, the Evidence, and the unknowns attached to every answer. [<a href="#reference-1">1</a>, <a href="#reference-3">3</a>]
 
 ## Start with a question and a scope
 
@@ -175,6 +203,38 @@ A single feature can span several layers: a button triggers JavaScript, which se
 
 Two habits follow from this list. Check host and format support before you plan an investigation, since "anything" means many formats, not every format on every host. And when Kuna and another provider are both configured for the same target, REA's automatic selection reports `ambiguous` instead of choosing, so name the provider you mean. [<a href="#reference-9">9</a>]
 
+## REA decompiler: what it can and cannot decompile
+
+REA is not a decompiler of its own: it returns pseudocode from the engine you connect, plus its own static readers for formats that do not need one. What you get depends on the target: [<a href="#reference-1">1</a>]
+
+- **Native binaries** (ELF, PE, Mach-O): pseudocode, assembly, strings, symbols, calls, and references from Hopper, Ghidra, or IDA. Kuna adds ELF and thin Mach-O without typed references.
+- **Android APKs:** classes and decompiled Java methods through headless JADX and a full JDK; manifests and string tables through an Apktool you supply.
+- **.NET assemblies:** metadata and CIL instructions, read statically. REA does not execute the assembly and does not produce C# source.
+- **JavaScript and Electron:** not decompilation at all. REA recovers modules, imports, source maps, IPC channels, and native add-on links from the shipped files.
+- **Go and Rust binaries:** embedded build and dependency metadata, without a decompiler.
+
+What it cannot do: recover original source code, names, or comments that the build discarded. Native output is pseudocode, so a claim that rewritten code behaves the same needs a test, as in the DX-Ball case below. Format support also varies by host: Windows ARM PE files need Ghidra on a Windows x64 host, and headerless m68k ROMs are not admitted on Windows. [<a href="#reference-11">11</a>, <a href="#reference-12">12</a>]
+
+On macOS, Ghidra may report `native_decompiler` as missing because the extracted archive ships the decompiler source without the macOS executable. REA does not build it for you; the installation guide gives a `make ghidra_opt` recipe for x64 and for Apple Silicon (`ARCH_TYPE="-arch arm64" OSDIR=mac_arm_64`), after which `rea doctor --json` should report it healthy. [<a href="#reference-15">15</a>]
+
+## REA vs Ghidra MCP and IDA MCP
+
+Ghidra MCP and IDA MCP each expose one engine to your agent; REA sits one level up and can use either engine as a provider. They are not competitors so much as different layers.
+
+| | GhidraMCP | IDA Pro MCP | REA |
+|---|---|---|---|
+| What it is | Ghidra plugin plus Python MCP server | MCP server for IDA Pro | MCP server and CLI over many engines |
+| Engines | Ghidra only | IDA Pro 8.3+ (IDA Free not supported) | Ghidra, IDA, Hopper, Kuna, JADX, Apktool, built-in readers |
+| Targets | Native binaries | Native binaries | Native, Electron/JS, .NET, Android, websites, captures |
+| Results | Tool output | Tool output | Evidence with source, coverage, and unknowns |
+| License | Apache-2.0 | MIT | MIT |
+
+Sources: [<a href="#reference-18">18</a>, <a href="#reference-19">19</a>, <a href="#reference-1">1</a>]
+
+REA's IDA provider actually runs through an IDA MCP server: it adapts mrexodia/ida-pro-mcp (attached GUI mode on upstream 1.4.0, or a headless profile that serves `idb_open`, `idb_list`, and `idb_close`), with an optional native bridge for IDA Free. You open the original binary, not the `.idb`, and REA checks that its hash matches the database. For Ghidra, REA ships its own headless bridge rather than using GhidraMCP. [<a href="#reference-20">20</a>, <a href="#reference-15">15</a>]
+
+Choose a single-engine server when you already live in one GUI and want the agent to rename and annotate there. Choose REA when the question crosses formats or layers, or when you need to know what the answer did not cover. Note that ida-pro-mcp's README now recommends the official Hex-Rays IDA MCP server; REA's IDA guide documents only the profiles above. [<a href="#reference-19">19</a>, <a href="#reference-20">20</a>]
+
 ## What a result proves, and what it doesn't
 
 REA's results are careful about the kind of claim each fact supports. For application analysis, static observations of files, passive runtime observations, inferred relationships, and unknown or unavailable facts each keep their original authority; tracing and comparison do not promote one into another. A relationship marked `resolved` means the static target was unique within the analysis. It does not mean the code path executed. [<a href="#reference-4">4</a>]
@@ -217,6 +277,53 @@ The case notes say plainly that the four-step path is not an automatically paire
 Several 6.6 changes, delivered in 6.7.0, are breaking. The one most users will hit concerns saved results: **Evidence and analysis snapshots made with older releases must be regenerated.** Their identity now requires an explicit relationship-coverage field; old files are not migrated, and missing facts are not filled with guessed defaults. [<a href="#reference-2">2</a>]
 
 Other changes affect scripts. `inspect_adb_package.version_code` is now a decimal string, and failed native UI scenarios return a typed error with the collected report in `partial_observation`. MCP registrations are pinned to the version that ran setup, so after upgrading, run setup again and restart your agent. [<a href="#reference-2">2</a>, <a href="#reference-15">15</a>]
+
+## REA MCP server setup
+
+The quickest REA MCP server setup is `npx rea-agents setup`: it detects your agents, shows the configuration changes, asks for approval, backs up existing settings, and pins the registration to the exact version that ran it. Restart the agent afterward. [<a href="#reference-15">15</a>]
+
+Setup supports Claude Code, Claude Desktop, Codex, Cursor, Gemini CLI, Windsurf, VS Code, GitHub Copilot CLI, OpenCode, Qwen Code, Kimi Code, Trae, and others. For a client it does not cover, register the stdio server by hand:
+
+```json
+{
+  "mcpServers": {
+    "rea": { "command": "npx", "args": ["-y", "rea-agents@6.7.0", "mcp"] }
+  }
+}
+```
+
+For Claude Code alone, `claude mcp add --scope local rea -- npx -y rea-agents@6.7.0 mcp` does the same; on Windows, wrap the command as `cmd.exe /d /c npx -y rea-agents@6.7.0 mcp`. [<a href="#reference-15">15</a>]
+
+REA is also listed in the official **MCP Registry** as `io.github.morluto/rea`. A Registry-aware client can find it there and install the same `rea-agents` npm package over stdio; there is no separate artifact. [<a href="#reference-15">15</a>]
+
+Two settings are worth knowing. If your client is configured with a larger receive buffer, set `REA_MCP_MAX_RESPONSE_BYTES` to the same byte count (at least 10,485,760) so larger replies arrive whole; setup keeps that override when it refreshes the registration. Native engines are configured separately: `GHIDRA_INSTALL_DIR` and `JAVA_HOME` for Ghidra, `REA_IDA_MCP_CONFIG` for IDA. Run `rea doctor --provider ghidra --json` (or `hopper`, `ida`) to check one engine without auditing everything. [<a href="#reference-3">3</a>, <a href="#reference-15">15</a>, <a href="#reference-20">20</a>]
+
+## Using REA from GitHub: install and first run
+
+You do not need to clone the GitHub repository to use REA. The repository at `morluto/rea` is where the source, docs, and releases live; the runnable tool is the `rea-agents` npm package built from it. Each GitHub release is tagged `rea-agents-<version>`, and the 6.7.0 tag matches the npm package used in this article. [<a href="#reference-1">1</a>, <a href="#reference-2">2</a>]
+
+Three ways to run it, from lightest to most permanent:
+
+- **Package runner, no install:** `npx -y rea-agents@latest analyze-javascript-application /absolute/path/to/app --json`. Bun users can use `bunx rea-agents`.
+- **Agent setup:** `npx rea-agents setup`, as above.
+- **Global CLI:** `npm install --global rea-agents`, then `rea --help`, and `rea update` later.
+
+A first run on an Electron app needs only Node.js 22.19+, 24.11+, or 26+ (Node 23 and 25 are unsupported), because static JavaScript analysis needs no native engine. The output can be large: the project measured a 334 MB Evidence file for Obsidian, and `rea inspect-analysis-view` reduced it to a summary of about 10 KB. Save the JSON to a file and query it rather than pasting it into a chat. [<a href="#reference-15">15</a>, <a href="#reference-16">16</a>]
+
+To pin or roll back, name the version: `npx rea-agents@6.7.0 setup`, or `npm exec --yes --package=rea-agents@<version> -- rea setup`. If you hit a bug, update and rerun setup before opening an issue. [<a href="#reference-1">1</a>, <a href="#reference-15">15</a>]
+
+## REA repository: what's inside rea-agents
+
+The REA repository is a TypeScript project that publishes one npm package, `rea-agents`, with two commands, `rea` and `rea-agents`, under the MIT license. The main pieces: [<a href="#reference-1">1</a>]
+
+- **`src/`** holds the CLI, the MCP server, and one module per analyzer family: `ghidra`, `ida`, `hopper`, `kuna`, `javascript`, `electron`, `dotnet`, `android`, `apktool`, `browser`, `pcap`, `wasm`, `evm`, `firmware`, and more.
+- **`bridge/`** holds the code that runs inside other tools: a Java bridge for headless Ghidra, a Python bridge for Hopper, a JADX bridge for Android, plus helpers for Cutter, mitmproxy, pwntools, and pwndbg.
+- **`native/windows/`** ships a prebuilt Node addon for process ownership on Windows, so no separate build is needed.
+- **`skills/`** contains the workflow instructions that setup installs into your agent.
+- **`docs/`** is the reference: installation, CLI and Evidence, MCP contracts, and one guide per provider or target type, plus dated verification records.
+- **`server.json`** is the MCP Registry entry, and **`website/`** hosts the [rea.tools](https://rea.tools/) showcases, including the Notion and DX-Ball cases below.
+
+The package does not bundle Ghidra, IDA, Hopper, Kuna, JADX, or Apktool. Those stay separate installations under their own licenses, and REA only checks and drives them. [<a href="#reference-1">1</a>, <a href="#reference-5">5</a>]
 
 ## A reproducible first investigation
 
@@ -273,6 +380,14 @@ Only for native machine-code analysis. Static JavaScript/Electron and .NET inspe
 
 Usually not. Within the same MCP connection, inspect_analysis_view reads exact files, fields, or module references from Evidence that REA already retained. Rerun the analysis when you need files you did not select, a newer analyzer, or Evidence saved by a release before 6.6.
 
+### How is REA different from Ghidra MCP or IDA MCP?
+
+GhidraMCP and IDA Pro MCP each expose one engine to an agent. REA is an MCP server over many engines, including Ghidra and IDA (its IDA provider runs through ida-pro-mcp), plus built-in readers for Electron, .NET, and Android, and it returns Evidence that records source locations, coverage, and unknowns.
+
+### Can REA decompile to source code?
+
+No. Native analysis returns pseudocode and assembly from Hopper, Ghidra, IDA, or Kuna; Android methods come from JADX; .NET is read as metadata and CIL. Original names, comments, and source that the build discarded cannot be recovered.
+
 ### Does REA upload my app?
 
 REA analyzes targets locally, but its results go to your agent, and the model provider behind that agent has its own data policy. Review sensitive results before sharing them with a cloud model.
@@ -296,3 +411,6 @@ REA analyzes targets locally, but its results go to your agent, and the model pr
 15. <span id="reference-15"></span>morluto/rea. [“Installation and setup.”](https://github.com/morluto/rea/blob/rea-agents-6.7.0/docs/installation.md) GitHub, v6.7.0.
 16. <span id="reference-16"></span>morluto/rea. [“CLI and Evidence.”](https://github.com/morluto/rea/blob/rea-agents-6.7.0/docs/cli.md) GitHub, v6.7.0.
 17. <span id="reference-17"></span>REA. [“Notion Electron Reverse Engineering: Clipboard.”](https://rea.tools/showcase/notion/) rea.tools showcase, accessed 19 October 2026.
+18. <span id="reference-18"></span>LaurieWired/GhidraMCP. [“README.”](https://github.com/LaurieWired/GhidraMCP) GitHub, accessed 30 October 2026.
+19. <span id="reference-19"></span>mrexodia/ida-pro-mcp. [“README.”](https://github.com/mrexodia/ida-pro-mcp) GitHub, accessed 30 October 2026.
+20. <span id="reference-20"></span>morluto/rea. [“IDA provider.”](https://github.com/morluto/rea/blob/rea-agents-6.7.0/docs/ida-provider.md) GitHub, v6.7.0.

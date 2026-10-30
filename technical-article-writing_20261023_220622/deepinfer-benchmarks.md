@@ -55,8 +55,8 @@ related_research:
     title: "DeepInfer, Explained"
     description: "What DeepSeek's open inference engine includes, what it leaves out and how to try it."
   - url: /topics/deepinfer/
-    title: "DeepInfer topic hub"
-    description: "Every AgentsPulse article and update on DeepInfer."
+    title: "DeepInfer release tracker"
+    description: "Release dates, supported hardware, merged changes and open ports."
 faq_schema:
   - question: "Does DeepInfer run on H100, H200 or H20?"
     answer: "Not officially. DeepSeek supports NVIDIA Blackwell SM100 and Huawei Ascend 950. Community PR #92 runs DeepSeek-V4.1-Flash end to end on 8× and 4× H20-3e, and the author maintains it outside the main branch. On H200, upgrade its Humming dependency to 0.1.13."
