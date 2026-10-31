@@ -8,7 +8,7 @@ lede: "DeepSeek models and API releases, the open DeepInfer inference engine, an
 lang: en
 sitemap: true
 date: 2026-10-20
-last_modified_at: 2026-10-23
+last_modified_at: 2026-10-31
 topic_name: "DeepSeek"
 topic_tag: deepseek
 about_type: "Organization"
@@ -18,6 +18,9 @@ repo_label: "deepseek-ai on GitHub"
 og_image: "/technical-article-writing_20261019_145705/figures/cover/deepseek-1017-cover-1280.webp"
 timeline_title: "Recent DeepSeek updates"
 timeline:
+  - date: 2026-10-31
+    title: "Super-agent: a Router–Worker architecture for concurrent agent work"
+    url: /tutorials/deepseek-super-agent-architecture/
   - date: 2026-10-17
     title: "V4.1-Flash-1017 replaces the model behind deepseek-flash"
     url: /tutorials/deepseek-v4-1-flash-1017/

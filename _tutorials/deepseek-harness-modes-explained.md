@@ -59,6 +59,9 @@ related_research:
   - url: "/tutorials/deepseek-harness-and-cordis-why-everything-is-a-plugin/"
     title: "DeepSeek Harness Architecture"
     description: "How profiles, presets, bundles, and plugins compose the broader runtime."
+  - url: "/tutorials/deepseek-super-agent-architecture/"
+    title: "DeepSeek Super-agent Architecture"
+    description: "A Router and Worker design for running many agent tasks at once."
 ---
 DeepSeek Harness has four built-in agent modes: Standard, PTC, Minimal, and Creator. Standard is the general-purpose coding agent. PTC keeps Standard's capabilities but orchestrates tools through generated code. Minimal exposes only persistent Bash and a file editor. Creator adds runtime inspection and self-modification tools and therefore requires shell-level trust. This comparison is verified against DSH `v0.1.0-rc.7` (`99f6f02`).
 
@@ -169,6 +172,8 @@ Choose Standard as the default for everyday coding tasks. Move to PTC only when 
 *Start with the smallest operating contract that supports the task, then increase orchestration or runtime privilege deliberately.*
 
 For implementation details, continue to [How DeepSeek Harness PTC Mode Actually Works](/tutorials/deepseek-harness-ptc-mode/) and [DeepSeek Harness Creator Mode: How It Works and Its Risks](/tutorials/deepseek-harness-creator-mode/).
+
+Modes govern how one agent session sees its tools. For a design that coordinates many sessions at once, a resident Router plus parallel Workers, see [DeepSeek Super-agent: A Router and Worker Multi-Agent Architecture](/tutorials/deepseek-super-agent-architecture/). It is an architecture exploration, not a fifth mode.
 
 ## DeepSeek Harness Modes FAQ
 

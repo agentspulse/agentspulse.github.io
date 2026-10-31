@@ -48,6 +48,9 @@ related_research:
   - url: "/tutorials/deepseek-harness-vs-pi-agent/"
     title: "DeepSeek Harness vs Pi Agent"
     description: "A focused comparison of a plugin runtime and a minimal coding harness."
+  - url: "/tutorials/deepseek-super-agent-architecture/"
+    title: "DeepSeek Super-agent Architecture"
+    description: "A Router and Worker design for running many agent tasks at once, with its synthetic experiment results."
   - url: "/tutorials/agent-framework-harness-runtime-production/"
     title: "The Agent Framework Is Not the Runtime"
     description: "Why production agent systems increasingly separate framework APIs from the execution harness."
@@ -146,6 +149,8 @@ The honest answer depends heavily on what "adopt" means in context.
 **For production systems**, particularly ones with security or compliance requirements: not yet, at least not as a drop-in dependency you don't actively manage. The combination of an explicit developer-preview label, compatibility-breaking changes as a stated expectation, and a sandbox model that's intentionally scoped to filesystem effects rather than full isolation means production adoption today requires the adopting team to take on real integration and security engineering — not just configuration. That's not a criticism of the project; it's a fair reading of where DSH says it currently stands.
 
 The architecture itself — plugin-composed services, explicit approval and sandbox layers, a generic MCP client — is a sound direction, and one that other harnesses are converging on in various forms. Whether DSH specifically is the right implementation to bet on right now depends less on its design and more on how quickly its interfaces stabilize.
+
+The bundle model also shows up in the DeepSeek Harness team's Super-agent design exploration: its open-source prototype is packaged as a DSH bundle, with a resident Router dispatching work to parallel Worker sessions. See [DeepSeek Super-agent: A Router and Worker Multi-Agent Architecture](/tutorials/deepseek-super-agent-architecture/).
 
 ## References
 
