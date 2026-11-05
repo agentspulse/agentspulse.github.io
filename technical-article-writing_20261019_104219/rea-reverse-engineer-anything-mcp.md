@@ -17,16 +17,16 @@ cover_width: 1280
 cover_height: 720
 cover_srcset: "/image-gen_20261013_132100/cover/rea-cover-640.webp 640w, /image-gen_20261013_132100/cover/rea-cover-1280.webp 1280w, /image-gen_20261013_132100/cover/rea-cover-1536.webp 1536w"
 date: 2026-10-13
-last_modified_at: 2026-10-30
+last_modified_at: 2026-11-05
 author_name: "AgentsPulse Editorial Team"
 review_eyebrow: "Explainer / Agent tooling"
 research_scope: "Scope · Retained evidence · Proof limits"
-scope_note: "Updated 30 October 2026 for rea-agents 6.7.0. Based on the official repository, docs, and upstream verification records."
+scope_note: "Updated 5 November 2026 for rea-agents 6.8.0. Based on the official repository, docs, and upstream verification records."
 dek: "REA connects a coding agent to local reverse-engineering tools over MCP. Its real value is the investigation loop: scope a question, analyze once, query what you need, and keep track of what the evidence does not cover."
 key_takeaways:
   - "REA is a local MCP server and CLI, not a model or a new decompiler. Your agent plans; REA drives Ghidra, IDA, Hopper, Kuna, and built-in analyzers."
   - "Results come back as Evidence: each fact keeps its source, its kind of authority, and the coverage it did or did not reach. 'Not analyzed' is never reported as 'not there'."
-  - "Since 6.6 (shipped to npm in 6.7.0), an agent can query exact files and fields from an analysis it already ran, instead of repeating the analysis or pulling the whole result."
+  - "An agent can query exact files and fields from an analysis it already ran instead of repeating it. In 6.8.0, function analysis over MCP returns a short summary by default and keeps the full dossier for those follow-up queries."
 article_toc:
   - id: a-bridge-not-a-model-or-a-new-decompiler
     label: "What REA is"
@@ -44,6 +44,8 @@ article_toc:
     label: "vs Ghidra / IDA MCP"
   - id: what-a-result-proves-and-what-it-doesnt
     label: "What results prove"
+  - id: whats-new-in-rea-680
+    label: "What's new in 6.8.0"
   - id: rea-mcp-server-setup
     label: "MCP server setup"
   - id: using-rea-from-github-install-and-first-run
@@ -66,6 +68,10 @@ related_research:
 faq_schema:
   - question: "What is REA (Reverse Engineer Anything)?"
     answer: "REA is an open-source MCP server and CLI that connects AI agents to local reverse-engineering tools. The agent asks questions about an app or binary; REA runs analyzers such as Ghidra, IDA, Hopper, Kuna, or its built-in JavaScript and .NET readers and returns Evidence: findings with their source locations, coverage, and unknowns."
+  - question: "How does Reverse Engineer Anything work?"
+    answer: "Your agent calls REA through MCP (or you run the rea CLI). REA inspects a local target with the matching analyzer, returns Evidence with source locations, coverage, and unknowns, and keeps it so follow-up questions can query the saved result instead of rerunning the analysis. Behavior claims are then checked at runtime or with a test."
+  - question: "What is the latest REA version?"
+    answer: "As of 5 November 2026 the latest release is rea-agents 6.8.0, published on GitHub on 25 October 2026 and tagged latest on npm. It requires Node.js 22.23.4+, 24.22.1+, or 26.12.1+."
   - question: "Is REA the same thing as MCP?"
     answer: "No. MCP (Model Context Protocol) is the standard way an agent calls external tools. REA is one MCP server that exposes reverse-engineering tools over that protocol; the same workflows are also available from its rea CLI."
   - question: "Do I need Ghidra, IDA, Hopper, or Kuna?"
@@ -90,7 +96,7 @@ It is tempting to call it "a decompiler your agent can drive," but that misses t
 
 *Figure 1. REA's investigation loop: ask about a local target, let REA inspect and trace it, read the evidence, then explain, implement, or test, with follow-up questions looping back to REA.* [<a href="#reference-1">1</a>]
 
-This explainer was first published for REA 6.4.0 and has been rewritten for **rea-agents 6.7.0**, released on 18 October 2026. [<a href="#reference-2">2</a>]
+This explainer was first published for REA 6.4.0, rewritten for 6.7.0, and updated on 5 November 2026 for **rea-agents 6.8.0**, released on 25 October 2026 and still the latest npm version. [<a href="#reference-21">21</a>] Version-specific changes are in [What's new in REA 6.8.0](#whats-new-in-rea-680).
 
 ## A bridge, not a model or a new decompiler
 
@@ -278,21 +284,38 @@ Several 6.6 changes, delivered in 6.7.0, are breaking. The one most users will h
 
 Other changes affect scripts. `inspect_adb_package.version_code` is now a decimal string, and failed native UI scenarios return a typed error with the collected report in `partial_observation`. MCP registrations are pinned to the version that ran setup, so after upgrading, run setup again and restart your agent. [<a href="#reference-2">2</a>, <a href="#reference-15">15</a>]
 
+## What's new in REA 6.8.0 {#whats-new-in-rea-680}
+
+rea-agents 6.8.0 is a large release. Four changes matter most if you already use REA through an agent: [<a href="#reference-21">21</a>]
+
+- **Function analysis returns a summary first.** Over MCP, `analyze_function` now returns a retained summary and keeps the complete dossier in the session, so the agent pages pseudocode or references with `inspect_analysis_view` instead of receiving several megabytes at once. Pass `detail: "complete"` for the old inline result. The CLI keeps the complete default. [<a href="#reference-16">16</a>, <a href="#reference-21">21</a>]
+- **Compact MCP schemas.** Tool input schemas are advertised in a compact form to save context. Set `REA_MCP_INPUT_SCHEMA_PROFILE=full` in the registration if your client needs the full field guidance; both profiles expose the same tools and the same server-side validation. [<a href="#reference-1">1</a>]
+- **Optional HTTP transport.** `rea mcp --http` serves the same tools over streamable HTTP at `/mcp` instead of stdio. It has no TLS or client authentication, so keep it on a trusted local machine. Stdio remains the default. [<a href="#reference-3">3</a>]
+- **More shipped formats without a native engine.** New readers cover Unity IL2CPP metadata, Godot PCK, PyInstaller archives, Node.js single-executable blobs, CPython bytecode, BEAM, devicetrees, CUDA/HIP code objects, and more PE/ELF tables. [<a href="#reference-1">1</a>, <a href="#reference-21">21</a>]
+
+The release also adds **agent environments**: `rea environment-build` turns a recorded HAR or browser-scenario capture into a local MCP server whose tools answer only from what the capture observed. This lets you test an agent against a replica of a web app without calling the real service. Writes are served only when the capture confirmed their effect, and `environment-serve --replay-only` replays the recorded responses without state. [<a href="#reference-22">22</a>]
+
+### Upgrading to 6.8.0
+
+Upgrade Node.js first. REA 6.8.0 needs **Node.js 22.23.4+, 24.22.1+, or 26.12.1+**; Node 23 and 25 are unsupported, and the installer does not upgrade Node for you. Then rerun setup and restart the agent, because registrations are pinned to a version. [<a href="#reference-1">1</a>, <a href="#reference-21">21</a>]
+
+Scripts that parse REA output need checking. `--format jsonl` now emits one row per object plus a final metadata record; use `--format json` for the old whole-document output. Reconstruction summaries moved source-state counts to `summary.by_source_state`, and several fields (Mach-O import names, browser timestamps, Swift binding names) can now be `null` where the identity is unknown. The release notes list every breaking change with its migration. [<a href="#reference-21">21</a>]
+
 ## REA MCP server setup
 
 The quickest REA MCP server setup is `npx rea-agents setup`: it detects your agents, shows the configuration changes, asks for approval, backs up existing settings, and pins the registration to the exact version that ran it. Restart the agent afterward. [<a href="#reference-15">15</a>]
 
-Setup supports Claude Code, Claude Desktop, Codex, Cursor, Gemini CLI, Windsurf, VS Code, GitHub Copilot CLI, OpenCode, Qwen Code, Kimi Code, Trae, and others. For a client it does not cover, register the stdio server by hand:
+Setup supports Claude Code, Claude Desktop, Codex, Cursor, Gemini CLI, Windsurf, VS Code, GitHub Copilot CLI, OpenCode, Qwen Code, Kimi Code, Trae, Grok Build, and others; FreeBuff was added in 6.8.0. For a client it does not cover, register the stdio server by hand:
 
 ```json
 {
   "mcpServers": {
-    "rea": { "command": "npx", "args": ["-y", "rea-agents@6.7.0", "mcp"] }
+    "rea": { "command": "npx", "args": ["-y", "rea-agents@6.8.0", "mcp"] }
   }
 }
 ```
 
-For Claude Code alone, `claude mcp add --scope local rea -- npx -y rea-agents@6.7.0 mcp` does the same; on Windows, wrap the command as `cmd.exe /d /c npx -y rea-agents@6.7.0 mcp`. [<a href="#reference-15">15</a>]
+For Claude Code alone, `claude mcp add --scope local rea -- npx -y rea-agents@6.8.0 mcp` does the same; on Windows, wrap the command as `cmd.exe /d /c npx -y rea-agents@6.8.0 mcp`. [<a href="#reference-15">15</a>]
 
 REA is also listed in the official **MCP Registry** as `io.github.morluto/rea`. A Registry-aware client can find it there and install the same `rea-agents` npm package over stdio; there is no separate artifact. [<a href="#reference-15">15</a>]
 
@@ -300,7 +323,7 @@ Two settings are worth knowing. If your client is configured with a larger recei
 
 ## Using REA from GitHub: install and first run
 
-You do not need to clone the GitHub repository to use REA. The repository at `morluto/rea` is where the source, docs, and releases live; the runnable tool is the `rea-agents` npm package built from it. Each GitHub release is tagged `rea-agents-<version>`, and the 6.7.0 tag matches the npm package used in this article. [<a href="#reference-1">1</a>, <a href="#reference-2">2</a>]
+You do not need to clone the GitHub repository to use REA. The repository at `morluto/rea` is where the source, docs, and releases live; the runnable tool is the `rea-agents` npm package built from it. Each GitHub release is tagged `rea-agents-<version>`, and the 6.8.0 tag matches the npm package used in this article. [<a href="#reference-1">1</a>, <a href="#reference-2">2</a>]
 
 Three ways to run it, from lightest to most permanent:
 
@@ -308,9 +331,9 @@ Three ways to run it, from lightest to most permanent:
 - **Agent setup:** `npx rea-agents setup`, as above.
 - **Global CLI:** `npm install --global rea-agents`, then `rea --help`, and `rea update` later.
 
-A first run on an Electron app needs only Node.js 22.19+, 24.11+, or 26+ (Node 23 and 25 are unsupported), because static JavaScript analysis needs no native engine. The output can be large: the project measured a 334 MB Evidence file for Obsidian, and `rea inspect-analysis-view` reduced it to a summary of about 10 KB. Save the JSON to a file and query it rather than pasting it into a chat. [<a href="#reference-15">15</a>, <a href="#reference-16">16</a>]
+A first run on an Electron app needs only Node.js 22.23.4+, 24.22.1+, or 26.12.1+ (Node 23 and 25 are unsupported), because static JavaScript analysis needs no native engine. The output can be large: the project measured a 334 MB Evidence file for Obsidian, and `rea inspect-analysis-view` reduced it to a summary of about 10 KB. Save the JSON to a file and query it rather than pasting it into a chat. [<a href="#reference-15">15</a>, <a href="#reference-16">16</a>]
 
-To pin or roll back, name the version: `npx rea-agents@6.7.0 setup`, or `npm exec --yes --package=rea-agents@<version> -- rea setup`. If you hit a bug, update and rerun setup before opening an issue. [<a href="#reference-1">1</a>, <a href="#reference-15">15</a>]
+To pin or roll back, name the version: `npx rea-agents@6.8.0 setup`, or `npm exec --yes --package=rea-agents@<version> -- rea setup`. If you hit a bug, update and rerun setup before opening an issue. [<a href="#reference-1">1</a>, <a href="#reference-15">15</a>]
 
 ## REA repository: what's inside rea-agents
 
@@ -327,12 +350,12 @@ The package does not bundle Ghidra, IDA, Hopper, Kuna, JADX, or Apktool. Those s
 
 ## A reproducible first investigation
 
-You need Node.js 22.19+, 24.11+, or 26+, plus npm. On Linux, static JavaScript analysis also needs a procps-compatible `ps`. [<a href="#reference-1">1</a>]
+You need Node.js 22.23.4+, 24.22.1+, or 26.12.1+, plus npm. On Linux, static JavaScript analysis also needs a procps-compatible `ps`. [<a href="#reference-1">1</a>]
 
 **1. Register a pinned version with your agent.**
 
 ```bash
-npx rea-agents@6.7.0 setup
+npx rea-agents@6.8.0 setup
 ```
 
 Setup shows the configuration changes, asks for approval, backs up existing settings, and installs matching workflow instructions. Restart the agent afterward. Pinning the version makes the investigation repeatable. [<a href="#reference-1">1</a>, <a href="#reference-15">15</a>]
@@ -351,11 +374,11 @@ the analyzed scope or left unknown.
 **3. Or run the same loop from a terminal.** Analyze selected files once, then query the saved Evidence:
 
 ```bash
-npx -y rea-agents@6.7.0 analyze-javascript-application /absolute/path/to/app.asar \
+npx -y rea-agents@6.8.0 analyze-javascript-application /absolute/path/to/app.asar \
   --source-path package.json --source-path main.js --json > app-evidence.json
 jq -c '{source: {kind: "inline", evidence: .}, view: {kind: "summary"}}' \
   app-evidence.json > app-view.json
-npx -y rea-agents@6.7.0 inspect-analysis-view app-view.json
+npx -y rea-agents@6.8.0 inspect-analysis-view app-view.json
 ```
 
 A CLI process has no connection ledger, so it passes the complete Evidence inline. Swap the summary view for a `javascript-facts` or module-reference view to ask narrower questions of the same file. [<a href="#reference-4">4</a>, <a href="#reference-16">16</a>]
@@ -367,6 +390,14 @@ A CLI process has no connection ledger, so it passes the complete Evidence inlin
 ### What is REA (Reverse Engineer Anything)?
 
 REA is an open-source MCP server and CLI that connects AI agents to local reverse-engineering tools. The agent asks questions about an app or binary; REA runs analyzers such as Ghidra, IDA, Hopper, Kuna, or its built-in JavaScript and .NET readers and returns Evidence: findings with their source locations, coverage, and unknowns.
+
+### How does Reverse Engineer Anything work?
+
+Your agent calls REA through MCP (or you run the rea CLI). REA inspects a local target with the matching analyzer, returns Evidence with source locations, coverage, and unknowns, and keeps it so follow-up questions can query the saved result instead of rerunning the analysis. Behavior claims are then checked at runtime or with a test.
+
+### What is the latest REA version?
+
+As of 5 November 2026 the latest release is rea-agents 6.8.0, published on GitHub on 25 October 2026 and tagged latest on npm. It requires Node.js 22.23.4+, 24.22.1+, or 26.12.1+.
 
 ### Is REA the same thing as MCP?
 
@@ -394,9 +425,9 @@ REA analyzes targets locally, but its results go to your agent, and the model pr
 
 ## References
 
-1. <span id="reference-1"></span>morluto/rea. [“README.”](https://github.com/morluto/rea/blob/rea-agents-6.7.0/README.md) GitHub, v6.7.0.
+1. <span id="reference-1"></span>morluto/rea. [“README.”](https://github.com/morluto/rea/blob/rea-agents-6.8.0/README.md) GitHub, v6.8.0.
 2. <span id="reference-2"></span>morluto/rea. [“rea-agents v6.7.0 release notes”](https://github.com/morluto/rea/releases/tag/rea-agents-6.7.0) (including the 6.6.0 changes and breaking changes). GitHub, 18 October 2026.
-3. <span id="reference-3"></span>morluto/rea. [“MCP contracts.”](https://github.com/morluto/rea/blob/rea-agents-6.7.0/docs/mcp-contracts.md) GitHub, v6.7.0.
+3. <span id="reference-3"></span>morluto/rea. [“MCP contracts.”](https://github.com/morluto/rea/blob/rea-agents-6.8.0/docs/mcp-contracts.md) GitHub, v6.8.0.
 4. <span id="reference-4"></span>morluto/rea. [“Cross-layer JavaScript application workflows.”](https://github.com/morluto/rea/blob/rea-agents-6.7.0/docs/javascript-application-workflows.md) GitHub, v6.7.0.
 5. <span id="reference-5"></span>morluto/rea. [“Disclaimer.”](https://github.com/morluto/rea/blob/rea-agents-6.7.0/DISCLAIMER.md) GitHub, v6.7.0.
 6. <span id="reference-6"></span>morluto/rea. [“JavaScript artifact reconstruction.”](https://github.com/morluto/rea/blob/rea-agents-6.7.0/docs/javascript-artifact-reconstruction.md) GitHub, v6.7.0.
@@ -408,9 +439,11 @@ REA analyzes targets locally, but its results go to your agent, and the model pr
 12. <span id="reference-12"></span>morluto/rea. [“Headerless raw-binary analysis with Ghidra.”](https://github.com/morluto/rea/blob/rea-agents-6.7.0/docs/raw-binary.md) GitHub, v6.7.0.
 13. <span id="reference-13"></span>morluto/rea. [“Notion clipboard case: sources and scope.”](https://github.com/morluto/rea/blob/rea-agents-6.7.0/website/evidence/notion-clipboard.md) GitHub, v6.7.0.
 14. <span id="reference-14"></span>morluto/rea. [“DX-Ball sound-panning case notes.”](https://github.com/morluto/rea/blob/rea-agents-6.7.0/website/evidence/dx-ball-sound-pan.md) GitHub, v6.7.0.
-15. <span id="reference-15"></span>morluto/rea. [“Installation and setup.”](https://github.com/morluto/rea/blob/rea-agents-6.7.0/docs/installation.md) GitHub, v6.7.0.
-16. <span id="reference-16"></span>morluto/rea. [“CLI and Evidence.”](https://github.com/morluto/rea/blob/rea-agents-6.7.0/docs/cli.md) GitHub, v6.7.0.
+15. <span id="reference-15"></span>morluto/rea. [“Installation and setup.”](https://github.com/morluto/rea/blob/rea-agents-6.8.0/docs/installation.md) GitHub, v6.8.0.
+16. <span id="reference-16"></span>morluto/rea. [“CLI and Evidence.”](https://github.com/morluto/rea/blob/rea-agents-6.8.0/docs/cli.md) GitHub, v6.8.0.
 17. <span id="reference-17"></span>REA. [“Notion Electron Reverse Engineering: Clipboard.”](https://rea.tools/showcase/notion/) rea.tools showcase, accessed 19 October 2026.
 18. <span id="reference-18"></span>LaurieWired/GhidraMCP. [“README.”](https://github.com/LaurieWired/GhidraMCP) GitHub, accessed 30 October 2026.
 19. <span id="reference-19"></span>mrexodia/ida-pro-mcp. [“README.”](https://github.com/mrexodia/ida-pro-mcp) GitHub, accessed 30 October 2026.
 20. <span id="reference-20"></span>morluto/rea. [“IDA provider.”](https://github.com/morluto/rea/blob/rea-agents-6.7.0/docs/ida-provider.md) GitHub, v6.7.0.
+21. <span id="reference-21"></span>morluto/rea. [“rea-agents v6.8.0 release notes.”](https://github.com/morluto/rea/releases/tag/rea-agents-6.8.0) GitHub, 25 October 2026.
+22. <span id="reference-22"></span>morluto/rea. [“Agent environments from recorded captures.”](https://github.com/morluto/rea/blob/rea-agents-6.8.0/docs/agent-environments.md) GitHub, v6.8.0.
