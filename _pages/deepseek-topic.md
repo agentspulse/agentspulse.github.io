@@ -8,7 +8,7 @@ lede: "DeepSeek models and API releases, the open DeepInfer inference engine, an
 lang: en
 sitemap: true
 date: 2026-10-20
-last_modified_at: 2026-10-31
+last_modified_at: 2026-11-06
 topic_name: "DeepSeek"
 topic_tag: deepseek
 about_type: "Organization"
@@ -18,6 +18,9 @@ repo_label: "deepseek-ai on GitHub"
 og_image: "/technical-article-writing_20261019_145705/figures/cover/deepseek-1017-cover-1280.webp"
 timeline_title: "Recent DeepSeek updates"
 timeline:
+  - date: 2026-11-02
+    title: "Creator Mode: DeepSeek Harness builds and installs plugins from prompts"
+    url: /tutorials/deepseek-harness-creator-mode/
   - date: 2026-10-31
     title: "Super-agent: a Router–Worker architecture for concurrent agent work"
     url: /tutorials/deepseek-super-agent-architecture/
