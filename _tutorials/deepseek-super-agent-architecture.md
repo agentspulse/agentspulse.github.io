@@ -84,8 +84,7 @@ subscription per vendor, a shared gateway such as
 <a href="https://www.packyapi.ai/register?aff=5W73&amp;utm_source=agentspulse&amp;utm_medium=affiliate&amp;utm_campaign=super-agent"
 rel="sponsored nofollow noopener" target="_blank">PackyAPI</a> is the cheaper way in.</p>
 <p><small>Disclosure: this page contains an affiliate link. If you sign up through it, we
-may earn a commission at no extra cost to you. 披露：本页含联盟推广链接，通过链接注册我们
-可能获得佣金，你不会因此多付费用。</small></p>
+may earn a commission at no extra cost to you.</small></p>
 
 ## Why Single-Session Agents Hit a Human Limit
 
