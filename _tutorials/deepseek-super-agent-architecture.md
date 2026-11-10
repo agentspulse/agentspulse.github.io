@@ -77,6 +77,16 @@ On October 31, 2026, the DeepSeek Harness team published a long design essay, *S
 
 **Short take:** Super-agent is a dispatch pattern for many concurrent, loosely related tasks, not a better way to solve one hard task. Its measured gains come from synthetic workloads and are labelled preliminary by the authors.
 
+<p><strong>What it costs.</strong> Super-agent buys shorter completion time by spending
+more tokens — 23.23M cache reads per run in the paper's ablation, against 6.05M for a
+single session. If you would rather pay one bill across Claude, Codex and Gemini than one
+subscription per vendor, a shared gateway such as
+<a href="https://www.packyapi.ai/register?aff=5W73&amp;utm_source=agentspulse&amp;utm_medium=affiliate&amp;utm_campaign=super-agent"
+rel="sponsored nofollow noopener" target="_blank">PackyAPI</a> is the cheaper way in.</p>
+<p><small>Disclosure: this page contains an affiliate link. If you sign up through it, we
+may earn a commission at no extra cost to you. 披露：本页含联盟推广链接，通过链接注册我们
+可能获得佣金，你不会因此多付费用。</small></p>
+
 ## Why Single-Session Agents Hit a Human Limit
 
 Most agents today treat one **session** as the unit of work. Sessions do not share context, so a person running several tasks in parallel has to switch between them and remember what each one knows. The team observes that a person can usually keep up with only **3 to 5 active sessions**. In that setup, the model decides how well a single task goes, but human attention decides how many tasks can move at once.

@@ -91,6 +91,15 @@ Revolut kept the frontier models for exceptions. "Open source is now a priority 
 
 The split is economic. Frontier tools are billed by usage, which led to budget caps; the GLM fleet has a flat bill with "no bill shock" at the end of the month. Abitbol did not present a head-to-head quality benchmark between GLM and Claude or GPT models. Public leaderboards place GLM-5.3 below the frontier: BenchLM scores it 61 out of 100, 50th of 216 ranked models as of November 4. Revolut's case rests on cost and access to tokens.
 
+<p><strong>One bill instead.</strong> The other way to avoid bill shock is to route Claude,
+Codex and Gemini through a single aggregated key rather than a separate subscription per
+vendor — for example
+<a href="https://www.packyapi.ai/register?aff=5W73&amp;utm_source=agentspulse&amp;utm_medium=affiliate&amp;utm_campaign=glm"
+rel="sponsored nofollow noopener" target="_blank">PackyAPI</a>.</p>
+<p><small>Disclosure: this page contains an affiliate link. If you sign up through it, we
+may earn a commission at no extra cost to you. 披露：本页含联盟推广链接，通过链接注册我们
+可能获得佣金，你不会因此多付费用。</small></p>
+
 ## Self-Hosted GLM Hardware and Latency Targets
 
 Serving GLM-5.3 to 2,000 engineers takes roughly 56 B200 GPUs, Abitbol said, for a model he puts at about 800 billion parameters. The Register notes that 56 GPUs equals seven eight-GPU DGX B200 systems, and that the earlier GLM-5.1 has about 754 billion total parameters with 40 billion active per token.
