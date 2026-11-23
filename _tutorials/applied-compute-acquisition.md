@@ -12,7 +12,7 @@ permalink: /tutorials/applied-compute-acquisition/
 thumbnail: "/images/applied-compute-acquisition/cover.jpg"
 og_image: "/images/applied-compute-acquisition/cover.jpg"
 date: 2026-11-19
-last_modified_at: 2026-11-19
+last_modified_at: 2026-11-23
 author_name: "AgentsPulse Editorial Team"
 cover_alt: "Applied Compute artwork reading The AI Supercloud for Training and Inferencing Open Models"
 cover_width: 1200
@@ -94,6 +94,12 @@ AC2, the Applied Compute Agent Cloud, is one platform for the full life of a cus
 **Improve.** Production traces become training data. AC2 can attach a live endpoint to a training runtime and update the model with online RL and on-policy self-distillation as user feedback arrives, with A/B tests on release candidates before rollout.
 
 **Route.** AC2 Routers train small decision models that pick a model per request. Shift-1, a 4-billion-parameter router Applied Compute released in October, routes coding traffic between closed models and could equally route between post-trained open models such as Kimi or Nemotron.
+
+<p><strong>Testing the mixed-model idea before buying a platform.</strong> AC2 is built on the bet that one application will call several models, open and closed, and pick one per request. Before training or routing anything, a smaller team can check whether that mix helps on its own prompts by sending the same requests to several hosted models through a shared gateway such as
+<a href="https://www.packyapi.ai/register?aff=5W73&amp;utm_source=agentspulse&amp;utm_medium=affiliate&amp;utm_campaign=applied-compute-acquisition"
+rel="sponsored nofollow noopener" target="_blank">PackyAPI</a>. A hosted gateway sits outside your perimeter, so it does not offer the in-VPC controls described next.</p>
+<p><small>Disclosure: this page contains an affiliate link. If you sign up through it, we
+may earn a commission at no extra cost to you.</small></p>
 
 The parts that a security buyer cares about sit underneath: serverless or in-VPC deployment so data stays inside the customer's perimeter, role-based access control, audit logs on every dispatch, SOC 2 and ISO 42001 certification, and customer ownership of the weights. Since July, customers have run more than 1,700 training runs on AC2, and 40% of customers use it for both training and inference.
 
